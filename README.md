@@ -6,9 +6,9 @@ MVC패턴의 이해와 다양한 CRUD를 능숙하게 하기 위해 시작했습
 
 ![image](https://user-images.githubusercontent.com/90390746/144049399-5bde2e6b-9a11-4d42-889d-622a4bc07e98.png)
 
-### Schedule
-
 ---
+
+## Schedule
 
 > First
 >
@@ -29,9 +29,9 @@ MVC패턴의 이해와 다양한 CRUD를 능숙하게 하기 위해 시작했습
 >
 > - 오류 검토 후 디버깅 및 리팩토링
 
-### Team
-
 ---
+
+## Team
 
 > - 김강우
 > - 김영진
