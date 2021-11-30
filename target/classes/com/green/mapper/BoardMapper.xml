@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.mapper.BoardMapper">
+	<sql id="criteria">
+		<trim prefix="(" suffix=") and " prefixOverrides="OR">
+			    	<foreach item="type" collection="typeArr">
+			    		<trim prefix="OR">
+			    			<choose>
+			    				<when test="type== 'T'.toString()">
+			    					title like '%'||#{keyword}||'%'
+			    				</when>
+			    				<when test="type== 'C'.toString()">
+			    					content like '%'||#{keyword}||'%'
+			    				</when>
+			    				<when test="type== 'W'.toString()">
+			    					writer like '%'||#{keyword}||'%'
+			    				</when>
+			    			</choose>
+			    		</trim>
+			    	</foreach>
+		    </trim>
+	</sql>
+
+
+	<select id="getBoardList" resultType="com.green.vo.BoardVO">
+		select * from big_tree_board
+	</select>
+	<select id="getBoard" resultType="com.green.vo.BoardVO">
+		select*from big_tree_board where bno=#{bno}
+	</select>
+	<insert id="registBoard">
+		insert into big_tree_board(bno,title,content,writer ) values 
+			(board_seq.nextval,#{title},#{content},#{writer})
+	</insert>
+	<delete id="deleteBoard">
+		delete big_tree_board where bno=#{bno}
+	</delete>
+	<update id="updateBoard">
+		update big_tree_board 
+			set title =#{title}, content=#{content}, updateDate=sysdate
+				where bno = #{bno}
+	</update>
+	
+	<select id="getBoardListWithPage" resultType="com.green.vo.BoardVO">
+		<![CDATA[
+			select bno,title,content,writer,regDate,updateDate,replyCnt,views,recommended,not_recommended,report
+				from( select rownum rn,bno,title,content,writer,regDate,updateDate,replyCnt,views,recommended,not_recommended,report
+					from big_tree_board
+						where 
+				]]>	
+				<if test="keyword !=null">	
+				<include refid="criteria"></include>
+				</if>
+				<![CDATA[	
+						rownum <=#{pageNum} * #{amount} order by bno desc )
+					where rn > (#{pageNum}-1) * #{amount} order by bno desc
+				]]>
+	</select>
+	<select id="getTotalCount" resultType="int">
+		select count(*) from big_tree_board 
+		<if test="keyword !=null">
+		where bno>0 <include refid="criteria"></include>
+		</if>
+	</select>  
+	<update id="updateViews">
+		update big_tree_board 
+			set views= views+1
+				where bno = #{bno}
+	</update>
+</mapper>
