@@ -51,7 +51,7 @@ public class MemberController {
 	@RequestMapping(value ="/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
 		session.invalidate();
-		log.info("logout success");
+		log.info("logout success....");
 		return "redirect:/board/list";
 	}
 	@GetMapping("/register")
