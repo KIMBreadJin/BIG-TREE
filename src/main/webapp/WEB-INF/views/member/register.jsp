@@ -13,6 +13,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	  function rand() {
 		  var code = Math.floor(Math.random()*(10000-1000)+1000)
 		  $('#captcha').val(code)
+		  $('#code').attr('value', 'Y')
 		  return code
 	  }
       function login() {
@@ -49,18 +50,14 @@ uri="http://java.sun.com/jsp/jstl/core" %>
           alert('핸드폰 번호를 확인해주세요')
           return false
         }
-        if($('#captcha').val() != $('#scode').val()){
-          alert('보안코드가 틀렸습니다')
-          return false
-        }
-        if($('#captcha').val() == $('#scode').val()){
-          $('#code').attr('value', 'Y')
-          $('#scode').attr('readonly', 'true')	
-        }
         if ($('#code').val() == 'N') {
             alert('보안코드를 확인해주세요')
             return false
          }
+        if($('#captcha').val() != $('#scode').val()){
+          alert('보안코드가 틀렸습니다')
+          return false
+        }
         else {
           alert('회원가입이 완료되었습니다')
           document.register.submit()

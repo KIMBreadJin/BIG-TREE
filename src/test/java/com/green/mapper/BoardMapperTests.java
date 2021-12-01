@@ -79,7 +79,7 @@ public class BoardMapperTests {
 		vo.setUser_id("test");
 		Mmapper.idChk(vo);
 	}
-	@Test
+	//@Test
 	public void phoneCheck() {
 		MemberVO vo = new MemberVO();
 		vo.setUser_phone("010-1111-2222");
