@@ -70,11 +70,9 @@ public class MemberController {
 		int result = service.idChk(vo);
 		try {
 			if(result == 1) {
-				model.addAttribute("msg","아이디가 중복되었습니다");
 				return "/member/register";
 			}else if(result == 0) {
 				log.info("회원가입 성공");
-				model.addAttribute("msg","회원가입 완료! 로그인 해주세요");
 				service.signup(vo);
 			}
 		}catch(Exception e) {

@@ -64,6 +64,20 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         }
       }
       function fn_idChk() {
+    	  var text =$("#user_id").val();
+    	  var regexp = /[0-9a-z]/;
+    	  for(var i=0; i<text.length; i++){
+    		  if(text.charAt(i) != " " && regexp.test(text.charAt(i)) == false){
+    			  alert("한글이나 특수문자 입력이 불가합니다");
+    			  $('#user_id').val("");
+    			  return;
+    		  }
+    		  if(text.length < 4){
+    			  alert('ID는 4자 이상 입력해주세요');
+    			  $('#user_id').val("");
+    			  return;
+    		  }
+    	  }
         $.ajax({
           url: '/member/idChk',
           type: 'post',
