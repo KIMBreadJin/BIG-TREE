@@ -66,11 +66,17 @@ public class BoardMapperTests {
 		int cnt= boardMapper.getTotalCount();
 		log.info("게시글의 총 갯수"+cnt);
 	}
-	@Test
+	//@Test
 	public void infoTest() {
 		MemberVO a = new MemberVO();
 		a.setUser_id("testid");
 		a.setUser_pwd("1234");
 		Mmapper.info(a);
+	}
+	@Test
+	public void idChkTest() {
+		MemberVO vo = new MemberVO();
+		vo.setUser_id("test");
+		Mmapper.idChk(vo);
 	}
 }

@@ -25,4 +25,7 @@
 	<update id="updatePwd">
 		update big_tree_member set user_pwd=#{user_pwd} where user_id=#{user_id}
 	</update>
+	<select id='idChk' resultType="int">
+		select count(*) from big_tree_member where user_id=#{user_id}
+	</select>
 </mapper>
