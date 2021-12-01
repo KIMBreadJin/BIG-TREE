@@ -73,10 +73,16 @@ public class BoardMapperTests {
 		a.setUser_pwd("1234");
 		Mmapper.info(a);
 	}
-	@Test
+	//@Test
 	public void idChkTest() {
 		MemberVO vo = new MemberVO();
 		vo.setUser_id("test");
 		Mmapper.idChk(vo);
+	}
+	@Test
+	public void phoneCheck() {
+		MemberVO vo = new MemberVO();
+		vo.setUser_phone("010-1111-2222");
+		Mmapper.PhnChk(vo);
 	}
 }

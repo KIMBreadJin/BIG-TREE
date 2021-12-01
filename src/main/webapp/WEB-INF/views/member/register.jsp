@@ -56,7 +56,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
           alert('두 비밀번호가 일치하지 않습니다.')
           return false
         } if($('#idChk').val() == 'N'){
-        	alert('아이디가 중복되었습니다')
+        	alert('아이디를 확인해주세요')
         	return false
         }else {
           alert('회원가입이 완료되었습니다')
@@ -88,6 +88,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
               alert('중복된 아이디입니다.')
             } else if (data == 0) {
               $('#idChk').attr('value', 'Y')
+              $('#user_id').attr('readonly','true')
               alert('사용 가능한 아이디입니다')
             }
           },
