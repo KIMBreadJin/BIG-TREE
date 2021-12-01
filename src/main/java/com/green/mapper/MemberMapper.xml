@@ -28,7 +28,7 @@
 	<select id='idChk' resultType="int">
 		select count(*) from big_tree_member where user_id=#{user_id}
 	</select>
-	<select id='PhnChk' resultType="int">
+	<select id='phnChk' resultType="int">
 		select count(*) from big_tree_member where user_phone=#{user_phone}
 	</select>
 </mapper>

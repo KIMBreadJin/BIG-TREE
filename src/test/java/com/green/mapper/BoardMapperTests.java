@@ -83,6 +83,6 @@ public class BoardMapperTests {
 	public void phoneCheck() {
 		MemberVO vo = new MemberVO();
 		vo.setUser_phone("010-1111-2222");
-		Mmapper.PhnChk(vo);
+		Mmapper.phnChk(vo);
 	}
 }
