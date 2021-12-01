@@ -58,12 +58,29 @@ public class MemberController {
 	public void signup() {
 		System.out.println(" 회원가입 페이지 ");
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="/idChk", method = RequestMethod.POST)
+	public int idChk(MemberVO vo) {
+		int result = service.idChk(vo);
+		return result;
+	}
 	@PostMapping("/register")
-	public String postSignup(MemberVO vo) {
-		System.out.println("회원가입 성공");
-		service.signup(vo);
-		
-		return "/member/login";
+	public String postSignup(Model model, MemberVO vo) {
+		int result = service.idChk(vo);
+		try {
+			if(result == 1) {
+				model.addAttribute("msg","아이디가 중복되었습니다");
+				return "/member/register";
+			}else if(result == 0) {
+				log.info("회원가입 성공");
+				model.addAttribute("msg","회원가입 완료! 로그인 해주세요");
+				service.signup(vo);
+			}
+		}catch(Exception e) {
+			throw new RuntimeException();
+		}				
+		return "redirect:/member/login";
 	}
 	
 	@RequestMapping(value = "/member/findId", method = RequestMethod.GET)

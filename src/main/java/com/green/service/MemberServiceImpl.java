@@ -52,4 +52,11 @@ public class MemberServiceImpl implements MemberService{
 		log.info("비밀번호 변경");
 		mapper.updatePwd(vo);
 	}
+	@Override
+	public int idChk(MemberVO vo){
+		log.info("아이디 중복체크");
+		int result = mapper.idChk(vo);
+		return result;
+	}
+	
 }
