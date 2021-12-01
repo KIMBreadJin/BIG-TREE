@@ -58,5 +58,11 @@ public class MemberServiceImpl implements MemberService{
 		int result = mapper.idChk(vo);
 		return result;
 	}
+	@Override
+	public int phnChk(MemberVO vo){
+		log.info("폰번호 중복체크");
+		int result = mapper.phnChk(vo);
+		return result;
+	}
 	
 }

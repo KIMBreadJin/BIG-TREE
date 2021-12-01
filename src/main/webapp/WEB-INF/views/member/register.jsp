@@ -58,12 +58,17 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         } if($('#idChk').val() == 'N'){
         	alert('아이디를 확인해주세요')
         	return false
-        }else {
+        } if($('#phnChk').val() == 'N'){
+        	alert('핸드폰 번호를 확인해주세요')
+        	return false
+        } else {
           alert('회원가입이 완료되었습니다')
           document.register.submit()
         }
       }
+      //아이디 중복 체크
       function fn_idChk() {
+    	  var phone = phone1.value+phone2.value+phone1.value
     	  var text =$("#user_id").val();
     	  var regexp = /[0-9a-z]/;
     	  for(var i=0; i<text.length; i++){
@@ -94,6 +99,37 @@ uri="http://java.sun.com/jsp/jstl/core" %>
           },
         })
       }
+      //폰 중복 체크
+      function fn_phnChk() {
+    	  var phone = $("#phone1").val() + $("#phone2").val() + $("#phone3").val();
+    	  var phoneValue = phone1.value + '-' + phone2.value + '-' + phone3.value
+    	  var text = phone
+    	  for(var i=0; i<text.length; i++){
+    		  if(text.length !== 11){
+    			  alert('8자리의 핸트폰 번호를 입력해주세요');
+    			  $('#phone2').val("");
+    			  $('#phone3').val("");
+    			  return;
+    		  }
+    	  }
+        $.ajax({
+          url: '/member/phnChk',
+          type: 'post',
+          dataType: 'json',
+          data: { user_phone: phoneValue },
+          success: function (data) {
+            if (data == 1) {
+              alert('중복된 핸드폰 번호입니다')
+            } else if (data == 0) {
+              $('#phnChk').attr('value', 'Y')
+              $('#phone1').attr('readonly','true')
+              $('#phone2').attr('readonly','true')
+              $('#phone3').attr('readonly','true')
+              alert('인증 가능한 핸드폰 번호입니다')
+            }
+          },
+        })
+      }
     </script>
   </head>
   <body>
@@ -109,8 +145,8 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         <label class="col-sm-1 control-label">아이디</label>
         <div class="col-sm-3">
           <input type="text" class="form-control" id="user_id" name="user_id" placeholder="아이디를 입력해주세요" />
-          <button class="idChk" type="button" id="idChk" onclick="fn_idChk()" value="N">중복확인</button>
-        </div>
+         </div> 
+         <button class="idChk" type="button" id="idChk" onclick="fn_idChk()" value="N">중복확인</button>
       </div>
       <div class="form-group">
         <label class="col-sm-1 control-label">비밀번호</label>
@@ -153,9 +189,10 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         <div class="col-sm-3">
           <select id="phone1" class="form-control">
             <option value="010">010</option></select
-          >- <input type="text" class="form-control" id="phone2" />-
-          <input type="text" class="form-control" id="phone3" />
+          > - <input type="text" class="form-control" id="phone2" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" /> -
+          <input type="text" class="form-control" id="phone3" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" />
         </div>
+        <button class="phnChk" type="button" id="phnChk" onclick="fn_phnChk()" value="N">핸드폰 인증</button>
         <input type="hidden" id="user_phone" name="user_phone" />
       </div>
       <div class="form-group">

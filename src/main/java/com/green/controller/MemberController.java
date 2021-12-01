@@ -27,11 +27,11 @@ public class MemberController {
 	@Setter(onMethod_=@Autowired)
 	MemberService service;
 	
+// 로그인 ------------	
 	@GetMapping("/login")
 	public void login() {
 		log.info("login page");
-	}
-	
+	}	
 	@RequestMapping(value = {"/member/login","/"},  method = RequestMethod.POST)
 	@ResponseBody
 	public int loginform(MemberVO vo, HttpServletRequest request) {
@@ -54,24 +54,34 @@ public class MemberController {
 		log.info("logout success....");
 		return "redirect:/board/list";
 	}
+	
+// 회원가입 ( 중복체크 )  ----------	
 	@GetMapping("/register")
 	public void signup() {
 		System.out.println(" 회원가입 페이지 ");
 	}
-	
 	@ResponseBody
 	@RequestMapping(value="/idChk", method = RequestMethod.POST)
 	public int idChk(MemberVO vo) {
 		int result = service.idChk(vo);
 		return result;
 	}
+	@ResponseBody
+	@RequestMapping(value="/phnChk", method = RequestMethod.POST)
+	public int phnChk(MemberVO vo) {
+		int result = service.phnChk(vo);
+		return result;
+	}
 	@PostMapping("/register")
 	public String postSignup(Model model, MemberVO vo) {
-		int result = service.idChk(vo);
+		int idChk = service.idChk(vo);
+		int phnChk = service.phnChk(vo);
 		try {
-			if(result == 1) {
+			if(idChk == 1) {
 				return "/member/register";
-			}else if(result == 0) {
+			}if(phnChk == 1) {
+				return "/member/register";
+			}if(idChk == 0 && phnChk == 0) {
 				log.info("회원가입 성공");
 				service.signup(vo);
 			}
@@ -81,6 +91,7 @@ public class MemberController {
 		return "redirect:/member/login";
 	}
 	
+// 회원 정보 찾기 & 비밀번호 초기화	 ----------
 	@RequestMapping(value = "/member/findId", method = RequestMethod.GET)
 	public String findId() {
 		return "/member/findId";
