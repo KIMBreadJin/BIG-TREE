@@ -72,12 +72,13 @@ public class MemberController {
 		int result = service.phnChk(vo);
 		return result;
 	}
+	
 	@PostMapping("/register")
 	public String postSignup(Model model, MemberVO vo) {
 		int idChk = service.idChk(vo);
 		int phnChk = service.phnChk(vo);
 		try {
-			if(idChk == 1) {
+ 			 if(idChk == 1) {
 				return "/member/register";
 			}if(phnChk == 1) {
 				return "/member/register";
