@@ -15,8 +15,8 @@ import lombok.ToString;
 @ToString
 public class ReplyVO {
 
-private int rno;
-private int bno;
+private Long rno;
+private Long bno;
 private String reply;
 private String replyer;
 private Date ReplyDate;

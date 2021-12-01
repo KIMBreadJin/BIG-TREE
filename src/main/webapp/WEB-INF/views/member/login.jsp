@@ -2,15 +2,14 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
 <!DOCTYPE html>
 <html lang="en">
     <head> 
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+		<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 		<link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.css">
 
 		<!-- Website CSS style -->
@@ -45,7 +44,7 @@
 								$('#spanLoginCheck').text(' 아이디 혹은 비밀번호가 틀렸습니다.');
 							}
 							else{//로그인 성공시
-								console.log(data)					
+								console.log(data)			
 								location.href = '/board/list'
 							}
 						}
@@ -91,13 +90,21 @@
 				  			<label class="cols-sm-2 control-label"></label>
 				  			<span id="spanLoginCheck"></span>
 	  					</div>
-						<div class="form-group ">
+						<div class="form-group">
 							<div class="custom-control custom-checkbox">
 								<input type="checkbox" class="custom-control-input" id="remember_id" name="remember_userID" ${checked}>
 								<label class="custom-control-label" for="remember_id">Remember me</label>
 							</div>
-							<button id="loginBtn" type="button" class="btn btn-primary btn-lg btn-block login-button">Sign in</button>
+							<button id="loginBtn" type="button" class="btn btn-primary btn-lg btn-block login-button" style="width: 280px;">Sign in</button>		
 						</div>
+						<div class="form-group" id="kakaologin">
+	  							<input type="hidden" name="kakaoemail" id="kakaoemail"/>
+	  							<input type="hidden" name="kakaoname" id="kakaoname"/>
+	  							<input type="hidden" name="kakaobirth" id="kakaobirth"/>
+	  							<a href="https://kauth.kakao.com/oauth/authorize?client_id=8d1b9885c6894cd6e125aaad761bdfc7&redirect_uri=http://localhost:8080/member/login&response_type=code">
+	  								<img src="../resources/images/kakao_login_medium_wide.png" style="width: 280px;"/>
+	  							</a>
+	  					</div>
 						<div class="login-register">
 							회원이 아니십니까? <a href="/member/register"> sign up</a><br>
 				            forget your <a href="/member/findId">ID</a> or <a href="/member/findPwd">password</a>?
@@ -106,7 +113,7 @@
 				</div>
 			</div>
 		</div>
-
+		    
 		<script type="text/javascript" src="/resources/js/bootstrap.js"></script>
 	</body>
 </html>

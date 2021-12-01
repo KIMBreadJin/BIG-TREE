@@ -1,5 +1,6 @@
 package com.green.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +18,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.green.service.BoardService;
 import com.green.service.MemberService;
+import com.green.service.RecommendedService;
 import com.green.vo.BoardVO;
 import com.green.vo.Criteria;
 import com.green.vo.MemberVO;
 import com.green.vo.PageDTO;
+import com.green.vo.RecommendedVO;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import lombok.Setter;
@@ -34,13 +37,15 @@ public class BoardController {
 	BoardService boardService;
 	@Setter(onMethod_=@Autowired)
 	MemberService memberService;
+	@Setter(onMethod_=@Autowired)
+	RecommendedService recommendedService;
+	
 	@GetMapping("/list")
 	public void getList(Model model,Criteria cri,HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
-		log.info("cri는"+cri);
 		MemberVO vo = (MemberVO)session.getAttribute("info");
-		log.info("user="+session.getAttribute("info"));
+		
 		int count= boardService.getTotalCount();
 		model.addAttribute("member",vo);
 		model.addAttribute("list",boardService.getBoardListWithPage(cri));
@@ -57,12 +62,22 @@ public class BoardController {
 		return "redirect:/board/list"+cri.getListLink();
 	}
 	
-	@GetMapping("/details")
-	public void getDetails(@RequestParam("bno")int bno,Model model, @ModelAttribute("cri") Criteria cri) {
+	@GetMapping("/details")//게시글조회
+	public void getDetails(@RequestParam("bno")int bno,Model model, @ModelAttribute("cri") Criteria cri,HttpServletRequest request) {
 		BoardVO vo = new BoardVO();
 		boardService.updateViews(bno);
+		int totalLike=recommendedService.getTotalLike(bno);//게시글의 좋아요 수 조회
+		int totalHate=recommendedService.getTotalHate(bno);//게시글의 싫어요 수 조회
 		vo=boardService.getBoard(bno);
+		RecommendedVO rVo= new RecommendedVO();
+		rVo.setBno(bno);
+		rVo.setUserName(((MemberVO)request.getSession().getAttribute("info")).getUser_name());//현재 접속중인유저의 이름
+		
+		model.addAttribute("recommended",recommendedService.getRecommended(rVo));//해당유저의 게시글 좋아요/싫어요 여부 가져옴
 		model.addAttribute("board",vo);
+		model.addAttribute("totalLike",totalLike);
+		model.addAttribute("totalHate",totalHate);
+		
 	}
 	
 	@PostMapping("/modify")
@@ -87,3 +102,5 @@ public class BoardController {
 		model.addAttribute("board",vo);
 	}
 }
+
+

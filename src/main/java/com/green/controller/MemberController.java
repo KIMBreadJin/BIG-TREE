@@ -1,5 +1,7 @@
 package com.green.controller;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.green.service.KakaoService;
 import com.green.service.MemberService;
 import com.green.vo.MemberVO;
 
@@ -26,6 +29,8 @@ public class MemberController {
 
 	@Setter(onMethod_=@Autowired)
 	MemberService service;
+	@Setter(onMethod_=@Autowired)
+	KakaoService kakaoService;
 	
 // 로그인 ------------	
 	@GetMapping("/login")
@@ -135,5 +140,16 @@ public class MemberController {
 		System.out.println(vo);
 		service.updatePwd(vo);
 		return "/member/login";
+	}
+	@RequestMapping("/login")
+	public String home(@RequestParam(value = "code", required = false) String code, Model model) throws Exception{
+		System.out.println("#########" + code);
+	    String access_Token = kakaoService.getAccessToken(code);
+	    HashMap<String, Object> userInfo = kakaoService.getUserInfo(access_Token);
+	    System.out.println("###access_Token#### : " + access_Token);
+	    System.out.println("###userInfo#### : " + userInfo.get("email"));
+	    System.out.println("###nickname#### : " + userInfo.get("nickname"));
+	    model.addAttribute("access_token",access_Token);
+	    return "/member/login";
 	}
 }

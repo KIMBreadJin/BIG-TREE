@@ -1,9 +1,12 @@
 package com.green.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.green.mapper.ReplyMapper;
+import com.green.vo.Criteria;
 import com.green.vo.ReplyVO;
 
 import lombok.Setter;
@@ -15,7 +18,7 @@ public class ReplyServiceImpl implements ReplyService{
 	
 	@Override
 	public int register(ReplyVO vo) {
-		// TODO Auto-generated method stub
+		
 		return mapper.insert(vo);
 	}
 
@@ -32,9 +35,15 @@ public class ReplyServiceImpl implements ReplyService{
 	}
 
 	@Override
-	public int remove(int rno) {
+	public int remove(Long rno) {
 		// TODO Auto-generated method stub
 		return mapper.delete(rno);
+	}
+
+	@Override
+	public List<ReplyVO> getList(Criteria cri, Long bno) {
+		// TODO Auto-generated method stub
+		return mapper.getListWithPaging(cri, bno);
 	}
 
 }
