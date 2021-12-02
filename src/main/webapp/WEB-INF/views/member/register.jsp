@@ -31,8 +31,8 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         var phone = phone1.value + '-' + phone2.value + '-' + phone3.value
         document.getElementById('user_phone').value = phone
         console.log(phone)
-        var nameCheck = RegExp(/^[가-힣]{2,6}$/);
-        var pwdCheck = RegExp(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/);
+        var nameCheck = RegExp(/^[가-힣]{2,6}$/); // 유저 이름 체크
+        var pwdCheck = RegExp(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/); // 유저 비밀번호 체크
         if (!nameCheck.test($('#user_name').val())) {
           alert('이름은 2~6자리 한글로 입력해주세요')
           return false
