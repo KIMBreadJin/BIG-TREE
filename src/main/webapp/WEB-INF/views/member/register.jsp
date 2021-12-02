@@ -161,7 +161,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
               		<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
               		<input type="text" class="form-control" name="user_id" id="user_id" placeholder="아이디를 입력해주세요 (4~12자)"  style="display:inline">    	         	
             	</div>
-            	<button class="btn" type="button" id="idChk" onclick="fn_idChk()" value="N" style="display:inline">ID중복확인</button> 
+            	<button class="btn btn-info btn-xs" type="button" id="idChk" onclick="fn_idChk()" value="N" style="display:inline">ID중복확인</button> 
 			</div>		
         </div>
         
@@ -256,7 +256,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	          	 	</div>
 	        	 	 - <input type="text" class="form-control" id="phone2" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" size = 4/> -
 	        	 	   <input type="text" class="form-control" id="phone3" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" size = 4/>       
-	        	 <button class="btn" type="button" id="phnChk" onclick="fn_phnChk()" value="N"> 인증 </button>   
+	        	 <button class="btn btn-info btn-sm" type="button" id="phnChk" onclick="fn_phnChk()" value="N"> 인증 </button>   
 	        	 </div>     	   	
         	<input type="hidden" id="user_phone" name="user_phone" />
           </div>

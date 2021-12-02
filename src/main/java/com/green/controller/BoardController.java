@@ -65,15 +65,17 @@ public class BoardController {
 	public void getDetails(@RequestParam("bno")int bno,Model model, @ModelAttribute("cri") Criteria cri,HttpServletRequest request) {
 		BoardVO vo = new BoardVO();
 		boardService.updateViews(bno);
-		int totalLike=recommendedService.getTotalLike(bno);//게시글의 좋아요 수 조회
-		int totalHate=recommendedService.getTotalHate(bno);//게시글의 싫어요 수 조회
-		vo=boardService.getBoard(bno);
+		int totalLike= recommendedService.getRecommendList(bno).size()!=0 ? recommendedService.getTotalLike(bno) : 0;//게시글의 추천이 하나도 없을경우 0으로 선언
+		int totalHate= recommendedService.getRecommendList(bno).size()!=0 ? recommendedService.getTotalHate(bno): 0;
 		RecommendedVO rVo= new RecommendedVO();
+		vo=boardService.getBoard(bno);	
 		rVo.setBno(bno);
 		rVo.setUserName(((MemberVO)request.getSession().getAttribute("info")).getUser_name());//현재 접속중인유저의 이름
-		
-		model.addAttribute("recommended",recommendedService.getRecommended(rVo));//해당유저의 게시글 좋아요/싫어요 여부 가져옴
+		rVo.setHateCnt(0);
+		rVo.setLikeCnt(0);
+		RecommendedVO rVo2=recommendedService.getRecommended(rVo);
 		model.addAttribute("board",vo);
+		model.addAttribute("recommended",rVo2 !=null ? rVo2 : rVo);//해당유저가 해당게시글에 추천or비추천 했으면 rVo2, 그렇지않으면 rVo
 		model.addAttribute("totalLike",totalLike);
 		model.addAttribute("totalHate",totalHate);
 		

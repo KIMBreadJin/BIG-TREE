@@ -111,11 +111,13 @@
     <!-- ----------------------여기까지 게시글 조회------------------------------   -->
   </body>
   <script>
-      var likeClicked=false
-      var hateClicked=false
+      var likeClicked= ${recommended.likeCnt}!=1 ? false : true
+      var hateClicked= ${recommended.hateCnt}!=1 ? false : true  
       var totalLike=${totalLike}
       var totalHate=${totalHate}
+      
       $(document).ready(function (e) {
+    	changeColor()	
         var operForm = $('#operForm')
         $("button[data-oper='modify']").click(function (e) {
           operForm.attr('action', '/board/modify').submit()
@@ -126,7 +128,6 @@
         })
 
     $(".img-thumbnail").click(function(e){
-    	console.log("${recommended}")
     	 var img=$(".img-thumbnail")
          if(img.eq(0)[0]==$(this)[0]){//눌린 버튼이 추천일때
              if(hateClicked==false && likeClicked==false){//아무버튼이 눌려져있지않은경우
@@ -160,25 +161,11 @@
               	likeClicked = !likeClicked
               }
            }
-    	var param={"bno":${board.bno} ,"userName":"${info.user_name}",
-    				"likeCnt":(likeClicked ? 1: 0), "hateCnt":(hateClicked ? 1: 0)
-    	}
+    
       	changeColor()
-     	 $.ajax({
-          anyne:true,
-     	  url:'/recommended/update',
-     	  type:'post',
-     	  data:JSON.stringify(param),
-     	  dataType:"text",
-     	  success:function(){
-     		  console.log("dd")
-     	  },
-     	  error:function(){
-     		  console.log("ee")
-     	  }
-       })//ajax end
-    	 })//
-      })
+     	updateRecommended()
+    	 })//click end
+      })//document end
 
       const changeColor=()=>{
         if(likeClicked==true && hateClicked==false){
@@ -193,6 +180,24 @@
           $("#like").css('background-color','white')
           $("#hate").css('background-color','red')
         }
+      }
+      const updateRecommended=()=>{
+        var param={"bno":${board.bno} ,"userName":"${info.user_name}",
+    				"likeCnt":(likeClicked ? 1: 0), "hateCnt":(hateClicked ? 1: 0)
+    	  }
+        $.ajax({
+     	  type:'POST',
+     	  data:param,
+        	url:'/updateRecommended',
+     	  dataType:"json",
+     	  success:function(data){
+     		  console.log(data)
+     	  },
+     	  error:function(data){
+          console.log(data)
+     		  
+     	  }
+       })//ajax end
       }
   </script>
   <script type="text/javascript" src="/resources/js/reply.js"></script>
