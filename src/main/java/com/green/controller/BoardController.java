@@ -24,7 +24,6 @@ import com.green.vo.Criteria;
 import com.green.vo.MemberVO;
 import com.green.vo.PageDTO;
 import com.green.vo.RecommendedVO;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

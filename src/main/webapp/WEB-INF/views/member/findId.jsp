@@ -56,7 +56,7 @@
 						</div>
 
 						<div class="form-group ">
-							<input type="submit" class="btn btn-primary btn-lg btn-block login-button" value="check"></button>
+							<input type="submit" class="btn btn-primary btn-lg btn-block login-button" value="check"></input>
 						</div>
 						<c:if test="${check == 1}">
 								<script>

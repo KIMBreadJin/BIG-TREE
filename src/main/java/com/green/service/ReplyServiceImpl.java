@@ -24,25 +24,21 @@ public class ReplyServiceImpl implements ReplyService{
 
 	@Override
 	public ReplyVO get(Long rno) {
-		// TODO Auto-generated method stub
 		return mapper.read(rno);
 	}
 
 	@Override
 	public int modify(ReplyVO vo) {
-		// TODO Auto-generated method stub
 		return mapper.update(vo);
 	}
 
 	@Override
 	public int remove(Long rno) {
-		// TODO Auto-generated method stub
 		return mapper.delete(rno);
 	}
 
 	@Override
 	public List<ReplyVO> getList(Criteria cri, Long bno) {
-		// TODO Auto-generated method stub
 		return mapper.getListWithPaging(cri, bno);
 	}
 

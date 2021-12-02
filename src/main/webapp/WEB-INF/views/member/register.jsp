@@ -1,21 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core" %>
 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
     <title>BigTree 회원가입 페이지</title>
- <script type="text/javascript">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/resources/css/register.css" />
+	<link href="https://fonts.googleapis.com/css?family=Passion+One" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script type="text/javascript">
 	  function rand() {
-		  var code = Math.floor(Math.random()*(10000-1000)+1000)
-		  $('#captcha').val(code)
-		  $('#code').attr('value', 'Y')
-		  return code
-	  }
+		    var code = Math.floor(Math.random()*(10000-1000)+1000)
+		    $('#captcha').val(code)
+		    $('#code').attr('value', 'Y')
+		    return code
+	    }
       function login() {
         var p1 = document.getElementById('user_pwd').value
         var p2 = document.getElementById('password2').value
@@ -68,12 +71,12 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     	  
         var phone = phone1.value + phone2.value + phone1.value
         var text = $('#user_id').val()
-        var regexp = /^[0-9a-z]/
+        var idCheck = RegExp(/^[0-9a-z]{4,12}$/);
         console.log(text.length+"4")
         console.log(text)
         for (var i = 0; i < text.length+1; i++) {
-          if (text.charAt(i) != '' && regexp.test(text.charAt(i)) == false) {
-            alert('한글이나 특수문자 입력이 불가합니다')
+          if (!idCheck.test($('#user_id').val())) {
+            alert('4~12자 한글이나 특수문자 입력이 불가합니다')
             $('#user_id').val('')
             return
           }
@@ -127,7 +130,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
               $('#phone1').attr('readonly', 'true')
               $('#phone2').attr('readonly', 'true')
               $('#phone3').attr('readonly', 'true')
-              alert('인증 가능한 핸드폰 번호입니다')
+              alert('인증 되었습니다')
             }
           },
         })
@@ -137,25 +140,28 @@ uri="http://java.sun.com/jsp/jstl/core" %>
   <body>
 <div class="container">
 	<div class="row">
-    <div class="col-md-8">
-      <section>      
-        <h1 class="entry-title"><span>BIG TREE 회원 가입</span> </h1>
-        <hr>
+        <div class="panel-heading">
+          <div class="panel-title text-center">
+            <h1 class="title">BIG TREE sign up</h1>
+            <hr />
+          </div>
+        </div>
+     <div class="main-login main-center">
       <form class="form-horizontal" method="post" name="register" action="register" >
         <div class="form-group">
           <label class="control-label col-sm-3">이름 <span class="text-danger">*</span></label>
-          <div class="col-md-8 col-sm-9">
-            <input type="text" class="form-control" name="user_name" id="user_name" placeholder="이름을 입력해주세요" >
+          <div class="col-md-4 col-sm-8">
+            <input type="text" class="form-control" name="user_name" id="user_name" placeholder="이름을 입력해주세요(2~6자)" >
           </div>
         </div>      
         <div class="form-group">
           <label class="control-label col-sm-3"> I D <span class="text-danger">*</span></label>
          	 <div class="col-md-5 col-sm-8">
-              	<div class="input-group">
+              	<div class="input-group" >
               		<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-              		<input type="text" class="form-control" name="user_id" id="user_id" size = 5 placeholder="아이디를 입력해주세요" >
+              		<input type="text" class="form-control" name="user_id" id="user_id" placeholder="아이디를 입력해주세요 (4~12자)"  style="display:inline">    	         	
             	</div>
-            	<button class="idChk" type="button" id="idChk" onclick="fn_idChk()" value="N">ID중복확인</button>
+            	<button class="btn" type="button" id="idChk" onclick="fn_idChk()" value="N" style="display:inline">ID중복확인</button> 
 			</div>		
         </div>
         
@@ -216,16 +222,19 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	        <div class="col-xs-8">
 	          <div class="form-inline">
 	          <select id="birthYear" class="form-control">
-	            <c:forEach var="year" begin="1950" end="2021">
+	          	<option value="">출생년도</option>
+	            <c:forEach var="year" begin="1950" end="2021">	              
 	              <option>${year}년</option>
 	            </c:forEach>
 	          </select>
 	          <select id="birthMonth" class="form-control">
+	          	<option value="">월</option>
 	            <c:forEach var="month" begin="1" end="12">
 	              <option>${month}월</option>
 	            </c:forEach>
 	          </select>
 	          <select id="birthDay" class="form-control">
+	         	<option value="">일</option>
 	            <c:forEach var="day" begin="1" end="31">
 	              <option>${day}일</option>
 	            </c:forEach>
@@ -245,35 +254,35 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	          	 			<option value="010">010</option>
 	          	 		</select>
 	          	 	</div>
-	        	 	 - <input type="text" class="form-control" id="phone2" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" size = 2/> -
-	        	 	   <input type="text" class="form-control" id="phone3" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" size = 2/>       
-	        	 <button class="phnChk" type="button" id="phnChk" onclick="fn_phnChk()" value="N">핸드폰 인증</button>   
+	        	 	 - <input type="text" class="form-control" id="phone2" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" size = 4/> -
+	        	 	   <input type="text" class="form-control" id="phone3" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" size = 4/>       
+	        	 <button class="btn" type="button" id="phnChk" onclick="fn_phnChk()" value="N"> 인증 </button>   
 	        	 </div>     	   	
         	<input type="hidden" id="user_phone" name="user_phone" />
           </div>
         </div>
         <div class="form-group">
-          <label class="control-label col-sm-3">Security Code </label>
+          <label class="control-label col-sm-3">Security Code <span class="text-danger">*</span></label>
           <div class="col-md-5 col-sm-8">
             <div>            
                 <input type="text" name="captcha" id="captcha" class="form-control label-warning"  value = "" />
                 <input type="text" class="form-control" name="scode" id="scode" placeholder="위 보안코드를 작성하시오" value="">
-                <button class="code" type="button" id="code" onclick="rand()" value="N">보안코드 생성</button>                
+                <button class="btn" type="button" id="code" onclick="rand()" value="N">보안코드 생성</button>                
             </div>
           </div>
         </div>
         <div class="form-group">
-          <div class="col-xs-offset-3 col-md-8 col-sm-9"><span class="text-muted"><span class="label label-danger">Note:-</span> * 표는 필수 입력란 입니다.</span> </div>
+          <div class="col-xs-offset-3 col-md-8 col-sm-9"><span class="text-muted"><span class="label label-danger">Note:-</span> ' <span class="text-danger">*</span> '표는 필수 입력란 입니다.</span> </div>
         </div>
         <div class="form-group">
           <div class="col-xs-offset-3 col-xs-10">
           	<input type="button" class="btn btn-primary" onclick="login()" value="회원가입" />
+          	<a class="btn btn-danger" href="/member/login">돌아가기</a>
           </div>
         </div>
       </form>
+      </div>
     </div>
- 
-</div>
-</div>
+    </div>
   </body>
 </html>
