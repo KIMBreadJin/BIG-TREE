@@ -8,6 +8,7 @@ public interface MemberService {
 	public void signup(MemberVO vo);	//회원가입하기
 	public int idChk(MemberVO vo); 		//아이디 중복체크
 	public int phnChk(MemberVO vo); // 전화번호 중복체크
+	public int kakaoChk(MemberVO vo);	//카카오 회원체크
 	
 	public MemberVO info(MemberVO vo);	//회원정보
 	public MemberVO getMember(long user_num);

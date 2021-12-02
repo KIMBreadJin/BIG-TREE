@@ -31,12 +31,13 @@ public class MemberController {
 	MemberService service;
 	@Setter(onMethod_=@Autowired)
 	KakaoService kakaoService;
-	
+	String kakaoid = "";
+	String kakaoName="";
 // 로그인 ------------	
-	@GetMapping("/login")
-	public void login() {
-		log.info("login page");
-	}	
+	//@GetMapping("/login")
+	//public void login() {
+	//	log.info("login page");
+	//}	
 	@RequestMapping(value = {"/member/login","/"},  method = RequestMethod.POST)
 	@ResponseBody
 	public int loginform(MemberVO vo, HttpServletRequest request) {
@@ -142,14 +143,54 @@ public class MemberController {
 		return "/member/login";
 	}
 	@RequestMapping("/login")
-	public String home(@RequestParam(value = "code", required = false) String code, Model model) throws Exception{
+	public String home(@RequestParam(value = "code", required = false) String code, Model model, MemberVO vo) throws Exception{
 		System.out.println("#########" + code);
 	    String access_Token = kakaoService.getAccessToken(code);
 	    HashMap<String, Object> userInfo = kakaoService.getUserInfo(access_Token);
+	    String id = (String) userInfo.get("id");
 	    System.out.println("###access_Token#### : " + access_Token);
-	    System.out.println("###userInfo#### : " + userInfo.get("email"));
 	    System.out.println("###nickname#### : " + userInfo.get("nickname"));
+	    System.out.println("###kakao_id'### : " + id);
 	    model.addAttribute("access_token",access_Token);
-	    return "/member/login";
+	    vo.setUser_kakao(id);
+	    kakaoid = vo.getUser_kakao();
+	    kakaoName = (String)userInfo.get("nickname");
+	    if(vo.getUser_kakao()!=null) {
+	    	return "/member/kakaoCheck";
+	    }
+	    else return "/member/login";
+	}
+	@ResponseBody
+	@RequestMapping(value="/kakaoCheck", method = RequestMethod.POST)
+	public int kakaoCheck(MemberVO vo) {
+		vo.setUser_kakao(kakaoid);
+		System.out.println("카카오 id 값 : "+vo.getUser_kakao());
+		System.out.println("닉네임 : "+kakaoName);
+		int result = service.kakaoChk(vo);
+		return result;
+	}
+	@GetMapping("/kakaoReg")
+	public void kakaoSignup() {
+		System.out.println(" 카카오 간편가입 페이지 ");
+	}
+	@PostMapping("/kakaoReg")
+	public String kakaoSignup(Model model, MemberVO vo) {
+		int result = service.idChk(vo);
+		vo.setUser_name(kakaoName);
+		vo.setUser_kakao(kakaoid);
+		model.addAttribute("info",vo);
+		try {
+			if(result == 1) {
+				model.addAttribute("msg","아이디가 중복되었습니다");
+				return "/member/kakaoReg";
+			}else if(result == 0) {
+				log.info("회원가입 성공");
+				model.addAttribute("msg","회원가입 완료! 로그인 해주세요");
+				service.signup(vo);
+			}
+		}catch(Exception e) {
+			throw new RuntimeException();
+		}				
+		return "redirect:/member/login";
 	}
 }

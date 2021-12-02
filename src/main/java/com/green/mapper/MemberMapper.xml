@@ -31,4 +31,7 @@
 	<select id='phnChk' resultType="int">
 		select count(*) from big_tree_member where user_phone=#{user_phone}
 	</select>
+	<select id='kakaoChk' resultType="int">
+		select count(*) from big_tree_member where user_kakao=#{user_kakao}
+	</select>
 </mapper>

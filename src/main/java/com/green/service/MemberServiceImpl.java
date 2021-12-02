@@ -65,4 +65,11 @@ public class MemberServiceImpl implements MemberService{
 		return result;
 	}
 	
+	@Override
+	public int kakaoChk(MemberVO vo) {
+		log.info("카카오 회원체크");
+		int result = mapper.kakaoChk(vo);
+		return result;
+	}
+	
 }

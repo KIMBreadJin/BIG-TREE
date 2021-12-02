@@ -7,7 +7,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -71,6 +73,7 @@ public class KakaoService {
                 br.close();
                 bw.close();
             } catch (IOException e) {
+                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
@@ -96,7 +99,6 @@ public class KakaoService {
 
                 String line = "";
                 String result = "";
-
                 while ((line = br.readLine()) != null) {
                     result += line;
                 }
@@ -107,10 +109,12 @@ public class KakaoService {
 
                 JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
                 JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
+                String kakao_id = element.getAsJsonObject().get("id").getAsString();
 
                 String nickname = properties.getAsJsonObject().get("nickname").getAsString();
 
                 userInfo.put("nickname", nickname);
+                userInfo.put("id", kakao_id);
 
             } catch (IOException e) {
                 // TODO Auto-generated catch block
