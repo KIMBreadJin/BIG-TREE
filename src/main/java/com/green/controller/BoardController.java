@@ -49,6 +49,7 @@ public class BoardController {
 		model.addAttribute("member",vo);
 		model.addAttribute("list",boardService.getBoardListWithPage(cri));
 		model.addAttribute("pageMaker",new PageDTO(cri, count));
+		
 	}
 	@GetMapping("/register")
 	public void getRegister( @ModelAttribute Criteria cri,Model model) {

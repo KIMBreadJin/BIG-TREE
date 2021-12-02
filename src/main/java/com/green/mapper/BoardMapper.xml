@@ -45,8 +45,8 @@
 	
 	<select id="getBoardListWithPage" resultType="com.green.vo.BoardVO">
 		<![CDATA[
-			select bno,title,content,writer,regDate,updateDate,replyCnt,views,recommended,not_recommended,report
-				from( select rownum rn,bno,title,content,writer,regDate,updateDate,replyCnt,views,recommended,not_recommended,report
+			select bno,title,content,writer,regDate,updateDate,replyCnt,views,report
+				from( select rownum rn,bno,title,content,writer,regDate,updateDate,replyCnt,views,report
 					from big_tree_board
 						where 
 				]]>	
