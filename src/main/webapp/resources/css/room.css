@@ -1,0 +1,150 @@
+.body-chat {
+  padding-bottom: 0;
+}
+.chat-header,
+.chat-header a {
+  background-color: #a1c0d6;
+  color: black;
+}
+
+.chat-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+	
+.chat {
+  overflow:scroll;
+  position: relative;
+  background-color: #a1c0d6;
+  height: 90vh;
+  padding-top: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.chat .date-divider {
+  text-align: center;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 15px;
+}
+
+.chat__message {
+  margin-bottom: 10px;
+  display: flex;
+}
+
+.chat__message-from-me {
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.chat__message-to-me {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.chat__message-time {
+  font-size: 10px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.chat__message-from-me .chat__message-body {
+  background-color: #ffe934;
+  padding: 10px 5px;
+  border-radius: 2px;
+  margin-right: 10px;
+  margin-left: 10px;
+  font-size: 15px;
+}
+
+.chat__message-to-me img {
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.chat__message-username {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.chat__message-to-me .chat__message-body {
+  background-color: white;
+  padding: 10px 5px;
+  border-radius: 2px;
+  font-size: 15px;
+}
+
+.chat__message-center {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat__message-time {
+  margin-top: 50px;
+  margin-left: 5px;
+}
+
+.type-message {
+  width: 100%;
+  bottom: 0;
+  position: fixed;
+  height: 45px;
+  background-color: #eeeeee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 5px;
+}
+
+.type-message .fa-plus {
+  color: #b4b4b4;
+}
+
+.type-message__input {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.type-message__input input {
+  width: 100%;
+  padding: 10px;
+  border-style: none;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.type-message__input #btnSend {
+  color: #523737;
+  background-color: #ffe934;
+  padding: 10px;
+  margin-right: 5px;
+  width: 13%;
+}
+
+.type-message__input .record-message i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header__column {
+  height: 20px;
+}
+
+#receiver {
+  text-align: center;
+  margin-left: 233px;
+  width: 5em;
+  background-color: #a1c0d6;
+  height: 1.5em;
+}
+
+.enter {
+  text-align: center;
+  color: gray;
+}

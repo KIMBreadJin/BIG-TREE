@@ -14,6 +14,7 @@
   
   <c:if test="${member != null}">
   <h3 class="page-header">${member.user_name}님 반갑습니다 <a href='/member/logout'>로그아웃</a></h3>
+  <h2><a href = '/chat/chatList'> 채팅 참여하기 </a></h2>
   </c:if>
   
 </div>
