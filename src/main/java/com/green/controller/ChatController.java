@@ -29,6 +29,6 @@ public class ChatController {
 	}
 	@GetMapping("/chatList")
 	public void chatlist() {
-		log.info("채팅목록");
+		log.info("채팅목록--");
 	}
 }
