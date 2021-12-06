@@ -12,7 +12,7 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
-ckeditor/**/*.html
+src/main/webapp/resources/js/ckeditor/**/*.html
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 
