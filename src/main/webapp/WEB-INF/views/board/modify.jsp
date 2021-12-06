@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script src="/resources/js/ckeditor/ckeditor.js"></script>
 <!DOCTYPE html>
 <html>
 <head>
@@ -95,6 +96,11 @@ $(document).ready(function(e){
 	    })
 	   
 })
+ var ckediters = CKEDITOR.replace('content', {
+      filebrowserUploadUrl: '/uploadImage',
+      uiColor: '#14B8C4',
+	  toolbar: [['Image']],
+    })
 </script>
 
 </html>

@@ -1,6 +1,7 @@
 package com.green.vo;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,9 +24,8 @@ public class BoardVO {
 	private Date updateDate;
 	private int replyCnt;
 	private int views;
-	private int recommend;
-	private int not_recommend;
 	private int report;
 	
 	private ReplyVO reply;
+	private List<ImageVO> imageList;
 }

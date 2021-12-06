@@ -13,7 +13,7 @@
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
-	
+
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
 
@@ -24,7 +24,6 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="com.green.controller" />
-		
 	<websocket:handlers>
 		<websocket:mapping handler="chattingHandler" path="/chat"/>
 		<websocket:handshake-interceptors>
@@ -33,6 +32,10 @@
 		<websocket:sockjs></websocket:sockjs>
 	</websocket:handlers>
 	<beans:bean id="chattingHandler" class="com.green.handler.ChattingHandler"/>
+	<beans:bean id ="multipartResolver" 
+		class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+		
+		</beans:bean>
 	
 	
 </beans:beans>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.green.vo.BoardVO;
 import com.green.vo.Criteria;
+import com.green.vo.ImageVO;
 
 public interface BoardService {
 	public List<BoardVO> getBoardList();//게시글 목록가져오기
@@ -14,6 +15,7 @@ public interface BoardService {
 	public void updateViews(int bno);
 	
 	public List<BoardVO> getBoardListWithPage(Criteria cri);
-	public int getTotalCount();
+	public int getTotalCount();//게시글 수 조회
+	public List<ImageVO>getImageList(int bno);
 
 }

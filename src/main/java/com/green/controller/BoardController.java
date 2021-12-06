@@ -49,7 +49,6 @@ public class BoardController {
 		model.addAttribute("member",vo);
 		model.addAttribute("list",boardService.getBoardListWithPage(cri));
 		model.addAttribute("pageMaker",new PageDTO(cri, count));
-		
 	}
 	@GetMapping("/register")
 	public void getRegister( @ModelAttribute Criteria cri,Model model) {
@@ -69,9 +68,10 @@ public class BoardController {
 		int totalLike= recommendedService.getRecommendList(bno).size()!=0 ? recommendedService.getTotalLike(bno) : 0;//게시글의 추천이 하나도 없을경우 0으로 선언
 		int totalHate= recommendedService.getRecommendList(bno).size()!=0 ? recommendedService.getTotalHate(bno): 0;
 		RecommendedVO rVo= new RecommendedVO();
+		MemberVO mVo=(MemberVO)request.getSession().getAttribute("info");
 		vo=boardService.getBoard(bno);	
 		rVo.setBno(bno);
-		rVo.setUserName(((MemberVO)request.getSession().getAttribute("info")).getUser_name());//현재 접속중인유저의 이름
+		rVo.setUserName(mVo!=null? ((MemberVO)request.getSession().getAttribute("info")).getUser_name(): "비회원");//현재 접속중인유저의 이름,로그아웃상태는 비회원
 		rVo.setHateCnt(0);
 		rVo.setLikeCnt(0);
 		RecommendedVO rVo2=recommendedService.getRecommended(rVo);
