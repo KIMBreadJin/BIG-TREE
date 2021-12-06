@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ChattingHandler extends TextWebSocketHandler{
 	
-	//private List<WebSocketSession> sessionList = new ArrayList<WebSocketSession>();
 	Map<String, WebSocketSession> userSessions = new HashMap<>();
 	Map<String, List<String>> roomUsers = new HashMap<>();
 	@Override
@@ -97,8 +96,6 @@ System.out.println("handleTextmessage: " + session + " : " + message);
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		
 		log.info("#ChattingHandler, afterConnectionClosed");
-
-		//sessionList.remove(session);
 		
 		log.info(session.getId() + "님이 퇴장하셨습니다.");
 	}

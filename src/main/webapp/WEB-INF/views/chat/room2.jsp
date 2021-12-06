@@ -10,7 +10,7 @@ SimpleDateFormat sf = new SimpleDateFormat("E요일, yyyy년 MM월 dd일"); %>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" />
     <link rel="stylesheet" type="text/css" href="/resources/css/room.css?after" />
-    <title>채팅방1</title>
+    <title>채팅방2</title>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
@@ -116,7 +116,7 @@ SimpleDateFormat sf = new SimpleDateFormat("E요일, yyyy년 MM월 dd일"); %>
         <i class="fa fa-chevron-left fa-lg" id="backChats"></i>
       </div>
       <div class="header__column">
-        <span class="header__text">채팅방1</span>
+        <span class="header__text">채팅방2</span>
       </div>
     </header>
     <div class="chat">

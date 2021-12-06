@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.green.handler.ChattingHandler;
 import com.green.vo.MemberVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/chat/*")
 @Slf4j
 public class ChatController {
-	@GetMapping("/room1")
+	@GetMapping({"/room1","/room2"})
 	public void chat(Model model, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		MemberVO vo = (MemberVO)session.getAttribute("info");
@@ -25,7 +26,7 @@ public class ChatController {
 		log.info("==================================");
 		log.info("@ChatController, GET Chat / Username : " + vo.getUser_name());
 		
-		model.addAttribute("userid", vo.getUser_name());
+		model.addAttribute("userid", vo.getUser_name());	
 	}
 	@GetMapping("/chatList")
 	public void chatlist() {

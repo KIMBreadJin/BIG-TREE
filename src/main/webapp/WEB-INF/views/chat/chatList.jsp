@@ -1,85 +1,77 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"    pageEncoding="UTF-8"%>
-    <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> <%@taglib uri="http://java.sun.com/jsp/jstl/core"
+prefix="c" %>
+
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-<title>chats</title>
-<link rel="stylesheet" type="text/css" href="/ercg/css/talk.css">
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <title>chats</title>
+    <link rel="stylesheet" type="text/css" href="/resources/css/chatList.css?after" />
+  </head>
 
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-	$("#room1").on('click', function() {
-		location.replace("room1");
-	});
-	
-	$("#room2").on('click', function() {
-		location.replace("room2.jsp");
-	});
-});
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('#room1').on('click', function () {
+        window.resizeTo(600, 800)
+        location.replace('room1')
+      })
 
-</script>
+      $('#room2').on('click', function () {
+        window.resizeTo(600, 800)
+        location.replace('room2')
+      })
+      $('#room').on('click', function () {
+        window.resizeTo(600, 800)
+        var rand = Math.floor(Math.random()*2)+1
+        if (rand == 2) {
+          location.replace('room2')
+        } else {
+          location.replace('room1')
+        }
+      })
+    })
+  </script>
+  <body>
+    <div class="container anidi_services">
+      <div class="row">
+        <ul class="links">
+          <li>
+            <a id="room1" title="채팅 1번방">
+              <span class="icon"><i class="fa fa-comments"></i></span>
+              <span class="text">채팅방 1</span></a
+            >
+            <div class="clearfix"></div>
+          </li>
+          <li>
+            <a id="room2" title="채팅 2번방">
+              <span class="icon"><i class="fa fa-comments"></i></span>
+              <span class="text">채팅방 2</span></a
+            >
+            <div class="clearfix"></div>
+          </li>
 
-<body>
-<div class="talkTool">
-	<!-- Title 채팅 -->
-	<header class= "top-header">
-		<div class="header__column">
-			<span class="header__text">채팅</span>
-		</div>
-	</header>
-	
-	<!-- 채팅방들 리스트 -->
-	<main class="chats">
-	
-		<div class="search-bar">
-			<input type="text" placeholder="검색">
-		</div>
-		<ul class="chats__list">
-			<li class="chats__chat" id="room1">
-					<div class="chat__content">
-						<div class="chat__preview">
-							<h3 class="chat__user">ROOM1</h3>
-						</div>
-					</div>
-			</li>
-			
-			<li class="chats__chat" id="room2">
-					<div class="chat__content">
-						<div class="chat__preview">
-							<h3 class="chat__user">ROOM2</h3>
-						</div>
-					</div>
-			</li>
-
-		</ul>
-	</main>
-	
-	<nav class="tab-bar">
-		<a href="index.jsp" class="tab-bar__tab">
-			<i class="fa fa-user"></i>
-			<span class="tabl-bar_title">친구</span>
-		</a>
-		
-		<a href="chats.jsp" class="tab-bar__tab--selected">
-			<i class="fas fa-commet"></i>
-			<span class="tab-bar__title">채팅</span>
-		</a>
-	   
-	   <a href="" class="tab-bar__tab">
-     	 <i class="fa fa-search"></i>
-      	<span class="tab-bar__title">채널</span>
-    	</a>
-
-    	<a href="" class="tab-bar__tab">
-      		<i class="fa fa-ellipsis-h"></i>
-      		<span class="tab-bar__title">더보기</span>
-    	</a>
-	</nav>
-</div>
-</body>
+          <li class="tab-bar">
+            <a href="index" class="tab-bar__tab">
+              <i class="fa fa-user"></i>
+              <span class="tabl-bar_title">친구</span>
+            </a>
+            <a id="room" class="tab-bar__tab--selected">
+              <i class="fa fa-commenting"></i>
+              <span class="tab-bar__title">채팅</span>
+            </a>
+            <a href="" class="tab-bar__tab">
+              <i class="fa fa-ellipsis-h"></i>
+              <span class="tab-bar__title">더보기</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
 </html>

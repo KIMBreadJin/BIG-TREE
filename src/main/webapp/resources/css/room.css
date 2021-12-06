@@ -14,10 +14,10 @@
 
 	
 .chat {
-  overflow:scroll;
+  overflow:auto;
   position: relative;
   background-color: #a1c0d6;
-  height: 90vh;
+  height: 85vh;
   padding-top: 15px;
   padding-left: 10px;
   padding-right: 10px;

@@ -1,0 +1,50 @@
+li {
+    list-style: none;
+}
+.anidi_services {
+    padding: 40px 20px 80px;
+    border-radius: 6px;
+    background-color: rgb(20, 110, 153);
+}
+
+.anidi_services ul {
+    display: block;
+}
+
+.anidi_services ul li {
+    display: block;
+    margin-bottom: 15px;
+    color: #fff;
+    text-decoration: none;
+    -webkit-transition: 0.5s;
+    -o-transition: 0.5s;
+    transition: 0.5s;
+}
+
+.anidi_services ul li a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    -webkit-transition: 0.5s;
+    -o-transition: 0.5s;
+    transition: 0.5s;
+}
+.anidi_services ul :hover{
+	color:gray;
+}
+
+.anidi_services ul li a span.icon {
+    width: 50px;
+    display: block;
+    font-size: 30px;
+    vertical-align: middle;
+    float: left;
+}
+
+.anidi_services ul li a span.text {
+    display: block;
+    vertical-align: middle;
+    font-size: 16px;
+    margin-left: 50px;
+    padding-top: 12px;
+}

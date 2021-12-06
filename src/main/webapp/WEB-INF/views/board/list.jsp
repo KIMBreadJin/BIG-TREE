@@ -14,7 +14,7 @@
   
   <c:if test="${member != null}">
   <h3 class="page-header">${member.user_name}님 반갑습니다 <a href='/member/logout'>로그아웃</a></h3>
-  <h2><a href = '/chat/chatList'> 채팅 참여하기 </a></h2>
+  <a id = "goChat"> 채팅 참여하기 </a>
   </c:if>
   
 </div>
@@ -185,7 +185,12 @@
 	   //브라우저에서 검색 버튼을 클릭하면 form 태그의 전송은 막고 페이지의 번호는 1이 되도록 처리 
 	   //화면에서 키워드가 없으면 검색을 허용하지 않음 
    })
-
+   $('#goChat').click( function (e) {
+       window.open('/chat/chatList',"채팅목록,","width=700,height=430")
+       window.resizeTo(700,430); 
+       return false;
+    })	
+    
   
   })
 </script>
