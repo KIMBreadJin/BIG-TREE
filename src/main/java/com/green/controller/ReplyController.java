@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.green.service.ReplyService;
 import com.green.vo.Criteria;
+import com.green.vo.ReplyPageDTO;
 import com.green.vo.ReplyVO;
 
 import lombok.Setter;
@@ -44,13 +45,30 @@ public class ReplyController {
 				new ResponseEntity<>("success",HttpStatus.OK):
 					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	//특정게시물조회
+//	//특정게시물조회
+//	@GetMapping(value= "/pages/{bno}/{page}",
+//			produces = {
+//					MediaType.APPLICATION_XML_VALUE,
+//					MediaType.APPLICATION_JSON_UTF8_VALUE
+//			})
+//	public ResponseEntity<List<ReplyVO>> getList(
+//			@PathVariable("page") int page,
+//			@PathVariable("bno") Long bno
+//			){
+//		log.info("목록조회.........");
+//		Criteria criteria = new Criteria(page,10);
+//		//페이지당 10개로 페이지당 갯수를 조절하려면 여기로
+//		log.info(""+criteria);
+//		//log.info안에 string을 위해 "" + 
+//		return new ResponseEntity<>(service.getList(criteria, bno),HttpStatus.OK);
+//	}
+	
 	@GetMapping(value= "/pages/{bno}/{page}",
 			produces = {
 					MediaType.APPLICATION_XML_VALUE,
 					MediaType.APPLICATION_JSON_UTF8_VALUE
 			})
-	public ResponseEntity<List<ReplyVO>> getList(
+	public ResponseEntity<ReplyPageDTO> getList(
 			@PathVariable("page") int page,
 			@PathVariable("bno") Long bno
 			){
@@ -59,7 +77,7 @@ public class ReplyController {
 		//페이지당 10개로 페이지당 갯수를 조절하려면 여기로
 		log.info(""+criteria);
 		//log.info안에 string을 위해 "" + 
-		return new ResponseEntity<>(service.getList(criteria, bno),HttpStatus.OK);
+		return new ResponseEntity<>(service.getListPage(criteria, bno),HttpStatus.OK);
 	}
 	@GetMapping(value = "/{rno}",
 			produces = {
@@ -98,6 +116,8 @@ public class ReplyController {
 						:new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	
 	}
+
+
 	
 	
 }

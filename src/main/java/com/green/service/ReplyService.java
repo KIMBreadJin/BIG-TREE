@@ -3,6 +3,7 @@ package com.green.service;
 import java.util.List;
 
 import com.green.vo.Criteria;
+import com.green.vo.ReplyPageDTO;
 import com.green.vo.ReplyVO;
 
 public interface ReplyService {
@@ -11,4 +12,5 @@ public interface ReplyService {
 	public int modify(ReplyVO vo);
 	public int remove(Long rno);
 	public List<ReplyVO> getList(Criteria cri, Long bno);
+	public ReplyPageDTO getListPage(Criteria cri,Long bno);
 }

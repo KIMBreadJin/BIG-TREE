@@ -20,6 +20,8 @@ public interface ReplyMapper {
 			@Param("cri") Criteria Cri,
 			@Param("bno") Long bno
 		);
+	public int getCountByBno(Long bno);
+	//댓글의숫자파악을위하여
 	
 			
 	
