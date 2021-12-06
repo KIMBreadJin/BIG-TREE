@@ -12,6 +12,7 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
+ckeditor/**/*.html
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 
@@ -24,4 +25,3 @@ buildNumber.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/maven
 
-ckeditor/**/*.html
