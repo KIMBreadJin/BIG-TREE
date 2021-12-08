@@ -33,14 +33,15 @@ public class MemberController {
 	KakaoService kakaoService;
 	String kakaoid = "";
 	String kakaoName="";
-// 로그인 ------------	
-	//@GetMapping("/login")
-	//public void login() {
-	//	log.info("login page");
-	//}	
+//	
+//	@GetMapping("/login")
+//	public void login() {
+//		log.info("login page");
+//	}
+	
 	@RequestMapping(value = {"/member/login","/"},  method = RequestMethod.POST)
 	@ResponseBody
-	public int loginform(MemberVO vo, HttpServletRequest request) {
+	public int loginform(MemberVO vo, HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
 		log.info("1) 로그인 고객 정보 ");	
 		vo.setUser_id(request.getParameter("user_id"));
@@ -60,18 +61,18 @@ public class MemberController {
 		log.info("logout success....");
 		return "redirect:/board/list";
 	}
-	
-// 회원가입 ( 중복체크 )  ----------	
 	@GetMapping("/register")
 	public void signup() {
 		System.out.println(" 회원가입 페이지 ");
 	}
+	
 	@ResponseBody
 	@RequestMapping(value="/idChk", method = RequestMethod.POST)
 	public int idChk(MemberVO vo) {
 		int result = service.idChk(vo);
 		return result;
 	}
+	
 	@ResponseBody
 	@RequestMapping(value="/phnChk", method = RequestMethod.POST)
 	public int phnChk(MemberVO vo) {
@@ -81,15 +82,14 @@ public class MemberController {
 	
 	@PostMapping("/register")
 	public String postSignup(Model model, MemberVO vo) {
-		int idChk = service.idChk(vo);
-		int phnChk = service.phnChk(vo);
+		int result = service.idChk(vo);
 		try {
- 			 if(idChk == 1) {
+			if(result == 1) {
+				model.addAttribute("msg","아이디가 중복되었습니다");
 				return "/member/register";
-			}if(phnChk == 1) {
-				return "/member/register";
-			}if(idChk == 0 && phnChk == 0) {
+			}else if(result == 0) {
 				log.info("회원가입 성공");
+				model.addAttribute("msg","회원가입 완료! 로그인 해주세요");
 				service.signup(vo);
 			}
 		}catch(Exception e) {
@@ -98,7 +98,6 @@ public class MemberController {
 		return "redirect:/member/login";
 	}
 	
-// 회원 정보 찾기 & 비밀번호 초기화	 ----------
 	@RequestMapping(value = "/member/findId", method = RequestMethod.GET)
 	public String findId() {
 		return "/member/findId";
@@ -156,6 +155,7 @@ public class MemberController {
 	    kakaoid = vo.getUser_kakao();
 	    kakaoName = (String)userInfo.get("nickname");
 	    if(vo.getUser_kakao()!=null) {
+	    	System.out.println("kakaoid : "+kakaoid);
 	    	return "/member/kakaoCheck";
 	    }
 	    else return "/member/login";
@@ -170,28 +170,24 @@ public class MemberController {
 		return result;
 	}
 	@GetMapping("/kakaoReg")
-	public void kakaoSignup() {
+	public void kakaoSignup(Model model) {
 		System.out.println(" 카카오 간편가입 페이지 ");
+		model.addAttribute("name",kakaoName);
+		model.addAttribute("id",kakaoid);
 	}
-	@PostMapping("/kakaoReg")
-	public String kakaoSignup(Model model, MemberVO vo) {
-		int result = service.idChk(vo);
-		vo.setUser_name(kakaoName);
+	@RequestMapping(value = "/kakaologin",  method = RequestMethod.POST)
+	@ResponseBody
+	public int kakaologin(MemberVO vo, HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession();
+		log.info("1) 로그인 고객 정보 ");	
 		vo.setUser_kakao(kakaoid);
-		model.addAttribute("info",vo);
-		try {
-			if(result == 1) {
-				model.addAttribute("msg","아이디가 중복되었습니다");
-				return "/member/kakaoReg";
-			}else if(result == 0) {
-				log.info("회원가입 성공");
-				model.addAttribute("msg","회원가입 완료! 로그인 해주세요");
-				service.signup(vo);
-			}
-		}catch(Exception e) {
-			throw new RuntimeException();
-		}				
-		return "redirect:/member/login";
+		log.info("카카오:" + vo.getUser_kakao());
+		int result = service.kakaologin(vo);
+		log.info("아이디 개수"+result);		
+		log.info("1) 로그인 고객 정보 " + service.kakaoinfo(vo));
+		
+		session.setAttribute("info", service.kakaoinfo(vo));
+		log.info("넘버" + session.getAttribute("info"));
+		return result;
 	}
-
 }

@@ -6,12 +6,18 @@
 	<select id="login" resultType="int">
 		select count(user_id) from big_tree_member where user_id = #{user_id} and user_pwd = #{user_pwd}
 	</select>
+	<select id="kakaologin" resultType="int">
+		select count(user_id) from big_tree_member where user_kakao=#{user_kakao}
+	</select>
 	<insert id="signup">
-	insert into big_tree_member (user_num, user_name, user_id, user_pwd, user_address, user_phone, user_email,user_birth)
-	values(member_seq.nextval,#{user_name},#{user_id},#{user_pwd},#{user_address},#{user_phone},#{user_email},#{user_birth})
+	insert into big_tree_member (user_num, user_name, user_id, user_pwd, user_address, user_phone, user_email,user_birth,user_kakao)
+	values(member_seq.nextval,#{user_name},#{user_id},#{user_pwd},#{user_address},#{user_phone},#{user_email},#{user_birth},#{user_kakao})
 	</insert>
 	<select id="info" resultType="com.green.vo.MemberVO">
 		select * from big_tree_member where user_id = #{user_id} and user_pwd = #{user_pwd}
+	</select>
+	<select id="kakaoinfo" resultType="com.green.vo.MemberVO">
+		select * from big_tree_member where user_kakao=#{user_kakao}
 	</select>
 	<select id="getMember" resultType="com.green.vo.MemberVO">
 		select * from big_tree_member where user_num=#{user_num}

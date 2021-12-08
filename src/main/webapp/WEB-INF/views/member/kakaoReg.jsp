@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core" %>
 
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -146,9 +147,9 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         <div class="form-group">
           <label class="control-label col-sm-3">이름 <span class="text-danger">*</span></label>
           <div class="col-md-4 col-sm-8">
-            <input type="text" class="form-control" name="user_name" id="user_name" readonly="readonly" value="${info.user_name}">
+            <input type="text" class="form-control" name="user_name" id="user_name" value="${name}" readonly="readonly">
           </div>
-        </div>      
+        </div>
         <div class="form-group">
           <label class="control-label col-sm-3"> I D <span class="text-danger">*</span></label>
          	 <div class="col-md-5 col-sm-8">
@@ -254,6 +255,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	        	 <button class="btn btn-info btn-sm" type="button" id="phnChk" onclick="fn_phnChk()" value="N"> 인증 </button>   
 	        	 </div>     	   	
         	<input type="hidden" id="user_phone" name="user_phone" />
+        	<input type="hidden" id="user_kakao" name="user_kakao" value="${id}" />
           </div>
         </div>
         <div class="form-group">

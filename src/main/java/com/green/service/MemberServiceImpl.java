@@ -20,6 +20,10 @@ public class MemberServiceImpl implements MemberService{
 	public int login(MemberVO vo) {
 		return mapper.login(vo);
 	}
+	@Override
+	public int kakaologin(MemberVO vo) {
+		return mapper.kakaologin(vo);
+	}
 
 	@Override
 	public void signup(MemberVO vo) {
@@ -58,18 +62,25 @@ public class MemberServiceImpl implements MemberService{
 		int result = mapper.idChk(vo);
 		return result;
 	}
+
 	@Override
-	public int phnChk(MemberVO vo){
-		log.info("폰번호 중복체크");
+	public int phnChk(MemberVO vo) {
+		log.info("휴대폰 중복체크");
 		int result = mapper.phnChk(vo);
 		return result;
 	}
-	
+
 	@Override
 	public int kakaoChk(MemberVO vo) {
 		log.info("카카오 회원체크");
 		int result = mapper.kakaoChk(vo);
 		return result;
 	}
+	@Override
+	public MemberVO kakaoinfo(MemberVO vo) {
+		return mapper.kakaoinfo(vo);
+	}
+
+	
 	
 }

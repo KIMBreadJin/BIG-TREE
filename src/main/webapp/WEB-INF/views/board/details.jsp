@@ -28,6 +28,7 @@ prefix="c" %>
       top: 40px;
       right: 5px;
     }
+
   </style>
   <body>
     <!-- -------------------게시글 조회--------------------------- -->
@@ -82,20 +83,33 @@ prefix="c" %>
               </div>
             </div>
             <!-- 리플기능 추가하기 -->
+           
+      <div class="row col-lg-12">
+          <!-- panel -->
+          <div class="panel panel-default">
+            <div class="panel-heading"><i class="fa fa-comments fa-fw">댓글</i></div>
             <button id="addReplyBtn" class="btn btn-primary btn-xs pull-right">댓글 달기</button>
+          </div>
+          <!-- panel-body -->
+          <div class="panel-body">
+ 			<!-- 댓글 구현창 -->
             <ul class="chat">
               <li class="left clearfix" data-rno="12">
                 <div>
                   <div class="header">
-                    <strong class="primary-font">user00</strong>
-                    <small class="pull-right text-muted">2021-12-01 16:55</small>
+                    <strong class="primary-font">작성자 테스트</strong>
+                    <small class="pull-right text-muted">2021-09-28 11:06</small>
                   </div>
-                  <p>댐댐?</p>
+                  <p>댓글테스트트트</p>
                 </div>
               </li>
+              <!-- end reply -->
             </ul>
-            <!-- 댓글 화면구현창 -->
-            <div class="panel-footer"></div>
+          </div>
+            <!-- 댓글 페이지번호 구현창 -->
+            <div class="panel-footer">
+            <p>댓글 페이지 테스트용</p>
+            </div>
             <!-- 모달창 -->
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -109,10 +123,10 @@ prefix="c" %>
                     <div class="form-group">
                       <div class="form-group">
                         <label for="">댓글작성자</label>
-                        <input type="text" class="form-control" name="replyer" value="댓글 작성자!!!" />
+                        <input type="text" class="form-control" name="replyer" value="replyer" />
                       </div>
                       <label for="">댓글</label>
-                      <input type="text" class="form-control" name="reply" value="댓글 등록!!!" />
+                      <input type="text" class="form-control" name="reply" value="reply" />
                     </div>
 
                     <div class="form-group">
@@ -177,40 +191,43 @@ prefix="c" %>
           if (error) error()
         })
       }
-      const remove = (rno, callback, error) => {
-        $.ajax({
-          type: 'delete',
-          url: '/replies/' + rno,
-          success: (deleteResult, status, xhr) => {
-            if (callback) callback(deleteResult)
-          },
-          error: (xhr, status, er) => {
-            if (error) error(er)
-          },
-        })
-      }
-      const update = (reply, callback, error) => {
-        console.log('Rno: ' + reply.rno)
-        $.ajax({
-          type: 'put',
-          url: '/replies/' + reply.rno,
-          data: JSON.stringify(reply),
-          contentType: 'application/json; charset=utf-8',
-          success: (result, status, xhr) => {
-            if (callback) callback(result)
-          },
-          error: (xhr, status, er) => {
-            if (error) error(er)
-          },
-        })
-      }
-      const get = (rno, callback, error) => {
-        $.get('/replies/' + rno + '.json', (result) => {
-          if (callback) callback(result)
-        }).fail((xhr, status, err) => {
-          if (error) error()
-        })
-      }
+		const remove = (rno,callback,error)=>{
+			$.ajax({
+				type:'delete',
+				url:'/replies/' +rno,
+				success:(deleteResult,status,xhr)=>{
+					if(callback) callback(deleteResult)
+				},
+				error:
+					(xhr,status,er)=>{
+						if(error) error(er);
+					}
+			})
+		}
+		const update= (reply,callback,error)=>{
+			console.log("Rno: " +reply.rno);
+			$.ajax({
+				type:'put',
+				url:'/replies/' + reply.rno,
+				data:JSON.stringify(reply),
+				contentType:"application/json; charset=utf-8",
+				success:(result, status, xhr)=>{
+					if(callback) callback(result);
+				},
+				error:
+					(xhr,status,er)=>{
+					if(error) error(er);
+				}
+			})
+		}
+		const get = (rno ,callback ,error)=>{
+			console.log("특정댓글을눌러보았다")
+			$.get("/replies/" +rno +".json" , (result) =>{
+				if(callback) {callback(result)}
+			}).fail((xhr,status,err) =>{
+				if(error) error();
+			})
+		}
       const displayTime = (timeValue) => {
         var today = new Date()
         var gap = today.getTime() - timeValue
@@ -233,36 +250,40 @@ prefix="c" %>
       return { add, getList, remove, update, get, displayTime }
     })()
     //resplyService 기능 end
+    
     $(document).ready(function () {
-      var bnoValue = '<c:out value="{board.bno}"/>'
+      var bnoValue = '<c:out value="${board.bno}"/>'
       var replyUL = $('.chat')
-      showList(1)
-      function showList(page) {
-        const showList = (page) => {
-          replyService.getList({ bno: bnoValue, page: page || 1 }, (replyCnt, list) => {
-            if (page == -1) {
-              pageNum = Math.ceil(replyCnt / 10.0)
-              showList(pageNum)
-              return
-            } //새로운댓글을 추가하면 showlist(-1)을 호출하여 전체댓글의갯수파악
+      const showList = (page) => {
+        	 
+	          replyService.getList({ bno: bnoValue, page: page || 1 }, (replyCnt,list) => {
+	        	if(page==-1){
+	        		page = Math.ceil(replyCnt/10.0);
+	        		showList(pageNum)
+	        		return;
+	        	}
+	            var str = ''
+	            if (list == null || list.length == 0) {
+	              // 데이터가 없으면 종료함
+	              replyUL.html('')
+	              return
+	            } //if문 end
+	                  for (var i = 0, len = list.length || 0; i < len; i++) {
+	                    str += "<li class='left clearfix' data-rno='" + list[i].rno + "'>"
+	                    str += " <div><div class='header'><strong class='primary-font'>" + list[i].replyer + '</strong>'
+	                    str += "   <small class='pull-right text-muted'>" + replyService.displayTime(list[i].replyDate) + '</small></div>'
+	                    str += ' <p>' + list[i].reply + '</p></div></li>'
+	                  } //for문 end
+	                  
+	            replyUL.html(str)
+	            showReplyPage(replyCnt)
+	          })//람다함수(replyCnt,list를 파라미터로갖고있는)의 end 
+	         }//showList function end 
+		 showList(1);
+	     
+         
+	
 
-            var str = ''
-            if (list == null || list.length == 0) {
-              // 데이터가 없으면 종료함
-              replyUL.html('')
-              return
-            } //if문 end
-            for (var i = 0, len = list.length || 0; i < len; i++) {
-              str += "<li class='left clearfix' data-rno='" + list[i].rno + "'>"
-              str += " <div><div class='header'><strong class='primary-font'>" + list[i].replyer + '</strong>'
-              str += "   <small class='pull-right text-muted'>" + replyService.displayTime(list[i].replyDate) + '</small></div>'
-              str += ' <p>' + list[i].reply + '</p></div></li>'
-            } //for문 end
-            replyUL.html(str)
-          })
-        }
-      } //showList function end
-      
       // 모달기능 start
       var modal = $('.modal')
       var modalInputReply = modal.find("input[name='reply']")
@@ -285,7 +306,7 @@ prefix="c" %>
         modal.modal('hide')
       }) //모달창닫을대 버튼 end
 
-      modalRegisterBtn.click(function (e) {
+      modalRegisterBtn.on('click',(function (e) {
         console.log('댓글제출버튼 눌림 ')
         var reply = {
           replyer: modalInputReplyer.val(),
@@ -297,24 +318,27 @@ prefix="c" %>
           modal.find('input').val('')
           modal.modal('hide')
           //showList(1) // 댓글목록갱신
-          showList(-1)
+         showList(-1);
         })
-      }) // modalRegisterBtn end
-      $('.chat').on('click', 'li', function (e) {
+      }) 
+      )// modalRegisterBtn end
+      
+     $('.chat').on('click', 'li', function (e) {
         var rno = $(this).data('rno')
 
-        replyService.get(rno, function (reply) {
-          modalInputReply.val(reply)
-          modalInputReplyer.val(replyer)
-          modalInputReplyDate.val(replyService.displayTime(replyDate)).attr('readonly', 'readonly')
-          modal.data('rno', rno)
+          replyService.get(rno, function (reply) {
+          modalInputReply.val(reply.reply)
+          modalInputReplyer.val(reply.replyer)
+          modalInputReplyDate.val(replyService.displayTime(reply.replyDate)).attr('readonly', 'readonly')
+          modal.data('rno', reply.rno)
 
           modal.find("button[id!= 'modalCloseBtn']").hide()
           modalModBtn.show()
           modalRemoveBtn.show()
           $('.modal').modal('show')
-        })
-      }) //특정댓글의 이벤트 클릭이벤츠처리 424p참조할것
+        }) 
+        //console.log("dddd")
+      }) //특정댓글의 이벤트 클릭이벤츠처리 424p참조할것 
 
       modalModBtn.click(function (e) {
           var reply = { rno: modal.data('rno'), reply: modalInputReply.val() }
@@ -333,21 +357,22 @@ prefix="c" %>
             showList(pageNum)
           })
         }) //modalRemoveBtn(삭제)기능 end
+        replyPageFooter.on('click', 'li a', function (e) {
+            //li 태그로 만든 페이지 번호를 누르면
+            
+            e.preventDefault()
+            console.log('페이지가 눌렸어요')
+            var targetPageNum = $(this).attr('href')
+            //this는 누른 페이지 li 태그이고 이때의 li태그의 href 속성을 얻음   href = "3(페이지)"
+            console.log('targetPageNum : ' + targetPageNum)
+            pageNum = targetPageNum
+            showList(pageNum)
+      }) //페이지번호를 클릭(replyPageFooter.on)하면 이동할수있게
     }) //document ready end
 
     // page계산함수
       var pageNum = 1
-      var replyPageFooter = $('.panel-footer')
-    replyPageFooter.on('click', 'li a', function (e) {
-      //li 태그로 만든 페이지 번호를 누르면
-      e.preventDefault()
-      console.log('페이지가 눌렸어요')
-      var targetPageNum = $(this).attr('href')
-      //this는 누른 페이지 li 태그이고 이때의 li태그의 href 속성을 얻음   href = "3(페이지)"
-      console.log('targetPageNum : ' + targetPageNum)
-      pageNum = targetPageNum
-      showList(pageNum)
-
+      var replyPageFooter = $('.panel-footer');
 
       const showReplyPage = (replyCnt) => {
         //페이지 계산함수 정의
@@ -362,7 +387,7 @@ prefix="c" %>
         if (endNum * 10 < replyCnt) {
           next = true
         }
-        var str = "<ul class='pagination pull-right'>"
+        var str = "<ul class='pagination pull-right'>";
         if (prev) {
           str += "<li class='page-item'><a class='page-link' href='" + (startNum - 1) + "'>이전 페이지</a></li>"
         }
@@ -377,7 +402,10 @@ prefix="c" %>
         console.log(str)
         replyPageFooter.html(str)
       } // showReplyPage Function end
-    })
+      
+       
+   
+    
   </script>
 
   <!-- 추천,비추천기능 -->
