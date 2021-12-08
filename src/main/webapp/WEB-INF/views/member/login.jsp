@@ -4,14 +4,11 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
+  	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-    <link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.css" />
-
-    <!-- Website CSS style -->
     <link rel="stylesheet" type="text/css" href="/resources/css/main.css" />
 
     <!-- Website Font style -->
@@ -117,7 +114,5 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         </div>
       </div>
     </div>
-
-    <script type="text/javascript" src="/resources/js/bootstrap.js"></script>
   </body>
 </html>

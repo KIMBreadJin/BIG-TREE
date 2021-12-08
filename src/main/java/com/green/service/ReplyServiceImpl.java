@@ -24,7 +24,7 @@ public class ReplyServiceImpl implements ReplyService{
 	}
 
 	@Override
-	public ReplyVO get(Long rno) {
+	public ReplyVO get(int rno) {
 		// TODO Auto-generated method stub
 		return mapper.read(rno);
 	}
@@ -36,19 +36,19 @@ public class ReplyServiceImpl implements ReplyService{
 	}
 
 	@Override
-	public int remove(Long rno) {
+	public int remove(int rno) {
 		// TODO Auto-generated method stub
 		return mapper.delete(rno);
 	}
 
 	@Override
-	public List<ReplyVO> getList(Criteria cri, Long bno) {
+	public List<ReplyVO> getList(Criteria cri, int bno) {
 		// TODO Auto-generated method stub
 		return mapper.getListWithPaging(cri, bno);
 	}
 
 	@Override
-	public ReplyPageDTO getListPage(Criteria cri, Long bno) {
+	public ReplyPageDTO getListPage(Criteria cri, int bno) {
 		// TODO Auto-generated method stub
 		return new ReplyPageDTO(mapper.getCountByBno(bno), mapper.getListWithPaging(cri, bno));
 	}

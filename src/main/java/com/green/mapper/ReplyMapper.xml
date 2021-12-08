@@ -29,7 +29,7 @@
 				from 
 				(    select /*+ index(big_tree_reply idx_reply) */
 				    rownum rn ,bno ,rno ,reply,replyer, replyDate,updateDate
-				        from tbl_reply
+				        from big_tree_reply
 				    where bno = #{bno} and rno>0
 				        and rownum <=#{cri.pageNum} * #{cri.amount}
 				 ) where rn >(#{cri.pageNum}-1) * #{cri.amount}

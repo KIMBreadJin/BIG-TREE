@@ -45,23 +45,7 @@ public class ReplyController {
 				new ResponseEntity<>("success",HttpStatus.OK):
 					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-//	//특정게시물조회
-//	@GetMapping(value= "/pages/{bno}/{page}",
-//			produces = {
-//					MediaType.APPLICATION_XML_VALUE,
-//					MediaType.APPLICATION_JSON_UTF8_VALUE
-//			})
-//	public ResponseEntity<List<ReplyVO>> getList(
-//			@PathVariable("page") int page,
-//			@PathVariable("bno") Long bno
-//			){
-//		log.info("목록조회.........");
-//		Criteria criteria = new Criteria(page,10);
-//		//페이지당 10개로 페이지당 갯수를 조절하려면 여기로
-//		log.info(""+criteria);
-//		//log.info안에 string을 위해 "" + 
-//		return new ResponseEntity<>(service.getList(criteria, bno),HttpStatus.OK);
-//	}
+
 	
 	@GetMapping(value= "/pages/{bno}/{page}",
 			produces = {
@@ -70,36 +54,34 @@ public class ReplyController {
 			})
 	public ResponseEntity<ReplyPageDTO> getList(
 			@PathVariable("page") int page,
-			@PathVariable("bno") Long bno
+			@PathVariable("bno") int bno
 			){
-		log.info("목록조회.........");
 		Criteria criteria = new Criteria(page,10);
-		//페이지당 10개로 페이지당 갯수를 조절하려면 여기로
-		log.info(""+criteria);
+		//페이지당 10개로 페이지당 갯수를 조절하려면 여기로		
+		ReplyPageDTO list=service.getListPage(criteria, bno);
+		log.info(bno+"의 댓글"+service.getList(criteria, bno));
+		list.setList(service.getList(criteria, bno));
+		log.info("replyPageDTO="+list);
 		//log.info안에 string을 위해 "" + 
-		return new ResponseEntity<>(service.getListPage(criteria, bno),HttpStatus.OK);
+		return new ResponseEntity<>(list,HttpStatus.OK);
 	}
+	//특정리플 조회하기(수정,삭제)를위하여
 	@GetMapping(value = "/{rno}",
-			produces = {
-					MediaType.APPLICATION_XML_VALUE,
-					MediaType.APPLICATION_JSON_UTF8_VALUE
-			} )
-	public ResponseEntity<ReplyVO> get(@PathVariable("rno")Long rno){
-		log.info("목록조회.."+rno);
+			produces = {MediaType.APPLICATION_JSON_VALUE,
+					MediaType.APPLICATION_JSON_UTF8_VALUE})
+	public ResponseEntity<ReplyVO> get(@PathVariable("rno") int rno){
+		log.info("1) 컨트롤러에서의 댓글 하나 가져오기 ...... " +rno);
 		return new ResponseEntity<>(service.get(rno),HttpStatus.OK);
 	}
+	
 	//삭제
 	@DeleteMapping(value = "/{rno}",
-			produces = {
-					MediaType.APPLICATION_XML_VALUE,
-					MediaType.APPLICATION_JSON_UTF8_VALUE
-			} )
-	public ResponseEntity<String> remove(@PathVariable("rno")Long rno){
-		log.info("삭제하는 번호 :" + rno);
-		
-		return service.remove(rno) == 1
-				?new ResponseEntity<>("삭제성공",HttpStatus.OK):
-				new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			produces = {MediaType.TEXT_PLAIN_VALUE})
+	public ResponseEntity<String> remove(@PathVariable("rno") int rno){
+		log.info("삭제하는 댓글번호"  +rno);
+		return service.remove(rno) ==1?
+				new ResponseEntity<>("success",HttpStatus.OK):
+					new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	//수정
 		@RequestMapping(method = {RequestMethod.PUT,RequestMethod.PATCH},
@@ -107,7 +89,7 @@ public class ReplyController {
 				produces = {MediaType.TEXT_PLAIN_VALUE})
 		public ResponseEntity<String> modify(
 			@RequestBody ReplyVO vo,
-			@PathVariable("rno") Long rno){
+			@PathVariable("rno") int rno){
 		vo.setRno(rno);
 		log.info("rno:"+rno);
 		log.info("modify"+vo);

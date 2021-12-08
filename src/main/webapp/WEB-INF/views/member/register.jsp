@@ -6,12 +6,12 @@ uri="http://java.sun.com/jsp/jstl/core" %>
   <head>
     <meta charset="UTF-8" />
     <title>BigTree 회원가입 페이지</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="/resources/css/register.css" />
 	<link href="https://fonts.googleapis.com/css?family=Passion+One" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet" type="text/css" />
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script type="text/javascript">
 	  function rand() {
 		    var code = Math.floor(Math.random()*(10000-1000)+1000)

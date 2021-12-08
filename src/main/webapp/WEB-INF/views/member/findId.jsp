@@ -1,18 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"    pageEncoding="UTF-8"%>
     <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<!------ Include the above in your HEAD tag ---------->
 
 <!DOCTYPE html>
 <html lang="en">
 <meta charset="UTF-8">
     <head> 
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" type="text/css" href="/resources/css/bootstrap.css">
+		<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+		<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 
-		<!-- Website CSS style -->
 		<link rel="stylesheet" type="text/css" href="/resources/css/main.css">
 
 		<!-- Website Font style -->
@@ -90,7 +87,5 @@
 				</div>
 			</div>
 		</div>
-
-		<script type="text/javascript" src="/resources/js/bootstrap.js"></script>
 	</body>
 </html>
