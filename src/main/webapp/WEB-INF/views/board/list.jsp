@@ -7,11 +7,11 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         게시판 목록 페이지
-        <button id="regBtn" type="button" class="btn btn-xs btn-raised float-right">새로운 게시글 등록</button>
+        <button id="regBtn" type="button" class="btn btn-primary btn-raised float-right">새로운 게시글 등록</button>
       </div>
       <!-- /.panel-heading -->
       <div class="panel-body">
-        <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+        <table  class="table table-striped table-bordered table-hover" id="dataTables-example">
           <thead>
             <tr>
               <th width="50px">번호</th>
@@ -55,32 +55,30 @@
               <input type="hidden" name="pageNum" value='${pageMaker.cri.pageNum}'>
               <input type="hidden" name="amount" value='${pageMaker.cri.amount}'>
               
-              <button class="btn btn-default">검색</button>
+              <button class="btn btn-primary">검색</button>
             </form>
           </div>
         </div>
-        <div class="pull-right">
-          <ul class="pagination">
+         <nav aria-label="Page navigation example" class="float-right">
+          <ul class="pagination justify-content-center">
             <c:if test="${pageMaker.prev}">
-              <li class="paginate_button previous">
-                <a href="${pageMaker.startPage-1}">이전</a>
+              <li class="page-item">
+                <a class="page-link" href="${pageMaker.startPage-1}">이전</a>
               </li>
             </c:if>
-
             <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-              <li class="pagenate_button ${pageMaker.cri.pageNum==num ? "active": ""}">
-                <a href="${num}">${num}</a>
+              <li class="page-item button ${pageMaker.cri.pageNum==num ? "active": ""}">
+                <a class="page-link" href="${num}">${num}</a>
               </li>
             </c:forEach>
-
             <c:if test="${pageMaker.next}">
-              <li class="pagenate_button next">
-                <a href="${pageMaker.endPage+1}">다음</a>
+              <li class="page-item">
+                <a class="page-link" href="${pageMaker.endPage+1}">다음</a>
               </li>
             </c:if>
           </ul>
-
-        </div>
+        </nav>
+      
         <!--  end pagination -->
         <form action="/board/list" id='actionForm' method="get">
         	<input type='hidden' name="pageNum" value="${pageMaker.cri.pageNum}">
@@ -118,6 +116,7 @@
   $(document).ready(function () {
     var result = '<c:out value="${result}"/>'
     checkModal(result)
+    console.log($("#pageNumber"))
     history.replaceState({}, null, null) //추가
     function checkModal(result) {
       if (result === '' || history.state) return
@@ -130,8 +129,10 @@
       self.location = '/board/register'
     })
     var actionForm = $("#actionForm");
-   $(".pagenate_button a").click(function(e){
+   $(".page-item.button a").click(function(e){
 	   e.preventDefault();
+	   console.log($(this).attr("href"))
+	   
 	   var thisis = $(this).attr("href"); 
 	   console.log("페이지 로직이 눌렸어요",thisis);
 	   actionForm.find("input[name='pageNum']").val(thisis);
@@ -166,12 +167,7 @@
 	   //브라우저에서 검색 버튼을 클릭하면 form 태그의 전송은 막고 페이지의 번호는 1이 되도록 처리 
 	   //화면에서 키워드가 없으면 검색을 허용하지 않음 
    })
-   $('#goChat').click( function (e) {
-       window.open('/chat/chatList',"채팅목록,","width=700,height=430")
-       window.resizeTo(700,430); 
-       return false;
-    })	
-  
+
   })
 </script>
 

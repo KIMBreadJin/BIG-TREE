@@ -1,20 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/core"
 prefix="c" %>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Big Tree 게시판</title>
-  </head>
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<%@ include file="../includes/header.jsp" %>
   <script src="/resources/js/ckeditor/ckeditor.js"></script>
   <style>
-    body {
-      width: 70%;
-      margin: 0 auto;
-    }
     .image {
       position: relative;
     }
@@ -32,12 +20,6 @@ prefix="c" %>
   </style>
   <body>
     <!-- -------------------게시글 조회--------------------------- -->
-    <div class="row">
-      <div class="col-lg-12">
-        <h1 class="page-header">게시글 조회</h1>
-      </div>
-      <!-- /.col-lg-12 -->
-    </div>
     <!-- /.row -->
     <div class="row">
       <div class="col-lg-12">
@@ -83,33 +65,15 @@ prefix="c" %>
               </div>
             </div>
             <!-- 리플기능 추가하기 -->
-           
-      <div class="row col-lg-12">
+           <br>
+      <div class="row col-lg-12" >
           <!-- panel -->
           <div class="panel panel-default">
             <div class="panel-heading"><i class="fa fa-comments fa-fw">댓글</i></div>
             <button id="addReplyBtn" class="btn btn-primary btn-xs pull-right">댓글 달기</button>
           </div>
           <!-- panel-body -->
-          <div class="panel-body">
- 			<!-- 댓글 구현창 -->
-            <ul class="chat">
-              <li class="left clearfix" data-rno="12">
-                <div>
-                  <div class="header">
-                    <strong class="primary-font">작성자 테스트</strong>
-                    <small class="pull-right text-muted">2021-09-28 11:06</small>
-                  </div>
-                  <p>댓글테스트트트</p>
-                </div>
-              </li>
-              <!-- end reply -->
-            </ul>
-          </div>
-            <!-- 댓글 페이지번호 구현창 -->
-            <div class="panel-footer">
-            <p>댓글 페이지 테스트용</p>
-            </div>
+         
             <!-- 모달창 -->
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -508,4 +472,3 @@ prefix="c" %>
     		
         })
   </script>
-</html>

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.green.vo.BoardVO;
 import com.green.vo.Criteria;
+import com.green.vo.TestVO;
 
 public interface BoardMapper {
 	public List<BoardVO> getBoardList();//게시글 목록가져오기
@@ -17,5 +18,6 @@ public interface BoardMapper {
 	public List<BoardVO> getBoardListWithPage(Criteria cri);//페이징처리
 	public int getTotalCount();//게시글 갯수 가져오기
 	public void updateViews(int bno);
-
+	public List<BoardVO> test(TestVO vo);
+	public List<BoardVO> test2();
 }

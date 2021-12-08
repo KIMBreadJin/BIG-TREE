@@ -74,13 +74,12 @@
 				    console.log($('div.cke_dialog_body'))	
 				    var myobj = JSON.parse(objArr);
 			   		myObjArr.push(myobj)
-				    var fileCallPath = encodeURIComponent(myobj[0].uploadPath + '/s_' + myobj[0].uuid + '_' + myobj[0].fileName)
-            console.log(fileCallPath)
+				    var fileCallPath = encodeURIComponent(myobj[0].uploadPath + '/s_' + myobj[0].uuid + '_' + myobj[0].fileName)        
 			        str = "<img id='img"+(cnt)+"' src='/display?fileName=" + fileCallPath + "'>"//이미지 태그 생성 
 	                str2="<div id='"+(cnt)+"'>"//form 태그의 input타입 생성하기위한 문자열 선언
-	                str2 += "<input type='hidden' name='imageList[" + (cnt)+ "].fileName' value='" + myobj[0].fileName + "'>"
-	                str2 += "<input type='hidden' name='imageList[" + (cnt) + "].uuid' value='" + myobj[0].uuid + "'>"
-	                str2 += "<input type='hidden' name='imageList[" + (cnt++) + "].uploadPath' value='" + myobj[0].uploadPath + "'>"
+	                str2 += "<input type='text' name='imageList[" + (cnt)+ "].fileName' value='" + myobj[0].fileName + "'>"
+	                str2 += "<input type='text' name='imageList[" + (cnt) + "].uuid' value='" + myobj[0].uuid + "'>"
+	                str2 += "<input type='text' name='imageList[" + (cnt++) + "].uploadPath' value='" + myobj[0].uploadPath + "'>"
 			        str2 +="</div>"
 	                ckediters.setData(ckediters.getData()+str);//기존의 data에 이미지 추가
 			        operForm.append(str2)//폼태그에 input(name=imageList) 보내기

@@ -47,15 +47,15 @@
 		<![CDATA[
 			select bno,title,content,writer,regDate,updateDate,replyCnt,views,report
 				from( select rownum rn,bno,title,content,writer,regDate,updateDate,replyCnt,views,report
-					from big_tree_board
+					from (select*from big_tree_board order by bno desc)
 						where 
 				]]>	
 				<if test="keyword !=null">	
 				<include refid="criteria"></include>
 				</if>
 				<![CDATA[	
-						rownum <=#{pageNum} * #{amount} order by bno desc )
-					where rn > (#{pageNum}-1) * #{amount} order by bno desc
+						rownum <=#{pageNum} * #{amount}  )
+					where rn > (#{pageNum}-1) * #{amount} 
 				]]>
 	</select>
 	<select id="getTotalCount" resultType="int">
@@ -63,7 +63,25 @@
 		<if test="keyword !=null">
 		where bno>0 <include refid="criteria"></include>
 		</if>
+	</select>
+	
+	
+	<select id="test" resultType="com.green.vo.BoardVO">
+		 <![CDATA[
+		 select rownum rn,bno,title,content,writer,regDate,updateDate,replyCnt,views,report
+					from big_tree_board
+						where rownum <=(#{pageNum} * #{amount})
+		]]>
 	</select>  
+	<select id="test2" resultType="com.green.vo.BoardVO">
+		 <![CDATA[
+		 select rownum rn,bno,title,content,writer,regDate,updateDate,replyCnt,views,report
+					from ( select*from big_tree_board order by bno desc)
+						where rownum <=20 
+		]]>
+	</select>  
+	
+	
 	<update id="updateViews">
 		update big_tree_board 
 			set views= views+1
