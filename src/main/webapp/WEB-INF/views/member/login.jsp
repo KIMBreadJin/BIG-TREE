@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
@@ -79,7 +78,14 @@ uri="http://java.sun.com/jsp/jstl/core" %>
               <div class="cols-sm-10">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                  <input type="password" class="form-control" name="inputPwd" id="inputPwd" placeholder="Enter your Password" />
+                  <input
+                    type="password"
+                    class="form-control"
+                    name="inputPwd"
+                    id="inputPwd"
+                    placeholder="Enter your Password"
+                    onkeypress="if(event.keyCode == 13){ $('#loginBtn').click(); }"
+                  />
                 </div>
               </div>
             </div>
