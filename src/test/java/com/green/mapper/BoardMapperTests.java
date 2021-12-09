@@ -85,4 +85,10 @@ public class BoardMapperTests {
 		vo.setUser_phone("010-1111-2222");
 		Mmapper.phnChk(vo);
 	}
+	@Test
+	public void friendfind() {
+		MemberVO vo = new MemberVO();
+		vo.setUser_id("test");
+		Mmapper.findFrd(vo);
+	}
 }

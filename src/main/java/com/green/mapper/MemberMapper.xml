@@ -40,4 +40,7 @@
 	<select id='kakaoChk' resultType="int">
 		select count(*) from big_tree_member where user_kakao=#{user_kakao}
 	</select>
+	<select id="findFrd" resultType="com.green.vo.MemberVO">
+		select * from big_tree_member where user_id = #{user_id}
+	</select>
 </mapper>
