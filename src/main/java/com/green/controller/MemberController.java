@@ -190,4 +190,19 @@ public class MemberController {
 		log.info("넘버" + session.getAttribute("info"));
 		return result;
 	}
+	@GetMapping("/findFrd")
+	public void findFriend(Model model, MemberVO vo) {
+	}
+	@PostMapping("/findFrd")
+	public String findFrdAction(MemberVO vo, Model model) {
+		MemberVO friend = service.findFrd(vo);
+		
+		if(friend == null) { 
+			model.addAttribute("checkid", 1);
+		} else { 
+			model.addAttribute("checkid", 0);
+			model.addAttribute("find", friend);
+		}
+		return "/member/findFrd";
+	}
 }

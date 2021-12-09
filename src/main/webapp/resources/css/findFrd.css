@@ -1,0 +1,97 @@
+/********** Imports **********/
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(https://fonts.gstatic.com/s/opensans/v16/mem5YaGs126MiZpBA-UN_r8OUuhs.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v16/mem8YaGs126MiZpBA-UFVZ0e.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'), url(https://fonts.gstatic.com/s/opensans/v16/mem5YaGs126MiZpBA-UNirkOUuhs.ttf) format('truetype');
+}
+/********** Variables **********/
+/* Colors */
+/********** Mixins **********/
+/********** Init **********/
+html,
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+}
+/********** Card **********/
+#mycard {
+  display: block;
+  width: 75%;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 0 20px 0 rgba(119, 119, 119, 0.4);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Size */
+  /* Header */
+  /* Body */
+}
+@media (max-width: 1300px) {
+  #mycard {
+    width: 80%;
+  }
+}
+@media (max-width: 1000px) {
+  #mycard {
+    width: 85%;
+  }
+}
+#mycard--header {
+  background: #112b88;
+  color: #FCFBFC;
+  padding: 70px 55px 10px 55px;
+  /* title */
+}
+#mycard--header #title {
+  font-weight: 300;
+}
+#mycard--header #title--bold-part {
+  font-weight: 600;
+}
+#mycard--body {
+  background: linear-gradient(180deg, #112b88 29px, #FCFBFC 29px);
+  padding: 10px 55px 40px 55px;
+}
+#mycard--body input,
+#mycard--body select {
+  box-shadow: 0 2px 20px 0 rgba(119, 119, 119, 0.4);
+}
+/********** Buttons **********/
+.btn-default {
+  background: #233b90;
+  color: #FCFBFC;
+  padding: 15px 20px;
+}
+.btn-default i {
+  color: #6878bb;
+  padding-right: 10px;
+}
+.btn-default:hover {
+  background: #2843a5;
+  color: #FCFBFC;
+  box-shadow: 0 0px 10px 0 rgba(119, 119, 119, 0.5);
+}
+#feiendResult {
+	width: 50%;
+	text-align:center;
+	margin: auto;
+	table-layout: fixed;
+}

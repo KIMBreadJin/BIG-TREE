@@ -16,4 +16,6 @@ public interface MemberService {
 	public MemberVO findId(MemberVO vo);	//아이디 찾기
 	public MemberVO findPwd(MemberVO vo); 	//비밀번호 찾기
 	public void updatePwd(MemberVO vo); 	// 비밀번호 변경
+	
+	public MemberVO findFrd(MemberVO vo); //친구 찾기
 }

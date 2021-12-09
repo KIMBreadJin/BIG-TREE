@@ -80,7 +80,10 @@ public class MemberServiceImpl implements MemberService{
 	public MemberVO kakaoinfo(MemberVO vo) {
 		return mapper.kakaoinfo(vo);
 	}
-
+	@Override
+	public MemberVO findFrd(MemberVO vo) {
+		return mapper.findFrd(vo);
+	}
 	
 	
 }
