@@ -19,11 +19,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.green.service.BoardService;
 import com.green.service.MemberService;
 import com.green.service.RecommendedService;
+import com.green.service.ReportService;
 import com.green.vo.BoardVO;
 import com.green.vo.Criteria;
 import com.green.vo.MemberVO;
 import com.green.vo.PageDTO;
 import com.green.vo.RecommendedVO;
+import com.green.vo.ReportVO;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +40,8 @@ public class BoardController {
 	MemberService memberService;
 	@Setter(onMethod_=@Autowired)
 	RecommendedService recommendedService;
+	@Setter(onMethod_= @Autowired)
+	ReportService reportService;
 	
 	@GetMapping("/list")
 	public void getList(Model model,Criteria cri,HttpServletRequest request) {
@@ -47,6 +51,7 @@ public class BoardController {
 		
 		int count= boardService.getTotalCount();
 		model.addAttribute("member",vo);
+		log.info("갑자기 왜이러나"+boardService.getBoardListWithPage(cri));
 		model.addAttribute("list",boardService.getBoardListWithPage(cri));
 		model.addAttribute("pageMaker",new PageDTO(cri, count));
 	}
@@ -58,6 +63,7 @@ public class BoardController {
 	@PostMapping("/register")
 	public String postRegister(BoardVO vo,RedirectAttributes rttr,@ModelAttribute("cri") Criteria cri) {
 		boardService.registBoard(vo);
+		rttr.addFlashAttribute("result","성공");
 		return "redirect:/board/list"+cri.getListLink();
 	}
 	
@@ -65,16 +71,19 @@ public class BoardController {
 	public void getDetails(@RequestParam("bno")int bno,Model model, @ModelAttribute("cri") Criteria cri,HttpServletRequest request) {
 		BoardVO vo = new BoardVO();
 		boardService.updateViews(bno);
+		
 		int totalLike= recommendedService.getRecommendList(bno).size()!=0 ? recommendedService.getTotalLike(bno) : 0;//게시글의 추천이 하나도 없을경우 0으로 선언
 		int totalHate= recommendedService.getRecommendList(bno).size()!=0 ? recommendedService.getTotalHate(bno): 0;
-		RecommendedVO rVo= new RecommendedVO();
 		MemberVO mVo=(MemberVO)request.getSession().getAttribute("info");
 		vo=boardService.getBoard(bno);	
+		
+		RecommendedVO rVo= new RecommendedVO();
 		rVo.setBno(bno);
-		rVo.setUserName(mVo!=null? ((MemberVO)request.getSession().getAttribute("info")).getUser_name(): "비회원");//현재 접속중인유저의 이름,로그아웃상태는 비회원
+		rVo.setUserName(mVo!=null? mVo.getUser_name(): "비회원");//현재 접속중인유저의 이름,로그아웃상태는 비회원
 		rVo.setHateCnt(0);
 		rVo.setLikeCnt(0);
 		RecommendedVO rVo2=recommendedService.getRecommended(rVo);
+
 		model.addAttribute("board",vo);
 		model.addAttribute("recommended",rVo2 !=null ? rVo2 : rVo);//해당유저가 해당게시글에 추천or비추천 했으면 rVo2, 그렇지않으면 rVo
 		model.addAttribute("totalLike",totalLike);
@@ -103,6 +112,9 @@ public class BoardController {
 		vo=boardService.getBoard(bno);
 		model.addAttribute("board",vo);
 	}
+	
+	@GetMapping("/testview")
+	public void ddd() {}
 }
 
 

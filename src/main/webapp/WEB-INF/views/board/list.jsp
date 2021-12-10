@@ -14,7 +14,7 @@
         <table  class="table table-striped table-bordered table-hover" id="dataTables-example">
           <thead>
             <tr>
-              <th width="50px">번호</th>
+              <th width="60px">번호</th>
               <th width="500px">제목</th>
               <th>작성자</th>
               <th>작성일</th>
@@ -91,12 +91,10 @@
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
-              <button class="close" data-dismiss="modal" type="button">&times;</button>
-              <h4 class="modal-title" id="myModalLabel">모달 제목</h4>
+              
               <div class="modal-body">처리가 완료되었습니다.</div>
               <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">닫기</button>
-                <button class="btn btn-primary" type="button">변경된 내용 저장</button>
               </div>
             </div>
             <!-- /.modal-content -->

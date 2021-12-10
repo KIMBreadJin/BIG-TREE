@@ -26,11 +26,13 @@
 	<context:component-scan base-package="com.green.controller" />
 	<websocket:handlers>
 		<websocket:mapping handler="chattingHandler" path="/chat"/>
+		<websocket:mapping handler="MessageHandler" path="/message"/>
 		<websocket:handshake-interceptors>
     		<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
     	</websocket:handshake-interceptors>
 		<websocket:sockjs></websocket:sockjs>
 	</websocket:handlers>
+	<beans:bean id="MessageHandler" class="com.green.handler.ChattingHandler"/>
 	<beans:bean id="chattingHandler" class="com.green.handler.ChattingHandler"/>
 	<beans:bean id ="multipartResolver" 
 		class="org.springframework.web.multipart.support.StandardServletMultipartResolver">

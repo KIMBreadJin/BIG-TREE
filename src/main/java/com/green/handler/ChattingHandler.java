@@ -11,6 +11,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.green.mapper.MessageMapper;
 import com.green.vo.MemberVO;
 
 import lombok.extern.slf4j.Slf4j;

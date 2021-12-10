@@ -26,6 +26,12 @@ public class BoardVO {
 	private int views;
 	private int report;
 	
+	
+	private int rn;// 오라클 rownum읽어오기위해
+	
 	private ReplyVO reply;
 	private List<ImageVO> imageList;
+	private List<ReportVO> reportList;//해당게시글의 신고목록
+	private ReportVO reportWithUser;//해당게시글의 해당사용자가 신고한 신고글
+	
 }
