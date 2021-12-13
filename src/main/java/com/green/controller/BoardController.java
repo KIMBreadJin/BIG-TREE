@@ -1,7 +1,9 @@
 package com.green.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -54,6 +56,9 @@ public class BoardController {
 		log.info("갑자기 왜이러나"+boardService.getBoardListWithPage(cri));
 		model.addAttribute("list",boardService.getBoardListWithPage(cri));
 		model.addAttribute("pageMaker",new PageDTO(cri, count));
+		model.addAttribute("popular", boardService.popularViews());
+		
+		
 	}
 	@GetMapping("/register")
 	public void getRegister( @ModelAttribute Criteria cri,Model model) {
@@ -113,8 +118,13 @@ public class BoardController {
 		model.addAttribute("board",vo);
 	}
 	
-	@GetMapping("/testview")
-	public void ddd() {}
+//	//인기글테스트용 		
+//	ModelAndView mav = new ModelAndView();
+//	Map<String,Object> map = new HashMap<>();
+//	map.put("list",list);
+//	mav.addObject("map",map);
+//	mav.setViewName("/list");
+//	return mav;
 }
 
 

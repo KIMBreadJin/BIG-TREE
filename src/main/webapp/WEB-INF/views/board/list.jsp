@@ -1,28 +1,110 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8" %>
 <%@ include file="../includes/header.jsp" %>
+<style>
+ul.pagination{
+    width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
+
+th.th1{
+	width:50px;
+	
+}
+th.th2{
+	width:300px;
+	
+}
+th.th3{
+	width:100px;
+	
+}
+td{
+text-align:center;
+}
+tr{
+text-align:center;
+}
+
+/* td move의 애니메이션효과 아직 완성 X*/
+td.move{
+  position: relative;
+}
+td.move:after{
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 0px;
+  height: 2px;
+  margin: 5px 0 0;
+  transition: all 0.2s ease-in-out;
+  transition-duration: 0.3s;
+  opacity: 0;
+  background-color: #8fd3f4;
+}
+td.move:hover:after{
+  width: 100%;
+  opacity: 1;
+}
+
+
+</style>
 <!-- /.row -->
 <div class="row">
+<!-- <div class="side_right">오른쪽 사이드 바 무엇을 넣을까요?</div> -->
+<!-- 사이드바 만들다가 만것  -->
   <div class="col-lg-12">
-    <div class="panel panel-default">
+  
+
+
+      <!-- 오늘의 인기글 start -->
+	
+	 <small class="text-muted">오늘의 인기글</small>
+	 <br>
+		<table class="test" id="dataTables-example2">
+	
+    <tr class="table-secondary">
+        <th class=th1>순위</th>
+        <th class=th2>제목</th>     
+        <th class=th3>조회수</th>
+	</tr>        
+
+   <c:forEach var = "popular" items="${popular}"> 
+    <c:set var="ranking" value="${ranking+1}"/>
+    <tr class="table-light">
+        <td > ${ranking}</td>
+        <td class='move' onclick href="${popular.bno}" style="cursor: pointer;">${popular.title}</td>    <!-- 제목 -->
+        <td >${popular.views}</td>    <!-- 조회수 -->   
+    </tr>
+    </c:forEach> 
+    
+ 
+</table>
+<!-- 오늘의 인기글  end-->
+	<br>
+	
       <div class="panel-heading">
-        게시판 목록 페이지
-        <button id="regBtn" type="button" class="btn btn-primary btn-raised float-right">새로운 게시글 등록</button>
+        <h1>자유게시판</h1>
+        <button id="regBtn" type="button" class="btn btn-outline-success">새로운 게시글 등록</button>
       </div>
+      
+	<br>
       <!-- /.panel-heading -->
       <div class="panel-body">
-        <table  class="table table-striped table-bordered table-hover" id="dataTables-example">
+        <table  class="table table-hover" id="dataTables-example">
           <thead>
-            <tr>
-              <th width="60px">번호</th>
-              <th width="500px">제목</th>
-              <th>작성자</th>
-              <th>작성일</th>
-              <th>조회수</th>
+            <tr class="table-success">
+              <th class="thNum">번호</th>
+              <th class="thTitle">제목</th>
+              <th class="thWriter">작성자</th>
+              <th class="thRegdate">작성일</th>
+              <th class="thViews">조회수</th>
             </tr>
           </thead>
           <c:forEach items="${list}" var="board">
-            <tr>
+            <tr >
               <td>${board.bno}</td>
               <td id="tdTitle"><a class='move' href='${board.bno}'> ${board.title}
               	<b>[${board.replyCnt}]</b>
@@ -35,9 +117,10 @@
         </table>
         <div class="row">
           <div class="col-lg-12">
-            <form action="/board/list" id="searchForm" method="get">
+            <form class="form-inline my-2 my-lg-0" action="/board/list" id="searchForm" method="get">
               <select name="type">
-                <option value="" <c:out value="${pageMaker.cri.type==null?'selected':''}"/>>type</option>
+                <option value="TWC" 
+                	<c:out value="${pageMaker.cri.type eq 'TWC'?'selected':''}"/>>전체</option>
                 <option value="T" 
                 	<c:out value="${pageMaker.cri.type eq 'T'?'selected':''}"/>>제목</option>
                 <option value="C"
@@ -48,43 +131,40 @@
                 	<c:out value="${pageMaker.cri.type eq 'TC'?'selected':''}"/>>제목 또는 내용</option>
                 <option value="TW"
                 	<c:out value="${pageMaker.cri.type eq 'TW'?'selected':''}"/>>제목 또는 작성자</option>
-                <option value="TWC" 
-                	<c:out value="${pageMaker.cri.type eq 'TWC'?'selected':''}"/>>제목 또는 작성자 또는 내용</option>
+                
               </select>
               <input type="text" name="keyword"/>
               <input type="hidden" name="pageNum" value='${pageMaker.cri.pageNum}'>
               <input type="hidden" name="amount" value='${pageMaker.cri.amount}'>
               
-              <button class="btn btn-primary">검색</button>
+              <button class="btn btn-outline-success">검색</button>
             </form>
           </div>
         </div>
-         <nav aria-label="Page navigation example" class="float-right">
-          <ul class="pagination justify-content-center">
+         
+          <ul class="pagination" >
             <c:if test="${pageMaker.prev}">
-              <li class="page-item">
-                <a class="page-link" href="${pageMaker.startPage-1}">이전</a>
+              <li class="page-item active">
+                <a class="page-link" href="${pageMaker.startPage-1}">&laquo;</a> <!-- &laquo;는 이전페이지가 화살표모양(<<)으로 바뀜 -->
               </li>
             </c:if>
             <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-              <li class="page-item button ${pageMaker.cri.pageNum==num ? "active": ""}">
+              <li class="page-item button ${pageMaker.cri.pageNum==num ? "active" : ""}">
                 <a class="page-link" href="${num}">${num}</a>
               </li>
             </c:forEach>
             <c:if test="${pageMaker.next}">
               <li class="page-item">
-                <a class="page-link" href="${pageMaker.endPage+1}">다음</a>
+                <a class="page-link" href="${pageMaker.endPage+1}">&raquo;</a>
               </li>
             </c:if>
           </ul>
-        </nav>
-      
         <!--  end pagination -->
-        <form action="/board/list" id='actionForm' method="get">
-        	<input type='hidden' name="pageNum" value="${pageMaker.cri.pageNum}">
-        	<input type='hidden' name="amount" value="${pageMaker.cri.amount}">
-        	<input type="hidden" name="type" value='${pageMaker.cri.type}'>
-            <input type="hidden" name="keyword" value='${pageMaker.cri.keyword}'>
+        <form class="d-flex" action="/board/list" id='actionForm' method="get">
+        	<input class="form-control me-sm-2" type='hidden' name="pageNum" value="${pageMaker.cri.pageNum}">
+        	<input class="form-control me-sm-2" type='hidden' name="amount" value="${pageMaker.cri.amount}">
+        	<input class="form-control me-sm-2" type="hidden" name="type" value='${pageMaker.cri.type}'>
+            <input class="form-control me-sm-2" type="hidden" name="keyword" value='${pageMaker.cri.keyword}'>
             
         </form>
         <!-- 모달 추가 -->
@@ -110,6 +190,7 @@
   <!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
+
 <script>
   $(document).ready(function () {
     var result = '<c:out value="${result}"/>'
@@ -137,6 +218,21 @@
 	   actionForm.submit();// 추가 
    })
    $(".move").click(function(e){
+	   e.preventDefault();
+     var bno=$("input[name=bno]").val()
+     if(bno){
+    	 bno=$(this).attr('href')
+    	 actionForm.append("<input type='hidden' name='bno' value='" +bno+"'>");
+     }
+     else{  
+    	 actionForm.append("<input type='hidden' name='bno' value='" +$(this).attr("href")+"'>");
+     }
+	   console.log($(this).attr('href'))
+	   actionForm.attr("action","/board/details");
+	  actionForm.submit();
+   })
+   
+      $(".moveP").click(function(e){
 	   e.preventDefault();
      var bno=$("input[name=bno]").val()
      if(bno){

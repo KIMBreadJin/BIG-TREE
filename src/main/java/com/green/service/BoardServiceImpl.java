@@ -2,18 +2,31 @@ package com.green.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.green.mapper.BoardMapper;
 import com.green.mapper.ImageUploadMapper;
+import com.green.mapper.ReplyMapper;
+import com.green.mapper.ReportMapper;
 import com.green.vo.BoardVO;
 import com.green.vo.Criteria;
+import com.green.vo.GetSessionUser;
 import com.green.vo.ImageVO;
+import com.green.vo.MemberVO;
+import com.green.vo.ReportVO;
 
 import lombok.Setter;
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
+@Log4j
 public class BoardServiceImpl implements BoardService {
 	
 	@Setter(onMethod_=@Autowired)
@@ -22,14 +35,37 @@ public class BoardServiceImpl implements BoardService {
 	@Setter(onMethod_=@Autowired)
 	ImageUploadMapper imageUploadMapper;
 	
+	@Setter(onMethod_=@Autowired)
+	ReportMapper reportMapper;
+	
+	@Setter(onMethod_=@Autowired)
+	ReplyMapper replyMapper;
+	
 	@Override
 	public List<BoardVO> getBoardList() {
-		return boardMapper.getBoardList();
+		List<BoardVO> boardList=boardMapper.getBoardList();
+		for(BoardVO board : boardList) {
+			board.setReplyCnt(replyMapper.getCountByBno(board.getBno()));
+			
+		}
+		log.info("boardList="+boardList);
+		return boardList;
 	}
 
 	@Override
 	public BoardVO getBoard(int bno) {
-		return boardMapper.getBoard(bno);
+		ReportVO reportVO = new ReportVO();
+		reportVO.setBno(bno);
+		
+		log.info("asdasd"+reportVO);
+		BoardVO boardVo =boardMapper.getBoard(bno);
+		if(GetSessionUser.getUser()!=null) {
+			String userName=GetSessionUser.getUser().getUser_name();
+			reportVO.setReporter(userName);
+			boardVo.setReportWithUser(reportMapper.getReport(reportVO));//게시글을 불러올때 유저가 해당게시글에 신고하였으면 정보를 가져감 
+			boardVo.setReportList(reportMapper.getReportList(bno));
+		}
+		return boardVo;
 	}
 
 	@Override
@@ -65,7 +101,11 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public List<BoardVO> getBoardListWithPage(Criteria cri) {
-		return boardMapper.getBoardListWithPage(cri);
+		List<BoardVO> boardList= boardMapper.getBoardListWithPage(cri);
+		for(BoardVO board : boardList) {
+			board.setReplyCnt(replyMapper.getCountByBno(board.getBno()));
+		}
+		return boardList;
 	}
 
 	@Override
@@ -82,6 +122,12 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<ImageVO> getImageList(int bno) {
 		return imageUploadMapper.getImageList(bno);
+	}
+
+	@Override
+	public List<BoardVO> popularViews() {
+		// TODO Auto-generated method stub
+		return boardMapper.popularViews();
 	}
 
 }
