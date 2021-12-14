@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.mapper.FriendMapper">
+	<select id="getMemberList" resultType="com.green.vo.MemberVO">
+		select*from big_tree_member where user_name like '%'||#{user_name}||'%'
+	</select>
+	<insert id="regist">
+		insert into big_tree_friend(fno,send_id,receiver_id) 
+			values(fr_seq.nextval,#{send_id},#{receiver_id})
+	</insert>
+	<delete id="delete">
+		delete big_tree_friend where fno=#{fno}
+	</delete>
+	<select id="getFriendVO" resultType="com.green.vo.FriendVO">
+		select*from big_tree_friend where send_id=#{send_id} 
+			and receiver_id=#{receiver_id} 
+	</select>
+	<update id="update">
+		update big_tree_friend set check_frd=#{check_frd} where fno=#{fno}
+	</update>
+
+</mapper>

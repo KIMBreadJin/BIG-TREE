@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.mapper.QnaMapper">
+	<sql id="criteria">
+		<trim prefix="(" suffix=") and " prefixOverrides="OR">
+			    	<foreach item="type" collection="typeArr">
+			    		<trim prefix="OR">
+			    			<choose>
+			    				<when test="type== 'T'.toString()">
+			    					title like '%'||#{keyword}||'%'
+			    				</when>
+			    				<when test="type== 'C'.toString()">
+			    					content like '%'||#{keyword}||'%'
+			    				</when>
+			    				<when test="type== 'W'.toString()">
+			    					writer like '%'||#{keyword}||'%'
+			    				</when>
+<!-- 			    				<when test="type== 'P'.toString()">
+			    					views>10
+			    				
+			    				</when> -->
+			    			</choose>
+			    		</trim>
+			    	</foreach>
+		    </trim>
+	</sql>
+
+
+	<select id="getQnaList" resultType="com.green.vo.QnaVO">
+		select * from big_tree_qna
+	</select>
+	<select id="getQna" resultType="com.green.vo.QnaVO">
+		select*from big_tree_qna where qno=#{qno}
+	</select>
+	<insert id="registQna">
+		insert into big_tree_qna(qno,title,content,writer ) values 
+			(qna_seq.nextval,#{title},#{content},#{writer})
+	</insert>
+	<delete id="deleteQna">
+		delete big_tree_qna where qno=#{qno}
+	</delete>
+	<update id="updateQna">
+		update big_tree_qna 
+			set title =#{title}, content=#{content}, updateDate=sysdate
+				where qno = #{qno}
+	</update>
+	
+	<select id="getQnaListWithPage" resultType="com.green.vo.QnaVO">
+		<![CDATA[
+			select qno,title,content,writer,regDate,updateDate
+				from( select rownum rn,qno,title,content,writer,regDate,updateDate
+					from (select*from big_tree_qna order by qno desc)
+						where 
+				]]>	
+				<if test="keyword !=null">	
+				<include refid="criteria"></include>
+				</if>
+				<![CDATA[	
+						rownum <=#{pageNum} * #{amount}  )
+					where rn > (#{pageNum}-1) * #{amount} 
+				]]>
+	</select>
+	
+	<select id="getTotalCount" resultType="int">
+		select count(*) from big_tree_qna
+		<if test="keyword !=null">
+		where qno>0 <include refid="criteria"></include>
+		</if>
+	</select>
+
+
+
+	
+</mapper>

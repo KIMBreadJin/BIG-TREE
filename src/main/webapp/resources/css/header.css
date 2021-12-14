@@ -1,0 +1,142 @@
+
+@import "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css";
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700');
+
+body{ font-size: 14px; color: #333; list-style: 26px;font-family: 'Roboto', sans-serif; }
+
+/** ======================  base css ==============================**/
+
+a:hover{ text-decoration: none; }
+/** ======================  header ==============================**/
+.header{}
+.header .dropdown-menu {
+    position: absolute;
+    right: 0;
+    left: auto;
+    border-radius: 0px;
+}
+.header .user-image {
+    float: left;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-top: -2px;
+}
+
+.header .navbar-light .navbar-nav .nav-link{ color: #fff }
+.header .navbar-light .navbar-nav .nav-link:hover, .header .navbar-light .navbar-nav .nav-link:focus   {
+    
+       background: rgba(0,0,0,0.1);
+    color: #f6f6f6;
+}
+.header .fa.fa-fw.fa-bars{ color: #fff; }
+.header .navbar-light .navbar-nav .nav-link {
+    color: #fff;
+    padding: 10px 20px;
+    position: relative;
+}
+.header  li>a>.label {
+    position: absolute;
+    top: 9px;
+    right: 7px;
+    font-size: 9px;
+    padding: 2px 3px;
+    line-height: .9; background-color: #333;    border-radius: .25em;
+}
+.header  li>a:after{ display: none; }
+
+.header-ul{    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    background-color: #ffffff;
+    padding: 7px 10px;
+    border-bottom: 1px solid #f4f4f4;
+    color: #333;
+    font-size: 14px;}
+
+    .navbar-nav>.notifications-menu>.dropdown-menu, .navbar-nav>.messages-menu>.dropdown-menu, .navbar-nav>.tasks-menu>.dropdown-menu {
+    width: 280px;
+    padding: 0 0 0 0;
+    margin: 0;
+    top: 100%;
+}
+.navbar-nav>.messages-menu>.dropdown-menu li .menu>li>a>div>img {
+    margin: auto 10px auto auto;
+    width: 40px;
+    height: 40px;
+}
+.navbar-nav>.messages-menu>.dropdown-menu li .menu>li>a ,.navbar-nav>.notifications-menu>.dropdown-menu li .menu>li>a{
+    margin: 0;
+    padding: 10px 10px;
+        display: block;
+    white-space: nowrap;
+    border-bottom: 1px solid #f4f4f4;
+}
+.navbar-nav>.messages-menu>.dropdown-menu li .menu>li>a>h4 {
+    padding: 0;
+    margin: 0 0 0 45px;
+    color: #333;
+    font-size: 15px;
+    position: relative;
+}
+.navbar-nav>.messages-menu>.dropdown-menu li .menu>li>a>p {
+    margin: 0 0 0 45px;
+    font-size: 12px;
+    color: #888888;
+}
+
+.footer-ul a{
+	border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    font-size: 12px;
+    background-color: #fff;
+    padding: 7px 10px;
+    border-bottom: 1px solid #eeeeee;
+    color: #333 ; display: block;
+    }
+
+      .dropdown-menu-over .menu{  max-height: 200px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-x: hidden;}
+
+    .navbar-nav>.notifications-menu>.dropdown-menu li .menu>li>a {
+    color: #444444;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 10px;
+}
+.navbar-nav>.notifications-menu>.dropdown-menu li .menu>li>a>.glyphicon, .navbar-nav>.notifications-menu>.dropdown-menu li .menu>li>a>.fa, .navbar-nav>.notifications-menu>.dropdown-menu li .menu>li>a>.ion {
+    width: 20px;
+}
+
+a.navbar-brand {
+    width: 165px;
+}
+.navbar-nav>li>a>span {
+	color: #f206f9;
+}
+.footer-ul a{
+	border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    font-size: 12px;
+    background-color: #fff;
+    padding: 7px 10px;
+    border-bottom: 1px solid #eeeeee;
+    color: #333 ; display: block;
+    }
+
+
+/*!
+ * Bootstrap v4.0.0-alpha.6 (https://getbootstrap.com)
+ * Copyright 2011-2017 The Bootstrap Authors
+ * Copyright 2011-2017 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ 

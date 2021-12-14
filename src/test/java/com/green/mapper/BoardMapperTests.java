@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.green.vo.BoardVO;
 import com.green.vo.Criteria;
 import com.green.vo.MemberVO;
+import com.green.vo.MessageVO;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -22,6 +23,9 @@ public class BoardMapperTests {
 	
 	@Setter(onMethod_=@Autowired)
 	MemberMapper Mmapper;
+	
+	@Setter(onMethod_=@Autowired)
+	MessageMapper Msgmapper;
 	
 	//@Test
 	public void registTest() {
@@ -85,10 +89,38 @@ public class BoardMapperTests {
 		vo.setUser_phone("010-1111-2222");
 		Mmapper.phnChk(vo);
 	}
-	@Test
+	//@Test
 	public void friendfind() {
 		MemberVO vo = new MemberVO();
 		vo.setUser_id("test");
 		Mmapper.findFrd(vo);
 	}
+	//@Test
+	public void sendMsgtest() {
+		for(int i=0; i<10;i++) {
+			MessageVO vo = new MessageVO();
+			vo.setUser_id("test");
+			vo.setMs_content("메세지 테스트");
+			vo.setReceiver_name("김영진");
+			vo.setReceiver_id("testid");
+			vo.setSend_name("영진");
+			
+			Msgmapper.sendMsg(vo);
+		}
+		
+	}
+	//@Test
+	public void readMesgTest() {
+		Msgmapper.readMsg(5L);
+	}
+	@Test
+	public void msgListTest() {
+		MessageVO a = new MessageVO();
+		a.setReceiver_id("testid");
+		Msgmapper.msgList(a);
+	}
+
 }
+
+
+

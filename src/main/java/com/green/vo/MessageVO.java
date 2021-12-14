@@ -1,5 +1,7 @@
 package com.green.vo;
 
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,10 +14,11 @@ import lombok.ToString;
 @Setter
 @ToString
 public class MessageVO {
+	private long mid;
 	private String user_id;
-	private String ms_title;
 	private String ms_content;
 	private String receiver_name;
+	private String receiver_id;
 	private String send_name;
 	private String creat_dt;
 	private String ms_type;  // 수신 발신 구분

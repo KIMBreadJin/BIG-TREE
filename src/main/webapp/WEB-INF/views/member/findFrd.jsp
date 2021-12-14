@@ -71,11 +71,20 @@ prefix="c" %>
 				</div>
 				<div class="form-label-group">
 					<input class="btn btn-block text-uppercase"
-						type="button" value="메세지 보내기" onclick="resetPwd()">
+						type="button" value="메세지 보내기" onclick="sendMsg()">
 				</div>
 		</c:if>
 		</div>
 		</form>
+		<script type="text/javascript">
+			function login(){
+				location.href = "/member/login"
+			}
+			function sendMsg(){
+		        window.resizeTo(600, 600)
+		        location.replace('/message/sendMsg')
+			}
+		</script>
     </div>
     
   </body>

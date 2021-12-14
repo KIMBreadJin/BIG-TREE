@@ -77,9 +77,9 @@
 				    var fileCallPath = encodeURIComponent(myobj[0].uploadPath + '/s_' + myobj[0].uuid + '_' + myobj[0].fileName)        
 			        str = "<img id='img"+(cnt)+"' src='/display?fileName=" + fileCallPath + "'>"//이미지 태그 생성 
 	                str2="<div id='"+(cnt)+"'>"//form 태그의 input타입 생성하기위한 문자열 선언
-	                str2 += "<input type='text' name='imageList[" + (cnt)+ "].fileName' value='" + myobj[0].fileName + "'>"
-	                str2 += "<input type='text' name='imageList[" + (cnt) + "].uuid' value='" + myobj[0].uuid + "'>"
-	                str2 += "<input type='text' name='imageList[" + (cnt++) + "].uploadPath' value='" + myobj[0].uploadPath + "'>"
+	                str2 += "<input type='hidden' name='imageList[" + (cnt)+ "].fileName' value='" + myobj[0].fileName + "'>"
+	                str2 += "<input type='hidden' name='imageList[" + (cnt) + "].uuid' value='" + myobj[0].uuid + "'>"
+	                str2 += "<input type='hidden' name='imageList[" + (cnt++) + "].uploadPath' value='" + myobj[0].uploadPath + "'>"
 			        str2 +="</div>"
 	                ckediters.setData(ckediters.getData()+str);//기존의 data에 이미지 추가
 			        operForm.append(str2)//폼태그에 input(name=imageList) 보내기
@@ -91,6 +91,7 @@
         operForm.attr('action', '/board/list').attr('method', 'get').submit()
       })
       $("#regist").click(function (e) {
+    	  
         if (confirm('등록하시겠습니까?')) {
         	var pass= nullDataCheck()
 	    	if(pass.content==true && pass.title==true){
@@ -101,7 +102,9 @@
 	    		e.preventDefault()
 	    		alert("제목과 내용을 채워주세요")
 	    	}
+        	
         }
+        
       })
       //==============버튼 유형에 따른 처리======================== 	
     	  

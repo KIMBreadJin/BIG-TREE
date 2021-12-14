@@ -55,7 +55,7 @@ a.move:hover:after{
 }
 div.s_right{
 	width:400px;
-	height:300vh; /* vh= body,html을 안건들이고 화면 꽉차게 하는방법 넓이는 vw를 쓰면됨! */
+	height:250vh; /* vh= body,html을 안건들이고 화면 꽉차게 하는방법 넓이는 vw를 쓰면됨! */
 	background-color: #B8F3B8;
 	float:right;
 
@@ -72,24 +72,20 @@ div.s_right{
 <div class=s_right>오른쪽사이드바만들기
 <div>대충 광고</div>
 <div>대충 </div>
+
 </div>
 <!-- /.row body내용-->
 <div class="row">
-
   <div class="col-lg-12">
-  
       <!-- 오늘의 인기글 start -->
-	
 	 <small class="text-muted">오늘의 인기글</small>
 	 <br>
 		<table class="test" id="dataTables-example2">
-	
 		    <tr class="table-secondary">
 		        <th class=th1>순위</th>
 		        <th class=th2>제목</th>     
 		        <th class=th3>조회수</th>
-			</tr>        
-		
+			</tr>        	
 		   <c:forEach var = "popular" items="${popular}"> 
 		    <c:set var="ranking" value="${ranking+1}"/>
 		    <tr class="table-light">
@@ -97,21 +93,17 @@ div.s_right{
 		        <td  ><a class='move' href="${popular.bno}">${popular.title}</a></td>    <!-- 제목 -->
 		        <td >${popular.views}</td>    <!-- 조회수 -->   
 		    </tr>
-		    </c:forEach> 
-		    
- 
+		    </c:forEach> 	    
 		</table>
-<!-- 오늘의 인기글  end-->
-	<br>
+    <br>
+       <!-- 오늘의 인기글  end-->
 	
-    </div>
-  	<!-- /.col-lg-12 -->
-  	  <div class="panel-heading">
+	
+  	  <div class="panel-heading text-center">
         <h1>자유게시판</h1>
-        <button id="regBtn" type="button" class="btn btn-outline-success">새로운 게시글 등록</button>
-      	
-      </div>
-      
+        <button id="regBtn" type="button" class="btn btn-outline-success float-right">새로운 게시글 등록</button>     	
+      </div>  
+        
 	<br>
       <!-- /.panel-heading -->
       <div class="panel-body">
@@ -137,8 +129,7 @@ div.s_right{
             </tr>
           </c:forEach>
         </table>
-        <div class="row">
-          <div class="col-lg-12">
+        
             <form class="form-inline my-2 my-lg-0" action="/board/list" id="searchForm" method="get">
               <select name="type">
                 <option value="TWC" 
@@ -161,8 +152,7 @@ div.s_right{
               
               <button class="btn btn-outline-success">검색</button>
             </form>
-          </div>
-        </div>
+          
          
           <ul class="pagination" >
             <c:if test="${pageMaker.prev}">
@@ -199,17 +189,15 @@ div.s_right{
                 <button class="btn btn-default" data-dismiss="modal">닫기</button>
               </div>
             </div>
-            <!-- /.modal-content -->
           </div>
-          <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal -->
+        <!-- /모달 end -->
+     
       </div>
       <!-- /.panel-boby -->
     </div>
     <!-- /.panel -->
   </div>
-</div>
 <!-- /.row -->
 
 <script>

@@ -1,6 +1,7 @@
 package com.green.controller;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.green.service.KakaoService;
 import com.green.service.MemberService;
+import com.green.service.MessageService;
 import com.green.vo.MemberVO;
+import com.green.vo.MessageVO;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -33,26 +36,31 @@ public class MemberController {
 	KakaoService kakaoService;
 	String kakaoid = "";
 	String kakaoName="";
-//	
-//	@GetMapping("/login")
-//	public void login() {
-//		log.info("login page");
-//	}
+	@Setter(onMethod_=@Autowired)
+	MessageService msgService;
 	
 	@RequestMapping(value = {"/member/login","/"},  method = RequestMethod.POST)
 	@ResponseBody
-	public int loginform(MemberVO vo, HttpServletRequest request, Model model) {
+	public int loginform(MemberVO vo, MessageVO msg,  HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
 		log.info("1) 로그인 고객 정보 ");	
 		vo.setUser_id(request.getParameter("user_id"));
 		vo.setUser_pwd(request.getParameter("user_pwd"));
 		log.info("아이디" + vo.getUser_id() + "비밀번호" + vo.getUser_pwd());
 		int result = service.login(vo);
-		log.info("아이디 개수"+result);		
-		log.info("1) 로그인 고객 정보 " + service.info(vo));
-		
+		log.info("아이디 개수"+result);			
 		session.setAttribute("info", service.info(vo));
 		log.info("넘버" + session.getAttribute("info"));
+		
+		if(result == 1) {
+			vo = (MemberVO)session.getAttribute("info");
+			msg.setReceiver_id(vo.getUser_id());
+			List<MessageVO> list = msgService.msgList(msg);
+			log.info("What...." + list);
+			session.setAttribute("mlist", list);
+			
+			session.setAttribute("cntMsg", msgService.countMsg(msg.getReceiver_id()));
+		}
 		return result;
 	}
 	@RequestMapping(value ="/logout", method = RequestMethod.GET)
@@ -194,14 +202,15 @@ public class MemberController {
 	public void findFriend(Model model, MemberVO vo) {
 	}
 	@PostMapping("/findFrd")
-	public String findFrdAction(MemberVO vo, Model model) {
+	public String findFrdAction(MemberVO vo, Model model,HttpServletRequest request) {
 		MemberVO friend = service.findFrd(vo);
+		HttpSession session = request.getSession();
 		
 		if(friend == null) { 
 			model.addAttribute("checkid", 1);
 		} else { 
 			model.addAttribute("checkid", 0);
-			model.addAttribute("find", friend);
+			session.setAttribute("find", friend);
 		}
 		return "/member/findFrd";
 	}
