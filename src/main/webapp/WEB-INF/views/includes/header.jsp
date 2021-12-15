@@ -45,7 +45,7 @@
                   <!-- start message -->
                     <c:forEach items="${mlist}" var="mlist">                
                       <li>               
-                        <a href="#">
+                        <a id="readM" href="/message/readMsg?mid=${mlist.mid}" onclick="window.open(this.href, '_blank', 'width=700, height=510'); return false;">
                           <div class="pull-left">
                               <img src="http://via.placeholder.com/160x160" class="rounded-circle " alt="User Image">
                           </div>

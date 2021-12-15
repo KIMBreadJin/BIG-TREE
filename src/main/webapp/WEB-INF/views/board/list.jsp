@@ -237,7 +237,7 @@ div.s_right{
 	   e.preventDefault();
 	   console.log($(this).attr("href"))
 	   
-	   var thisis = $(this).attr("href"); 
+	   //var thisis = $(this).attr("href"); 
 	   console.log("페이지 로직이 눌렸어요",thisis);
 	   actionForm.find("input[name='pageNum']").val(thisis);
 	   actionForm.submit();// 추가 

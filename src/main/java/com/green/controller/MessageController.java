@@ -12,9 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.green.service.MessageService;
@@ -54,4 +56,21 @@ public class MessageController {
 	public void getMList(Model model, MessageVO vo, HttpServletRequest request) {
 
 	}
+	@GetMapping("/readMsg")
+	public void readMsg(@RequestParam("mid")int mid, Model model) {
+		
+		model.addAttribute("readM",service.readMsg(mid));
+	}
+	@PostMapping("/readMsg")
+	public String postMsg(Model model, MessageVO vo, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		vo.setReceiver_id(request.getParameter("receiver_id"));
+		vo.setReceiver_name(request.getParameter("receiver_name"));
+		log.info("받아오나" + request.getParameter("receiver_id") , vo.getReceiver_id());
+		log.info("받아오나2" + request.getParameter("receiver_name") , vo.getReceiver_id());
+		session.setAttribute("ans", vo);
+		
+		return "/message/sendMsg";
+	}
+	
 }

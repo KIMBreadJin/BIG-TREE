@@ -26,8 +26,8 @@ prefix="c" %>
         </div>
         <div>
           <input type="hidden" id="user_id" name="user_id" value="${info.user_id}" />
-          <input type="hidden" id="receiver_id" name="receiver_id" value="${find.user_id}" />
-          <input type="hidden" id="receiver_name" name="receiver_name" value="${find.user_name}" />
+          <input type="hidden" id="receiver_id" name="receiver_id" value="${find.user_id}${ans.receiver_id}" />
+          <input type="hidden" id="receiver_name" name="receiver_name" value="${find.user_name}${ans.receiver_name}" />
           <input type="hidden" id="send_name" name="send_name" value="${info.user_name}" />
         </div>
         <br style="clear: both" />
