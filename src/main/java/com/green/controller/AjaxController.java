@@ -1,6 +1,9 @@
 package com.green.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.green.service.FriendService;
+import com.green.service.MemberService;
 import com.green.vo.Criteria;
 import com.green.vo.FriendVO;
 import com.green.vo.MemberVO;
@@ -32,6 +36,8 @@ public class AjaxController {
 	@Setter(onMethod_=@Autowired)
 	FriendService friendService;
 	
+	@Setter(onMethod_=@Autowired)
+	MemberService memberService;
 	
 	@ResponseBody
 	@RequestMapping(value = "/searchUser")
@@ -72,5 +78,42 @@ public class AjaxController {
 		return msg;
 	}
 	
+	@ResponseBody
+	@RequestMapping (value = "/requestReceived" )
+	public Map<String, Object> getRequestReceived(FriendVO vo) {
+		  Map<String, Object> result= new HashMap<String, Object>();
+		    
+			List<FriendVO> requestList = friendService.getFriendReceived(vo);
+			log.info("requestList(친구요청정보) :"+requestList);
+			List<MemberVO> memberList = new ArrayList<MemberVO>();
+			requestList.forEach(request->{
+				MemberVO member = new MemberVO();
+				member.setUser_id(request.getSend_id());
+				memberList.add(memberService.findFrd(member));
+			});
+			
+			result.put("requestList", requestList);
+			result.put("memberList", memberList);
+			return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping (value = "/requestSent" )
+	public Map<String, Object> getRequestSent(FriendVO vo) {
+	    Map<String, Object> result= new HashMap<String, Object>();
+	    
+		List<FriendVO> requestList = friendService.getFriendSent(vo);
+		log.info("requestList(친구요청정보) :"+requestList);
+		List<MemberVO> memberList = new ArrayList<MemberVO>();
+		requestList.forEach(request->{
+			MemberVO member = new MemberVO();
+			member.setUser_id(request.getReceiver_id());
+			memberList.add(memberService.findFrd(member));
+		});
+		
+		result.put("requestList", requestList);
+		result.put("memberList", memberList);
+		return result;
+	}
 	
 }

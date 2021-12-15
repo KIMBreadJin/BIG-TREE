@@ -54,4 +54,14 @@ public class FriendServiceImpl implements FriendService {
 		friendMapper.update(vo);
 	}
 
+	@Override
+	public List<FriendVO> getFriendReceived(FriendVO vo) {
+		return friendMapper.getFriendRecieved(vo);
+	}
+
+	@Override
+	public List<FriendVO> getFriendSent(FriendVO vo) {
+		return friendMapper.getFriendSent(vo);
+	}
+
 }

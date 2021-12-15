@@ -21,4 +21,6 @@ public class MemberVO {
 	private String user_email;
 	private String user_birth;
 	private String user_kakao;
+	private String user_nickName;
+	private int user_type;
 }

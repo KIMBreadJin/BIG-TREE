@@ -84,6 +84,10 @@ public class MemberServiceImpl implements MemberService{
 	public MemberVO findFrd(MemberVO vo) {
 		return mapper.findFrd(vo);
 	}
+	@Override
+	public void modify(MemberVO vo) {
+		mapper.modify(vo);
+	}
 	
 	
 }

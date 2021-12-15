@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.mapper.QnaReplyMapper">
+	<insert id="insert">
+		insert into big_tree_qna_reply(rno ,qno, reply, replyer)
+			values (qna_reply_seq.nextval, #{qno},#{reply},#{replyer})
+	</insert>
+	<select id="read" resultType="com.green.vo.QnaReplyVO"> 
+		select * from big_tree_qna_reply where rno = #{rno}
+	</select>
+	<update id="update" >
+		 update big_tree_qna_reply set reply= #{reply},
+		 	updateDate = sysdate where rno = #{rno}
+	</update>
+	<delete id="delete">
+		delete from big_tree_qna_reply where rno = #{rno}
+	</delete>
+	
+	<select id="getListWithPaging" resultType="com.green.vo.QnaReplyVO">
+	<!-- select rno,bno,reply,replyer,replyDate,updateDate
+	form big_tree_reply
+	where bno =#{bno}
+	order by rno asc -->
+
+		<![CDATA[
+			select rno ,qno ,rno ,reply,replyer, replyDate,updateDate
+				from 
+				(    select /*+ index(big_tree_qna_reply idx_reply) */
+				    rownum rn ,qno ,rno ,reply,replyer, replyDate,updateDate
+				        from big_tree_qna_reply
+				    where qno = #{qno} and rno>0
+				        and rownum <=#{cri.pageNum} * #{cri.amount}
+				 ) where rn >(#{cri.pageNum}-1) * #{cri.amount}
+       ]]>
+	</select>
+	<select id="getCountByBno" resultType="int">
+	<![CDATA[
+	select count(rno) from big_tree_qna_reply where qno=#{qno}
+	]]>
+	</select>
+	
+</mapper>

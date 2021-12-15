@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="" />
   	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  	<link rel="stylesheet" type="text/css" href="/resources/css/header.css" />
+  	<link rel="stylesheet" type="text/css" href="/resources/css/header.css?ver=3" />
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" >
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" ></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
@@ -22,7 +22,7 @@
 	<div style="float:none; margin:0 auto">
   		<a class="navbar-brand" href="/board/list"><h1>Big Tree Community</h1></a>
   	</div>
-      <div>
+  	<div>
         <ul class="navbar-nav">
           <li class="nav-item dropdown messages-menu">
             <a
@@ -53,14 +53,12 @@
                             ${mlist.send_name}
                             <i class="fa fa-clock-o"></i> <small> ${mlist.creat_dt}</small>
                           </h4>
-                          <p>${mlist.ms_content}</p>
-                          <%-- <input type="text" id="creat_dt" value="${mlist.creat_dt}" />    --%>
-                         <script>
-                         	console.log("1")
-                    	    passMin("${mlist.creat_dt}")                  	  	
-                      	 </script>   
-                          
+                          <p>${mlist.ms_content}</p>                
                         </a>
+                        <form action="/message/deleteMsg" method="post" name="delForm">
+                          <input type="hidden" name="mid" value="${mlist.mid}"/>
+                          <input type="submit" id="deleteMsg" value="&#xf1f8"/>
+                        </form>
                       </li>                      
                     </c:forEach>
                     <!-- end message -->
@@ -186,6 +184,36 @@
          <!-- 클릭시 나오는 회원정보 modal end -->
          
          
+         <div class="modal fade" id="requestList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header" style="margin:0;padding:0;">
+                   <nav class="navbar " style="width:248px;margin:0;padding:0;">
+					  <form class="form-inline" style="margin:0;padding:0;">
+					    <button class="btn btn-outline-secondary" type="button" style="width:248.66px;" id="requestSent"><h3>보낸 요청</h3></button>
+					  </form>  
+					</nav>
+					 <nav class="navbar" style="width:248px;margin:0;padding:0;">
+					  <form class="form-inline" >
+					    <button class="btn btn-outline-secondary" type="button" style="width:248.66px" id="requestReceived"><h3>받은 요청</h3></button>
+					  </form>  
+					</nav>
+                  </div>
+                  <!-- modal-header -->
+                  <div class="modal-body">
+	 				<ul class="requestResultList">
+             			
+            		</ul>
+                  </div>
+                  <!-- modal-body -->
+                  <div class="modal-footer">
+                    <button class="btn btn-info" id="memberListCloseBtn" type="button">닫기</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+         
+         
 </header>
  <style>
 	  .navbar.navbar-light.bg-light{
@@ -210,6 +238,8 @@
   </style>
 <script>
 $(document).ready(function(){
+	//$("#requestList").modal('show')
+	
 	var userList;
 	var userName= $("#searchUserName").val()
 	$('#goChat').click( function (e) {
@@ -242,7 +272,7 @@ $(document).ready(function(){
 				 }
 			 }
 		 })//end ajax
-		 
+	 })
 		 
 		 $("#searchResult").click(function(e){//결과보기 눌렀을때 호출함수
 			 console.log("결과보기 눌림")
@@ -256,14 +286,16 @@ $(document).ready(function(){
 				},
 				success:function(list){
 					 for (var i = 0, len = list.length || 0; i < len; i++) {
-		                    str += "<li class='left clearfix' data-name='" + list[i].user_name + "' id='resultNameList'>"
-		                    str += " <div><div class='header'><strong class='primary-font'>" + list[i].user_name + '</strong>'
+						 	
+		                    str += "<li class='left clearfix' data-name='" + list[i].user_name + "' id='resultNameList' style='margin:4px' >"
+		                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
+		                    str += "<strong class='primary-font' >" + list[i].user_name + '</strong><p>'+list[i].user_id + '</p>'
 		                    str += " </div>"
-		                    str += ' <p>' + list[i].user_id + '</p></div></li>'
+		                    str += '</div></li>'
 		                  }
 					 if (list == null || list.length == 0) {
 			              alert("조회결과없음")
-			              replyUL.html('')
+			              $(".userList").html('')
 			              return
 					 }
 					$(".userList").html(str)
@@ -319,9 +351,79 @@ $(document).ready(function(){
 				
 			}
 		})
-		 
+		
+		$("#requestReceived").click(function(e){
+			 $(".requestResultList").html('')
+				$(this).attr('class','btn btn-secondary')
+				$("#requestSent").attr('class','btn btn-outline-secondary')
+				
+				$.ajax({
+					type:'get',
+					url: '/requestReceived',
+					data:{
+						"receiver_id":"${info.user_id}"				
+					},
+					success:function(data){
+						console.log(data['memberList'])
+						var str=""
+						for (var i = 0, len = data['memberList'].length || 0; i < len; i++) {
+						 	
+		                    str += "<li class='left clearfix' data-name='" + data['memberList'][i].user_name + "' id='resultNameList' style='margin:4px' >"
+		                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
+		                    str += "<strong class='primary-font' >" + data['memberList'][i].user_name + '</strong><p>'+data['memberList'][i].user_id + '</p>'
+		                    str += " </div>"
+		                    str += '</div></li>'
+		                  }
+						 if (data == null ||  data['requestList'].length == 0) {
+				              alert("조회결과없음")
+				              
+				              return
+						 }
+						$(".requestResultList").html(str)
+					}
+				})
+		})
+		$("#requestSent").click(function(e){
+			 $(".requestResultList").html('')
+				$(this).attr('class','btn btn-secondary')
+				$("#requestReceived").attr('class','btn btn-outline-secondary')
+				
+				$.ajax({
+					type:'get',
+					url: '/requestSent',
+					data:{
+						"send_id":"${info.user_id}"				
+					},
+					success:function(data){
+						console.log(data['memberList'])
+						var str=""
+							console.log(data['memberList'])
+						for (var i = 0, len = data['memberList'].length || 0; i < len; i++) {
+						 	
+		                    str += "<li class='left clearfix' data-name='" + data['memberList'][i].user_name + "' id='resultNameList' style='margin:4px' >"
+		                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
+		                    str += "<strong class='primary-font' >" + data['memberList'][i].user_name + '</strong><p>'+data['memberList'][i].user_id + '</p>'
+		                    str += " </div>"
+		                    str += '</div></li>'
+		                  }
+						 if (data == null ||  data['requestList'].length == 0) {
+				              alert("조회결과없음")
+				              
+				              return
+						 }
+						$(".requestResultList").html(str)
+					}
+				})	
+		})		
+/* 		$('#deleteMsg').click(function(){
+			document.delForm.submit();
+		}) */
 	 })//end document
-})
+	
+	 const getRequestResultList=()=>{
+		
+	 }
+	 
 
 </script>
 </html> 

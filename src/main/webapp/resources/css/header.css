@@ -8,7 +8,7 @@ body{ font-size: 14px; color: #333; list-style: 26px;font-family: 'Roboto', sans
 
 a:hover{ text-decoration: none; }
 /** ======================  header ==============================**/
-.header{}
+input[type="submit"] {font-family:FontAwesome;}
 .header .dropdown-menu {
     position: absolute;
     right: 0;
@@ -72,6 +72,7 @@ a:hover{ text-decoration: none; }
     padding: 10px 10px;
         display: block;
     white-space: nowrap;
+    position: relative;
     border-bottom: 1px solid #f4f4f4;
 }
 .navbar-nav>.messages-menu>.dropdown-menu li .menu>li>a>h4 {
@@ -85,6 +86,19 @@ a:hover{ text-decoration: none; }
     margin: 0 0 0 45px;
     font-size: 12px;
     color: #888888;
+}
+.navbar-nav>.messages-menu>.dropdown-menu li .menu>li:hover form>#deleteMsg{
+	visibility : visible;
+	
+}
+.navbar-nav>.messages-menu>.dropdown-menu li .menu>li>form>#deleteMsg{
+	visibility: hidden;
+	position: relative;
+	z-index:1;
+	bottom:40px;
+	right:5px;
+	float:right;
+	color: #ff4646;
 }
 
 .footer-ul a{

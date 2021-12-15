@@ -55,7 +55,7 @@ a.move:hover:after{
 }
 div.s_right{
 	width:400px;
-	height:250vh; /* vh= body,html을 안건들이고 화면 꽉차게 하는방법 넓이는 vw를 쓰면됨! */
+	height:300vh; /* vh= body,html을 안건들이고 화면 꽉차게 하는방법 넓이는 vw를 쓰면됨! */
 	background-color: #B8F3B8;
 	float:right;
 
@@ -72,39 +72,17 @@ div.s_right{
 <div class=s_right>오른쪽사이드바만들기
 <div>대충 광고</div>
 <div>대충 </div>
-
 </div>
 <!-- /.row body내용-->
 <div class="row">
   <div class="col-lg-12">
-      <!-- 오늘의 인기글 start -->
-	 <small class="text-muted">오늘의 인기글</small>
-	 <br>
-		<table class="test" id="dataTables-example2">
-		    <tr class="table-secondary">
-		        <th class=th1>순위</th>
-		        <th class=th2>제목</th>     
-		        <th class=th3>조회수</th>
-			</tr>        	
-		   <c:forEach var = "popular" items="${popular}"> 
-		    <c:set var="ranking" value="${ranking+1}"/>
-		    <tr class="table-light">
-		        <td > ${ranking}</td>
-		        <td  ><a class='move' href="${popular.bno}">${popular.title}</a></td>    <!-- 제목 -->
-		        <td >${popular.views}</td>    <!-- 조회수 -->   
-		    </tr>
-		    </c:forEach> 	    
-		</table>
-    <br>
-       <!-- 오늘의 인기글  end-->
-	
-	
-  	  <div class="panel-heading text-center">
-        <h1>자유게시판</h1>
-        <button id="regBtn" type="button" class="btn btn-outline-success float-right">새로운 게시글 등록</button>     	
-      </div>  
-        
-	<br>
+    </div>
+  	<!-- /.col-lg-12 -->
+  	  <div class="panel-heading">
+        <h1>문의게시판</h1>
+        <button id="regBtn" type="button" class="btn btn-outline-success">새로운 게시글 등록</button>      	
+      </div>      
+		<br>
       <!-- /.panel-heading -->
       <div class="panel-body">
         <table  class="table table-hover" id="dataTables-example">
@@ -114,23 +92,36 @@ div.s_right{
               <th class="thTitle">제목</th>
               <th class="thWriter">작성자</th>
               <th class="thRegdate">작성일</th>
-              <th class="thViews">조회수</th>
             </tr>
           </thead>
-          <c:forEach items="${list}" var="board">
+          <c:forEach items="${list}" var="qna">
             <tr >
-              <td>${board.bno}</td>
-              <td id="tdTitle" ><a class='move' href='${board.bno}'> ${board.title}
-              	<b>[${board.replyCnt}]</b>
-              </a></td>
-              <td>${board.writer}</td>
-              <td><fmt:formatDate value="${board.regDate}" pattern="yyyy-MM-dd" /></td>
-              <td>${board.views}</td>
+              <td>${qna.qno}</td> <!-- 글번호 -->
+              <td>
+              <a class='move' href='${qna.qno}'>       	
+          	<c:if test="${qna.secret eq 'Y' }">
+         	${qna.title}
+         	</c:if>
+         	<c:if test="${qna.secret eq 'N' }">
+			<c:choose>
+                <c:when test= "${info.user_type eq 1}">
+                    <c:out value="${qna.title}"/>
+                </c:when>
+               <c:otherwise>비밀글은 작성자와 관리자만 볼 수 있습니다.</c:otherwise>
+            </c:choose>
+         	</c:if> 
+         	
+         	
+               </a>
+               </td> <!-- 제목 -->
+              <td>${qna.writer}</td> <!-- 작성자  -->
+              <td><fmt:formatDate value="${qna.regDate}" pattern="yyyy-MM-dd" /></td>           
             </tr>
           </c:forEach>
         </table>
-        
-            <form class="form-inline my-2 my-lg-0" action="/board/list" id="searchForm" method="get">
+        <div class="row">
+          <div class="col-lg-12">
+            <form class="form-inline my-2 my-lg-0" action="/qna/list" id="searchForm" method="get">
               <select name="type">
                 <option value="TWC" 
                 	<c:out value="${pageMaker.cri.type eq 'TWC'?'selected':''}"/>>전체</option>
@@ -152,8 +143,8 @@ div.s_right{
               
               <button class="btn btn-outline-success">검색</button>
             </form>
-          
-         
+          </div>
+        </div>         
           <ul class="pagination" >
             <c:if test="${pageMaker.prev}">
               <li class="page-item active">
@@ -172,7 +163,7 @@ div.s_right{
             </c:if>
           </ul>
         <!--  end pagination -->
-        <form class="d-flex" action="/board/list" id='actionForm' method="get">
+        <form class="d-flex" action="/qna/list" id='actionForm' method="get">
         	<input class="form-control me-sm-2" type='hidden' name="pageNum" value="${pageMaker.cri.pageNum}">
         	<input class="form-control me-sm-2" type='hidden' name="amount" value="${pageMaker.cri.amount}">
         	<input class="form-control me-sm-2" type="hidden" name="type" value='${pageMaker.cri.type}'>
@@ -189,17 +180,18 @@ div.s_right{
                 <button class="btn btn-default" data-dismiss="modal">닫기</button>
               </div>
             </div>
+            <!-- /.modal-content -->
           </div>
+          <!-- /.modal-dialog -->
         </div>
-        <!-- /모달 end -->
-     
+        <!-- /.modal -->
       </div>
       <!-- /.panel-boby -->
     </div>
     <!-- /.panel -->
   </div>
+</div>
 <!-- /.row -->
-
 <script>
   $(document).ready(function () {
     var result = '<c:out value="${result}"/>'
@@ -215,7 +207,7 @@ div.s_right{
     }
     $('#regBtn').click(function () {
     	 if(${info.user_name!=null}){
-    		 self.location = '/board/register'
+    		 self.location = '/qna/register'
     	 }
     	 else(alert("비회원은 이용할 수 없습니다."))
 
@@ -232,16 +224,16 @@ div.s_right{
    })
    $(".move").click(function(e){
 	   e.preventDefault();
-     var bno=$("input[name=bno]").val()
-     if(bno){
-    	 bno=$(this).attr('href')
-    	 actionForm.append("<input type='hidden' name='bno' value='" +bno+"'>");
+     var qno=$("input[name=qno]").val()
+     if(qno){
+    	 qno=$(this).attr('href')
+    	 actionForm.append("<input type='hidden' name='qno' value='" +qno+"'>");
      }
      else{  
-    	 actionForm.append("<input type='hidden' name='bno' value='" +$(this).attr("href")+"'>");
+    	 actionForm.append("<input type='hidden' name='qno' value='" +$(this).attr("href")+"'>");
      }
 	   console.log($(this).attr('href'))
-	   actionForm.attr("action","/board/details");
+	   actionForm.attr("action","/qna/details");
 	  actionForm.submit();
    })
    
@@ -264,4 +256,6 @@ div.s_right{
 
   })
 </script>
+
+
 

@@ -41,5 +41,10 @@ public class MessageServiceImpl implements MessageService{
 	public int countMsg(String receiver_id) {
 		return mapper.countMsg(receiver_id);
 	}
+
+	@Override
+	public void deleteMsg(long mid) {
+		mapper.deleteMsg(mid);
+	}
 		
 }

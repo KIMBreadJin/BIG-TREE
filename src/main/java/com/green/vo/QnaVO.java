@@ -21,6 +21,7 @@ public class QnaVO {
 	private String writer;
 	private Date regDate;
 	private Date updateDate;
+	private String secret;
 	
 	private List<ImageVO> imageList;
 	//qna게시판 댓글 추가할것

@@ -12,14 +12,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.green.service.MessageService;
+import com.green.vo.BoardVO;
+import com.green.vo.Criteria;
 import com.green.vo.MemberVO;
 import com.green.vo.MessageVO;
 
@@ -57,7 +61,7 @@ public class MessageController {
 
 	}
 	@GetMapping("/readMsg")
-	public void readMsg(@RequestParam("mid")int mid, Model model) {
+	public void readMsg(@RequestParam("mid")long mid, Model model) {
 		
 		model.addAttribute("readM",service.readMsg(mid));
 	}
@@ -73,4 +77,19 @@ public class MessageController {
 		return "/message/sendMsg";
 	}
 	
+	@PostMapping("/deleteMsg")
+	public String postDelMesg(@RequestParam("mid") long mid ,MemberVO vo, MessageVO msg,RedirectAttributes redirectAttributes, HttpServletRequest request){
+		service.deleteMsg(mid);
+		
+		HttpSession session = request.getSession();
+		vo = (MemberVO)session.getAttribute("info");
+		msg.setReceiver_id(vo.getUser_id());
+		List<MessageVO> list = service.msgList(msg);
+		session.removeAttribute("mlist");
+		session.removeAttribute("cntMsg");
+		session.setAttribute("mlist", list);
+		session.setAttribute("cntMsg", service.countMsg(msg.getReceiver_id()));
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
 }

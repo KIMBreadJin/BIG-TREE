@@ -55,7 +55,7 @@ public class QnaController {
 	public String postRegister(QnaVO vo,RedirectAttributes rttr,@ModelAttribute("cri") Criteria cri) {
 		qnaService.registQna(vo);
 		rttr.addFlashAttribute("result","성공");
-		return "redirect:/board/list"+cri.getListLink();
+		return "redirect:/qna/list"+cri.getListLink();
 	}
 	
 	@GetMapping("/details")//게시글조회

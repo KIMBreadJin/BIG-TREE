@@ -12,6 +12,7 @@ public interface MemberService {
 	public MemberVO info(MemberVO vo);	//회원정보
 	public MemberVO kakaoinfo(MemberVO vo);
 	public MemberVO getMember(long user_num);
+	public void modify(MemberVO vo);	//회원정보 수정
 	
 	public MemberVO findId(MemberVO vo);	//아이디 찾기
 	public MemberVO findPwd(MemberVO vo); 	//비밀번호 찾기

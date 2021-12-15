@@ -108,7 +108,7 @@ prefix="c" %>
       function add(reply, callback, error) {
         $.ajax({
           type: 'post',
-          url: '/replies/new',
+          url: '/replies2/new',
           data: JSON.stringify(reply),
           contentType: 'application/json; charset=utf-8',
           success: function (result, status, xhr) {
@@ -120,9 +120,9 @@ prefix="c" %>
         })
       }
       const getList = (param, callback, error) => {
-        var bno = param.bno
+        var qno = param.qno
         var page = param.page || 1
-        $.getJSON('/replies/pages/' + bno + '/' + page + '.json', (data) => {
+        $.getJSON('/replies2/pages/' + qno + '/' + page + '.json', (data) => {
           if (callback) callback(data.replyCnt, data.list) //controller에서
           //반환되는 pageDTO
         }).fail(function (xhr, status, err) {
@@ -132,7 +132,7 @@ prefix="c" %>
 		const remove = (rno,callback,error)=>{
 			$.ajax({
 				type:'delete',
-				url:'/replies/' +rno,
+				url:'/replies2/' +rno,
 				success:(deleteResult,status,xhr)=>{
 					if(callback) callback(deleteResult)
 				},
@@ -146,7 +146,7 @@ prefix="c" %>
 
 			$.ajax({
 				type:'put',
-				url:'/replies/' + reply.rno,
+				url:'/replies2/' + reply.rno,
 				data:JSON.stringify(reply),
 				contentType:"application/json; charset=utf-8",
 				success:(result, status, xhr)=>{
@@ -159,7 +159,7 @@ prefix="c" %>
 			})
 		}
 		const get = (rno ,callback ,error)=>{
-			$.get("/replies/" +rno +".json" , (result) =>{
+			$.get("/replies2/" +rno +".json" , (result) =>{
 				if(callback) {callback(result)}
 			}).fail((xhr,status,err) =>{
 				if(error) error();
@@ -189,14 +189,12 @@ prefix="c" %>
     //resplyService 기능 end
     
     $(document).ready(function () {
-    	if("${board.writer}"!="${info.user_name}"){
-    		$("#boardModifyBtn").hide()
-    	}
-      var bnoValue = '<c:out value="${board.bno}"/>'
+
+      var qnoValue = '<c:out value="${qna.qno}"/>'
       var replyUL = $('.chat')
       const showList = (page) => {
         	 
-	          replyService.getList({ bno: bnoValue, page: page || 1 }, (replyCnt,list) => {
+	          replyService.getList({ qno: qnoValue, page: page || 1 }, (replyCnt,list) => {
 	        	if(page==-1){
 	        		page = Math.ceil(replyCnt/10.0);
 	        		showList(pageNum)
@@ -257,7 +255,7 @@ prefix="c" %>
         var reply = {
           replyer: modalInputReplyer.val(),
           reply: modalInputReply.val(),
-          bno: bnoValue,
+          qno: qnoValue,
         }
         replyService.add(reply, (result) => {
           alert(result)
@@ -355,4 +353,23 @@ prefix="c" %>
 
         replyPageFooter.html(str)
       } // showReplyPage Function end 
+  </script>
+<script>
+      $(document).ready(function (e) {
+
+        <!-- 수정,목록가기 버튼 클릭시 호출함수 -->
+    	 var operForm = $('#operForm')
+        $("button[data-oper='modify']").click(function (e) {
+          operForm.attr('action', '/qna/modify').submit()
+        })
+        $("button[data-oper='list']").click(function (e) {
+          operForm.find('#qno').remove() //operForm 에서 id가 bno인 것을 찾아 데이터 삭제
+          operForm.attr('action', '/qna/list').submit()
+        })
+
+      
+      })
+      
+      
+
   </script>

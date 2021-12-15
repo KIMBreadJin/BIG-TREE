@@ -20,5 +20,8 @@
 	<select id="countMessageView" resultType="String">
         select count(*) from big_tree_message where receiver_name= #{receiver_name} and ms_type = 0
     </select>
+    <delete id="deleteMsg">
+		delete big_tree_message where mid=#{mid}
+	</delete>
     
 </mapper>

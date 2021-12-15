@@ -39,6 +39,8 @@ public class MemberController {
 	@Setter(onMethod_=@Autowired)
 	MessageService msgService;
 	
+	MemberVO memberVO = new MemberVO();
+	
 	@RequestMapping(value = {"/member/login","/"},  method = RequestMethod.POST)
 	@ResponseBody
 	public int loginform(MemberVO vo, MessageVO msg,  HttpServletRequest request, Model model) {
@@ -213,5 +215,32 @@ public class MemberController {
 			session.setAttribute("find", friend);
 		}
 		return "/member/findFrd";
+	}
+
+	@RequestMapping(value="/updatePwd", method=RequestMethod.GET)
+	public void updatePwd(Model model) {
+		model.addAttribute("pwd", memberVO.getUser_pwd());
+	}
+	@RequestMapping(value="/updatePwd" , method = RequestMethod.POST)
+	public String updatePwd(MemberVO vo, HttpServletRequest request) {
+		vo.setUser_id(memberVO.getUser_id());
+		vo.setUser_pwd(request.getParameter("password"));
+		service.updatePwd(vo);
+		return "/board/list";
+	}
+	@GetMapping("/checkPwd")
+	public void checkPwd(Model model) {
+		model.addAttribute("pwd", memberVO.getUser_pwd());
+		log.info("비밀번호 확인");
+	}
+	@RequestMapping(value="/modify", method=RequestMethod.GET)
+	public void modify() {
+		log.info("회원정보 변경");
+	}
+	@RequestMapping(value="/modify", method=RequestMethod.POST)
+	public String modify(MemberVO vo) {
+		vo.setUser_num(memberVO.getUser_num());
+		service.modify(vo);
+		return "/board/list";
 	}
 }
