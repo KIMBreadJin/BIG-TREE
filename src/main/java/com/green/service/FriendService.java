@@ -14,4 +14,7 @@ public interface FriendService {
 	public List<FriendVO> getFriendSent(FriendVO vo);//요청보낸 목록
 	
 	public void update(FriendVO vo);//친구거절 or 차단
+	
+	public List<MemberVO> getMyFriend(String user_id);
+	public List<MemberVO> getBlockList(String user_id);
 }

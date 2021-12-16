@@ -146,7 +146,11 @@ a.navbar-brand {
     border-bottom: 1px solid #eeeeee;
     color: #333 ; display: block;
     }
-
+#msgStack { 
+	position: fixed;
+	bottom: 0; 
+	float:right;
+	width: 100%; }
 
 /*!
  * Bootstrap v4.0.0-alpha.6 (https://getbootstrap.com)

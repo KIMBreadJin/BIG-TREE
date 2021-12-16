@@ -1,5 +1,6 @@
 package com.green.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,35 @@ public class FriendServiceImpl implements FriendService {
 	@Override
 	public List<FriendVO> getFriendSent(FriendVO vo) {
 		return friendMapper.getFriendSent(vo);
+	}
+
+	@Override
+	public List<MemberVO> getMyFriend(String user_id) {//jo8419
+		List<MemberVO> memberList= new ArrayList<>();
+		List<FriendVO> friendList = friendMapper.getMyFriend(user_id);
+		for(FriendVO friend: friendList) {
+			log.info(""+friend);
+			MemberVO vo = new MemberVO();
+
+			String getUserId=friend.getSend_id();//send_id,
+			vo.setUser_id(getUserId.equals(user_id) ? friend.getReceiver_id() : getUserId);
+			memberList.add(memberMapper.findFrd(vo));
+		}
+		
+		return memberList;
+	}
+
+	@Override
+	public List<MemberVO> getBlockList(String user_id) {
+		List<MemberVO> memberList= new ArrayList<>();
+		List<FriendVO> friendList = friendMapper.getBlockList(user_id);
+		for(FriendVO friend: friendList) {
+			MemberVO vo = new MemberVO();
+			String getUserId=friend.getSend_id();
+			vo.setUser_id(getUserId.equals(user_id) ? friend.getReceiver_id() : getUserId);
+			memberList.add(memberMapper.findFrd(vo));
+		}
+		return memberList;
 	}
 
 }

@@ -36,7 +36,7 @@ prefix="c" %>
                     <div class="input-group-prepend">
                       <div class="input-group-text"><i class="fa fa-arrow-right text-info"></i> <p class="m-0">🌳Sender</p></div>
                     </div>
-                    <input type="text" class="form-control" id="nombre" name="sender" value="${readM.send_name }(${readM.user_id})" readonly/>
+                    <input type="text" class="form-control" id="sender" name="sender" readonly/>
                   </div>
                 </div>
                 <div class="form-group">
@@ -44,7 +44,7 @@ prefix="c" %>
                     <div class="input-group-prepend">
                       <div class="input-group-text"><i class="fa fa-arrow-left text-info"></i><p class="m-0">🌲Receiver</p></div>
                     </div>
-                    <input type="email" class="form-control" id="nombre" name="receiver" value="${readM.receiver_name}(${readM.receiver_id})" readonly/>
+                    <input type="email" class="form-control" id="receiver" name="receiver" readonly/>
                   </div>
                 </div>
 
@@ -88,6 +88,13 @@ prefix="c" %>
             },
           })
         })
+    var sender ="${readM.send_name}("+"${readM.user_id}".substr(0, 3) + "***)";
+    var receiver = "${readM.receiver_name}("+"${readM.receiver_id}".substr(0, 3) + "***)";
+    console.log(sender)
+    console.log(receiver)
+    
+    $('#sender').val(sender);
+    $('#receiver').val(receiver);
     })
     </script>
   </body>

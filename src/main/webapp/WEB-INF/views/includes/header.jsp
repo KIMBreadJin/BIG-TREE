@@ -9,12 +9,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="" />
-  	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  	<link rel="stylesheet" type="text/css" href="/resources/css/header.css?ver=3" />
+  	<script src="https://code.jquery.com/jquery-3.6.0.js" type="text/javascript"></script>
+  	<link rel="stylesheet" type="text/css" href="/resources/css/header.css" />
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" >
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" ></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
     <script src="/resources/js/ckeditor/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="/resources/js/header.js"></script>
    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <header>
@@ -32,7 +34,7 @@
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
-            >
+            >            
               <i class="fa fa-envelope" aria-hidden="true"></i>
               <span class="label label-success">${cntMsg}</span>
             </a>
@@ -100,10 +102,10 @@
           	친구
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#" id="friendRequest">친구 요청</a>
-          <a class="dropdown-item" href="#" id="" id="firendList">친구 목록</a>
+          <a class="dropdown-item"  id="friendRequest">친구 요청</a>
+          <a class="dropdown-item"  id="friendList">친구 목록</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">차단 목록</a>
+          <a class="dropdown-item"  id="blockList">차단 목록</a>
         </div>
       </li> 
       <li class="nav-item dropdown">
@@ -175,15 +177,17 @@
                   </div>
                   <!-- modal-body -->
                   <div class="modal-footer">
-                    <button class="btn " id="friendRegistBtn" type="button"><img src="/resources/images/friendRegistbtnIcon.jpg" width="50px"><br>친구추가</button>
-                    <button class="btn btn-info" id="memberInfoCloseBtn" type="button">닫기</button>
+                    <button class="btn " id="sendMsgBtn" type="button"><img src="/resources/images/sendMsg.png" width="50px"></button>
+                    &nbsp;&nbsp;&nbsp;                
+                    <button class="btn " id="friendRegistBtn" type="button"><img src="/resources/images/friendRegistbtnIcon.jpg" width="50px"></button>
+                    &nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-info" id="memberInfoCloseBtn" type="button" width="50px">닫기</button>
                   </div>
                 </div>
               </div>
             </div>
          <!-- 클릭시 나오는 회원정보 modal end -->
-         
-         
+
          <div class="modal fade" id="requestList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -207,7 +211,7 @@
                   </div>
                   <!-- modal-body -->
                   <div class="modal-footer">
-                    <button class="btn btn-info" id="memberListCloseBtn" type="button">닫기</button>
+                    <button class="btn btn-info" id="requestListCloseBtn" type="button">닫기</button>
                   </div>
                 </div>
               </div>
@@ -235,11 +239,84 @@
 	a{
 		font-weight:bold;
 	}
+	#sendMsgBtn{
+		margin:0;
+		padding:0;
+	}
+	#friendRegistBtn{
+		margin:0;
+		padding:0;
+	}
   </style>
-<script>
+  
+<script type="text/javascript">
+var requestCnt=0;
+var cnt=0;
+var timer=null;
+var targetId=""
+var clicked={
+		"rejectClicked":false,
+		"acceptClicked":false,
+		"blockClicked":false,
+		"deleteClicked":false
+		}
+
+const rejectClicked=()=>{//친구거절 버튼클릭시 
+	for(let i in clicked){
+		clicked[i]=false
+	}
+	clicked['rejectClicked']=true	
+}
+const acceptClicked=()=>{//친구수락 버튼클릭
+	for(let i in clicked){
+		clicked[i]=false
+	}
+	clicked['acceptClicked']=true
+}
+const blockClicked=()=>{//차단버튼 클릭시
+	for(let i in clicked){
+		clicked[i]=false
+	}
+	clicked['blockClicked']=true
+}
+const deleteClicked=()=>{//친구요청 취소버튼 클릭시
+	for(let i in clicked){
+		clicked[i]=false
+	}
+	clicked['deleteClicked']=true
+}
+
+$(document).on('click','#resultNameList',function(e){//친구요청 모달에서 버튼클릭시 처리
+	var getUrl="/"
+		for(let key in clicked){
+			if(clicked[key]){
+				getUrl += key
+			}	
+		}
+		if(getUrl=="/") return false
+		$.ajax({
+			type:'get',
+			url:getUrl,
+			data:{
+				"receiver_id":getUrl=="/deleteClicked" ?  receiver_id: "${info.user_id}",
+				"send_id":getUrl=="/deleteClicked" ? "${info.user_id}" :receiver_id 
+			},
+			success:function(data){
+				alert(data)
+				$(".requestResultList").modal('hide')
+				$(".requestResultList").modal('show')
+				getUrl=="/deleteClicked" ? 
+						$("#requestSent").trigger('click'):
+						$("#requestReceived").trigger("click")
+				$(".modal-backdrop").remove()		
+			}
+		})
+})
+
+
+
 $(document).ready(function(){
-	//$("#requestList").modal('show')
-	
+
 	var userList;
 	var userName= $("#searchUserName").val()
 	$('#goChat').click( function (e) {
@@ -247,8 +324,7 @@ $(document).ready(function(){
 	    window.open('/chat/chatList',"채팅목록,","width=700,height=430")
 	    window.resizeTo(700,430); 
 	    return false;
-	 })		
-	 
+	 })		 
 	 $("#searchUser").submit(function(e){
 		 e.preventDefault()
 		 if($("#searchUserName").val().length<2){
@@ -272,10 +348,8 @@ $(document).ready(function(){
 				 }
 			 }
 		 })//end ajax
-	 })
-		 
+	 }) 
 		 $("#searchResult").click(function(e){//결과보기 눌렀을때 호출함수
-			 console.log("결과보기 눌림")
 			 var userName= $("#searchUserName").val()
 			 var str=""
 			$.ajax({
@@ -285,17 +359,15 @@ $(document).ready(function(){
 					user_name:userName
 				},
 				success:function(list){
-					 for (var i = 0, len = list.length || 0; i < len; i++) {
-						 	
+					 $(".userList").html('')
+					 for (var i = 0, len = list.length || 0; i < len; i++) { 	
 		                    str += "<li class='left clearfix' data-name='" + list[i].user_name + "' id='resultNameList' style='margin:4px' >"
 		                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
 		                    str += "<strong class='primary-font' >" + list[i].user_name + '</strong><p>'+list[i].user_id + '</p>'
 		                    str += " </div>"
 		                    str += '</div></li>'
 		                  }
-					 if (list == null || list.length == 0) {
-			              alert("조회결과없음")
-			              $(".userList").html('')
+					 if (list == null || list.length == 0) {			              
 			              return
 					 }
 					$(".userList").html(str)
@@ -306,21 +378,31 @@ $(document).ready(function(){
 				}
 			})//end ajax
 		 })//end click
+		
+		 $(".requestResultList").on("click","li",function(){
+			 receiver_id=$(this).find('p').text()
+			$("#memberName").val($(this).data('name'))
+			$("#memberId").val($(this).find('p').text())		
+		 })
 		 
 		 $(".userList").on("click","li",function(e){
 			 var send_id="${info.user_id}"
 			var receiver_id=$(this).find('p').text()
-			$("#memberId").val($(this).data('name'))
-			$("#memberName").val($(this).find('p').text())
+			$("#memberName").val($(this).data('name'))
+			$("#memberId").val($(this).find('p').text())
 			$("#memberInfo").modal('show')
 			
 		 })
+		 	 
 		 
 		 $("#memberListCloseBtn").click(function(e){
 			$("#memberList").modal('hide')
 		 })
 		 $("#memberInfoCloseBtn").click(function(e){
 			$("#memberInfo").modal('hide')
+		 })
+		 $("#requestListCloseBtn").click(function(e){
+			 $("#requestList").modal('hide')
 		 })
 
 		$("#friendRegistBtn").click(function(e){
@@ -333,6 +415,11 @@ $(document).ready(function(){
 				if(${info.user_id==null}){
 					alert("비회원은 이용할 수 없습니다.")
 					return false;
+				}
+			    
+				else if("${info.user_id}"==receiver_id){
+					alert("본인에게는 요청할 수 없습니다")
+					return false
 				}
 			 
 				else{$.ajax({
@@ -350,9 +437,14 @@ $(document).ready(function(){
 				}
 				
 			}
+		})	
+		$("#friendRequest").click(function(e){//친구요청 클릭시 요청목록이뜨는데 trigger를 사용해 보낸요청을 클릭한것으로 시작 
+			e.preventDefault();
+			$("#requestList").modal('show')
+			$("#requestSent").trigger("click")
 		})
-		
-		$("#requestReceived").click(function(e){
+	
+		$("#requestReceived").click(function(e){//받은요청 클릭시
 			 $(".requestResultList").html('')
 				$(this).attr('class','btn btn-secondary')
 				$("#requestSent").attr('class','btn btn-outline-secondary')
@@ -364,26 +456,25 @@ $(document).ready(function(){
 						"receiver_id":"${info.user_id}"				
 					},
 					success:function(data){
-						console.log(data['memberList'])
 						var str=""
-						for (var i = 0, len = data['memberList'].length || 0; i < len; i++) {
-						 	
+						for (var i = 0, len = data['memberList'].length || 0; i < len; i++) {	
 		                    str += "<li class='left clearfix' data-name='" + data['memberList'][i].user_name + "' id='resultNameList' style='margin:4px' >"
 		                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
-		                    str += "<strong class='primary-font' >" + data['memberList'][i].user_name + '</strong><p>'+data['memberList'][i].user_id + '</p>'
-		                    str += " </div>"
-		                    str += '</div></li>'
+		                    str += "<strong class='primary-font' >" + data['memberList'][i].user_name +'<div class="float-right" id="btns">'
+		                    str += '<button class="btn btn-primary" id="accept" onclick="acceptClicked()">수락</button>'
+				            str += '<button class="btn btn-danger" id="reject"  onclick="rejectClicked()">거절</button>'
+				            str +='<button class="btn btn-secondary" id="block" onclick="blockClicked()">차단</button> </div>'
+		                    str +='</strong><p>'+data['memberList'][i].user_id+'</p>'
+		                    str += '</div></div></li>'
 		                  }
-						 if (data == null ||  data['requestList'].length == 0) {
-				              alert("조회결과없음")
-				              
+						 if (data == null ||  data['requestList'].length == 0) {       
 				              return
 						 }
-						$(".requestResultList").html(str)
+						$(".requestResultList").append(str)
 					}
 				})
 		})
-		$("#requestSent").click(function(e){
+		$("#requestSent").click(function(e){//보낸요청 클릭시
 			 $(".requestResultList").html('')
 				$(this).attr('class','btn btn-secondary')
 				$("#requestReceived").attr('class','btn btn-outline-secondary')
@@ -395,37 +486,90 @@ $(document).ready(function(){
 						"send_id":"${info.user_id}"				
 					},
 					success:function(data){
-						console.log(data['memberList'])
 						var str=""
-							console.log(data['memberList'])
 						for (var i = 0, len = data['memberList'].length || 0; i < len; i++) {
 						 	
 		                    str += "<li class='left clearfix' data-name='" + data['memberList'][i].user_name + "' id='resultNameList' style='margin:4px' >"
 		                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
-		                    str += "<strong class='primary-font' >" + data['memberList'][i].user_name + '</strong><p>'+data['memberList'][i].user_id + '</p>'
+		                    str += "<strong class='primary-font' >" + data['memberList'][i].user_name 
+		                    str +='<div id="btns"><button class="btn btn-danger float-right" id="delete" onclick="deleteClicked()">취소</button></div>'
+		                    str += '</strong><p>'+data['memberList'][i].user_id + '</p>'
 		                    str += " </div>"
 		                    str += '</div></li>'
 		                  }
 						 if (data == null ||  data['requestList'].length == 0) {
-				              alert("조회결과없음")
-				              
 				              return
 						 }
 						$(".requestResultList").html(str)
 					}
 				})	
-		})		
-/* 		$('#deleteMsg').click(function(){
-			document.delForm.submit();
-		}) */
+		})
+			
 	 })//end document
-	
-	 const getRequestResultList=()=>{
-		
-	 }
+
+	 $("#friendList").click(function(e){
+		$(".userList").html('')
+		var str=""
+		$.ajax({
+			type:'get',
+			url:'/getFriendList',
+			data:{
+				user_id:"${info.user_id}"
+			},
+			success:function(list){
+				 for (var i = 0, len = list.length || 0; i < len; i++) { 	
+	                    str += "<li class='left clearfix' data-name='" + list[i].user_name + "' id='resultNameList' style='margin:4px' >"
+	                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
+	                    str += "<strong class='primary-font' >" + list[i].user_name + '</strong><p>'+list[i].user_id + '</p>'
+	                    str += " </div>"
+	                    str += '</div></li>'
+	                  }
+				 if (list == null || list.length == 0) {			              
+		              return
+				 }
+				$(".userList").html(str)
+				$("#memberList").modal('show')
+			},
+			error:function(data){
+				console.log("에러"+data)
+			}
+		})//end ajax
+	  })
+	  
+	  $("#blockList").click(function(e){
+		$(".userList").html('')
+		var str=""
+		$.ajax({
+			type:'get',
+			url:'/getBlockList',
+			data:{
+				user_id:"${info.user_id}"
+			},
+			success:function(list){
+				 for (var i = 0, len = list.length || 0; i < len; i++) { 	
+	                    str += "<li class='left clearfix' data-name='" + list[i].user_name + "' id='resultNameList' style='margin:4px' >"
+	                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
+	                    str += "<strong class='primary-font' >" + list[i].user_name + '</strong><p>'+list[i].user_id + '</p>'
+	                    str += " </div>"
+	                    str += '</div></li>'
+	                  }
+				 if (list == null || list.length == 0) {			              
+		              return
+				 }
+				$(".userList").html(str)
+				$("#memberList").modal('show')
+			},
+			error:function(data){
+				console.log("에러"+data)
+			}
+		})//end ajax
+	  })
 	 
 
 </script>
+<body>
+<div id="msgStack"></div>
+</body>
 </html> 
 
 

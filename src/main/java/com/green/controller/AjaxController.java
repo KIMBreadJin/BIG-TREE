@@ -50,26 +50,58 @@ public class AjaxController {
 	@ResponseBody
 	@RequestMapping(value="/getUserList")
 	public List<MemberVO> getUserList(@RequestParam("user_name")String user_name , Model model) {
-		
 		List<MemberVO> list = friendService.getMemberList(user_name);
-		
 		return list;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="/getFriendList")
+	public List<MemberVO> getFriendList(@RequestParam("user_id")String user_id , Model model) {
+		List<MemberVO> friendList= friendService.getMyFriend(user_id);
+		log.info("조회된 상대유저 정보"+friendList);
+		return friendList;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/getBlockList")
+	public List<MemberVO> getBlockList(@RequestParam("user_id")String user_id , Model model) {
+		return friendService.getBlockList(user_id);
+	}
 
 	@ResponseBody
 	@RequestMapping (value = "/registFriend" ,produces = "application/text; charset=utf8")
 	public String reportRegist(FriendVO vo) {
+		FriendVO vo2= new FriendVO();
+		vo2.setSend_id(vo.getReceiver_id());
+		vo2.setReceiver_id(vo.getSend_id());
+		FriendVO case1= friendService.getFriendVO(vo);
+		FriendVO case2= friendService.getFriendVO(vo2);
 		String msg="";
 		log.info("여긴들어오나");
-	  if(friendService.getFriendVO(vo)!= null) {
-		  if(friendService.getFriendVO(vo).getCheck_frd()==0) {
+	  if(case1 != null ) {
+		  if(case1.getCheck_frd()==0) {
 			  msg= "수락 대기중인 요청입니다";
 		  }
-		  else {
+		  else if(case1.getCheck_frd()==1) {
 			  msg="차단상태입니다";
 		  }
+		  else {
+			  msg="이미 친구목록에 존재하는 회원입니다";
+		  }
 	  }
+	  
+	  else if(case2!=null) {
+		  if(case2.getCheck_frd()==0) {
+			  msg="수락 대기중인 요청입니다";
+		  }
+		  else if(case2.getCheck_frd()==2) {
+			  msg="차단상태입니다";
+		  }
+		  else {
+			  msg="이미 친구목록에 존재하는 회원입니다";
+		  }
+	  }
+	  
 	  else{
 		  friendService.regist(vo);
 		  msg= "요청 성공";
@@ -115,5 +147,36 @@ public class AjaxController {
 		result.put("memberList", memberList);
 		return result;
 	}
+	
+	@ResponseBody
+	@RequestMapping (value = {"/rejectClicked","/deleteClicked"},produces = "application/text; charset=utf8" )
+	public String deleteFriend(FriendVO vo) {
+	    FriendVO vo2 = friendService.getFriendVO(vo);
+	    log.info("view에서 가져온 친구정보:"+ vo);
+	    log.info("조회하려는 친구정보"+vo2);
+		friendService.delete(vo2);
+		return "삭제되었습니다";
+	}
+	
+	@ResponseBody
+	@RequestMapping (value = "/blockClicked" ,produces = "application/text; charset=utf8")
+	public String blockFriend(FriendVO vo) {
+	    FriendVO vo2 = friendService.getFriendVO(vo);
+	    log.info("조회하려는 친구정보"+vo2);
+	    vo2.setCheck_frd(2);
+		friendService.update(vo2);
+		return "차단성공";
+	}
+	
+	@ResponseBody
+	@RequestMapping (value = "/acceptClicked" ,produces = "application/text; charset=utf8")
+	public String acceptFriend(FriendVO vo) {
+	    FriendVO vo2 = friendService.getFriendVO(vo);
+	    log.info("조회하려는 친구정보"+vo2);
+	    vo2.setCheck_frd(1);
+		friendService.update(vo2);
+		return "수락완료";
+	}
+
 	
 }
