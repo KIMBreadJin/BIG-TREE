@@ -28,7 +28,7 @@ prefix="c" %>
     
       <div class="col-lg-12">
         <div class="panel panel-default">
-          <div class="panel-heading">게시글 조회 페이지</div>
+          <div class="panel-heading">게시글 조회 페이지</div>                  
           <!-- /.panel-heading -->
           <div class="panel-body">
             <div class="form-group">
@@ -180,6 +180,7 @@ prefix="c" %>
             </div>
 
     <!-- ----------------------여기까지 게시글 조회------------------------------   -->
+  
   </body>
 
   <!-- 리플 기능 -->
@@ -270,8 +271,9 @@ prefix="c" %>
     //resplyService 기능 end
     
     $(document).ready(function () {
-    	if("${board.writer}"!="${info.user_name}"){
-    		$("#boardModifyBtn").hide()
+    	$("#boardModifyBtn").hide()
+    	if("${board.writer}"=="${info.user_name}"||"${info.user_type}"==1){
+    		$("#boardModifyBtn").show()
     	}
       var bnoValue = '<c:out value="${board.bno}"/>'
       var replyUL = $('.chat')
@@ -289,10 +291,14 @@ prefix="c" %>
 	              replyUL.html('')
 	              return
 	            } //if문 end
+	            
 	                  for (var i = 0, len = list.length || 0; i < len; i++) {
+	                	  var replyer = list[i].replyer
+	                	  if(replyer=="${board.writer}"){
+	                		  replyer+="(글쓴이)"} 
 	                    str += "<li class='left clearfix' data-rno='" + list[i].rno + "'>"
-	                    str += " <div><div class='header'><strong class='primary-font'>" + list[i].replyer + '</strong>'
-	                    str += "   <small class='pull-right text-muted'>" + replyService.displayTime(list[i].replyDate) + '</small></div>'
+	                    str += "<div><div class='header'><strong class='primary-font'>" + replyer + "</strong>"                   
+	                    str += "<small class='pull-right text-muted'>" + replyService.displayTime(list[i].replyDate) + '</small></div>'
 	                    str += ' <p>' + list[i].reply + '</p></div></li>'
 	                  } //for문 end
 	              
@@ -301,8 +307,7 @@ prefix="c" %>
 	          })//람다함수(replyCnt,list를 파라미터로갖고있는)의 end 
 	         }//showList function end 
 		 showList(1);
-	     
-         
+
 	
 
       // 모달기능 start
@@ -360,8 +365,8 @@ prefix="c" %>
           modal.data('rno', reply.rno)
 			
           modal.find("button[id!='modalCloseBtn']").hide()
-          if("${info.user_name}"==replyer){
-        	  console.log("${info.user_name}")
+          if("${info.user_name}"== replyer.split('(')[0]||"${info.user_type}" == 1){
+        	 console.log("${info.user_name}")
          	 console.log($(this).find('strong').text())
         	modalModBtn.show()
           	modalRemoveBtn.show()

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.green.service.MemberService;
 import com.green.service.MessageService;
 import com.green.vo.BoardVO;
 import com.green.vo.Criteria;
@@ -36,15 +37,23 @@ import lombok.extern.slf4j.Slf4j;
 public class MessageController {
 	@Setter(onMethod_=@Autowired)
 	MessageService service;
+	@Setter(onMethod_=@Autowired)
+	MemberService Mservice;
 	
 	@GetMapping("/sendMsg")
-	public void getMsg() {
-	
+	public void getMsg(Model model,MemberVO vo, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		log.info("sendMsg vo : " + vo);
+		if(vo.getUser_id() != null) {
+			MemberVO mvo = Mservice.findFrd(vo);			
+			model.addAttribute("search", mvo);
+			session.removeAttribute("ans");
+		}	
 	}
 	
 	@RequestMapping(value="/sendMsg", method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<String> sendMessage(@RequestBody MessageVO vo){		
+	public ResponseEntity<String> sendMessage(@RequestBody MessageVO vo){				
 		ResponseEntity<String> entity = null;
 		try {
 			service.sendMsg(vo);
@@ -52,7 +61,7 @@ public class MessageController {
 		}catch (Exception e) {
 			e.printStackTrace();
 			entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
+		}	
 		return entity;
 		
 	}

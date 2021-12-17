@@ -5,7 +5,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>BigTree 회원정보 수정 페이지</title>
+    <title>BigTree 회원정보 수정</title>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -19,11 +19,17 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 		    $('#code').attr('value', 'Y')
 		    return code
 	    }
+	  var birthYear ="1950"
+	  var birthMonth ="1"
+	  var birthDay="1"
+	  $("#birthMonth").change(function(){
+		  console.log($(this).val())
+	  })
       function modifyProfile() {
-        var birthYear = document.getElementById('birthYear').value
-        var birthMonth = document.getElementById('birthMonth').value
-        var birthDay = document.getElementById('birthDay').value
-        var birth = birthYear + ' ' + birthMonth + ' ' + birthDay
+        birthYear = document.getElementById('birthYear').value
+        birthMonth = document.getElementById('birthMonth').value
+        birthDay = document.getElementById('birthDay').value
+        var birth = birthYear + '년 ' + birthMonth + '월 ' + birthDay
         console.log(birth)
         document.getElementById('user_birth').value = birth
         var phone = phone1.value + '-' + phone2.value + '-' + phone3.value
@@ -77,6 +83,25 @@ uri="http://java.sun.com/jsp/jstl/core" %>
           },
         })
       }
+      function selectEmail(email){
+    	  var $email = $(email);
+    	  var $email_site = $('input[name=email_site]')
+    	  
+    	  //값이 1일때 직접입력
+    	  if($email.val()=="1"){
+    		  $email_site.attr('readonly', false);
+    		  $email_site.val('');
+    	  }else{
+    		  $email_site.attr('readonly', true);
+    		  $email_site.val($email.val());
+    	  }
+      }
+      $(document).ready(function(e){
+    	  $("#birthMonth").change(function(){
+    		  birthMonth=$("#birthMonth").val()
+    		  console.log("값 : "+birthMonth)
+    	  })
+      })
     </script>
   </head>
   <body>
@@ -92,10 +117,21 @@ uri="http://java.sun.com/jsp/jstl/core" %>
       <form class="form-horizontal" method="post" name="modify" id="modify" >
         <div class="form-group">
           <label class="control-label col-sm-3">E-MAIL </label>
-          <div class="col-md-8 col-sm-9">
+          <div class="col-md-5 col-sm-8">
            <div class="input-group">
               <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-           	  <input type="email" class="form-control" id="user_email" placeholder="이메일을 입력해주세요" name="user_email" />
+              <div class="form-inline">
+	              <input type="text" name="email_id" id="email_id" class="form-control" placeholder="아이디 입력"  />
+	              <input type="text" name="email_site" id="email_site" class="form-control" placeholder="이메일 선택 혹은 입력" />
+	          </div>
+              <select name="select_Email" onChange="selectEmail(this)" class="form-control" id="select_Email">
+              	<option value="1" selected>직접입력</option>
+              	<option value="naver.com">naver.com</option>
+              	<option value="nate.com">nate.com</option>
+              	<option value="gmail.com">gmail.com</option>
+              	<option value="hanmail.net">hanmail.net</option>
+              </select>
+           	  <input type="hidden" id="user_email" name="user_email" />
             </div>  
           </div>
         </div>
@@ -123,7 +159,6 @@ uri="http://java.sun.com/jsp/jstl/core" %>
          	 </select>
           </div>
         </div>
-        
         <div class="form-group">
 	        <label class="control-label col-sm-3">생년월일</label>
 	        <div class="col-xs-8">
@@ -131,20 +166,38 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	          <select id="birthYear" class="form-control">
 	          	<option value="">출생년도</option>
 	            <c:forEach var="year" begin="1950" end="2021">	              
-	              <option>${year}년</option>
+	              <option value="${2021-year+1950}">${2021-year+1950}년</option>
 	            </c:forEach>
 	          </select>
-	          <select id="birthMonth" class="form-control">
+	          <select id="birthMonth" class="form-control" name="birthMonth">
 	          	<option value="">월</option>
 	            <c:forEach var="month" begin="1" end="12">
-	              <option>${month}월</option>
+	              <option>${month}</option>
 	            </c:forEach>
 	          </select>
 	          <select id="birthDay" class="form-control">
 	         	<option value="">일</option>
-	            <c:forEach var="day" begin="1" end="31">
-	              <option>${day}일</option>
-	            </c:forEach>
+	         	<c:choose>
+	         		<c:when test="${birthMonth eq '2'}">
+	         			<c:forEach var="day" begin="1" end="28">
+	              		<option>${day}</option>
+	            		</c:forEach>
+	         		</c:when>
+	         		<c:otherwise>
+	         			<c:choose>
+	         			<c:when test="${birthMonth eq 4 or birthMonth eq 6 or birthMonth eq 9 or birthMonth eq 11}">
+	         				<c:forEach var="day" begin="1" end="30">
+	         				<option>${day}</option>
+	         				</c:forEach>
+	         			</c:when>
+	         			<c:otherwise>
+	         				<c:forEach var="day" begin="1" end="31">
+	         				<option>${day}</option>
+	         				</c:forEach>
+	         			</c:otherwise>
+	         			</c:choose>
+	         		</c:otherwise>
+	         	</c:choose>
 	          </select>
 	           </div>
 	          <input type="hidden" id="user_birth" name="user_birth" />

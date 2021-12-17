@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +26,7 @@ import com.green.service.MemberService;
 import com.green.vo.Criteria;
 import com.green.vo.FriendVO;
 import com.green.vo.MemberVO;
+import com.green.vo.MessageVO;
 import com.green.vo.ReplyPageDTO;
 import com.green.vo.ReportVO;
 
@@ -42,21 +46,22 @@ public class AjaxController {
 	@ResponseBody
 	@RequestMapping(value = "/searchUser")
 	public int getSearchUser(@RequestParam("user_name")String user_name){
-		
+		log.info("1)");
 		return friendService.getMemberList(user_name)==null? 0 : 
 			friendService.getMemberList(user_name).size();
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/getUserList")
-	public List<MemberVO> getUserList(@RequestParam("user_name")String user_name , Model model) {
+	public List<MemberVO> getUserList(@RequestParam("user_name")String user_name ) {
+		log.info("2)");
 		List<MemberVO> list = friendService.getMemberList(user_name);
 		return list;
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/getFriendList")
-	public List<MemberVO> getFriendList(@RequestParam("user_id")String user_id , Model model) {
+	public List<MemberVO> getFriendList(@RequestParam("user_id")String user_id, Model model) {
 		List<MemberVO> friendList= friendService.getMyFriend(user_id);
 		log.info("조회된 상대유저 정보"+friendList);
 		return friendList;

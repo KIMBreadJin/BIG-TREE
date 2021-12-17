@@ -3,9 +3,22 @@
 	    // 웹소켓 연결
 	    sock = new SockJS('http://localhost:8080/message')
 	    socket = sock;
-	
+		console.log(sock)
 	    // 데이터를 전달 받았을때 
 	    sock.onmessage = onMessage; // toast 생성
+
+	function goSubmit(){
+		var gsWin = window.open("","Message","width=600,height=410");
+		var frm = document.sendMsgForm;
+		frm.action = "/message/sendMsg";
+		frm.target="Message";
+		gsWin.focus();
+		frm.submit();
+	}
+	$('#sendMsgBtn').click(function(){
+		console.log("눌리나")
+		goSubmit();
+	})
 	});
     function onMessage(evt){
         var data = evt.data;
@@ -19,3 +32,4 @@
         $(".toast").toast({"animation": true, "autohide": false});
         $('.toast').toast('show');
     };
+

@@ -39,7 +39,7 @@ public class MemberController {
 	@Setter(onMethod_=@Autowired)
 	MessageService msgService;
 	
-	MemberVO memberVO = new MemberVO();
+	MemberVO memberData = new MemberVO();
 	
 	@RequestMapping(value = {"/member/login","/"},  method = RequestMethod.POST)
 	@ResponseBody
@@ -53,7 +53,7 @@ public class MemberController {
 		log.info("아이디 개수"+result);			
 		session.setAttribute("info", service.info(vo));
 		log.info("넘버" + session.getAttribute("info"));
-		
+		memberData = service.info(vo);
 		if(result == 1) {
 			vo = (MemberVO)session.getAttribute("info");
 			msg.setReceiver_id(vo.getUser_id());
@@ -187,7 +187,7 @@ public class MemberController {
 	}
 	@RequestMapping(value = "/kakaologin",  method = RequestMethod.POST)
 	@ResponseBody
-	public int kakaologin(MemberVO vo, HttpServletRequest request, Model model) {
+	public int kakaologin(MemberVO vo, MessageVO msg, HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession();
 		log.info("1) 로그인 고객 정보 ");	
 		vo.setUser_kakao(kakaoid);
@@ -195,9 +195,18 @@ public class MemberController {
 		int result = service.kakaologin(vo);
 		log.info("아이디 개수"+result);		
 		log.info("1) 로그인 고객 정보 " + service.kakaoinfo(vo));
-		
+		memberData = service.kakaoinfo(vo);
 		session.setAttribute("info", service.kakaoinfo(vo));
 		log.info("넘버" + session.getAttribute("info"));
+		if(result == 1) {
+			vo = (MemberVO)session.getAttribute("info");
+			msg.setReceiver_id(vo.getUser_id());
+			List<MessageVO> list = msgService.msgList(msg);
+			log.info("What...." + list);
+			session.setAttribute("mlist", list);
+			
+			session.setAttribute("cntMsg", msgService.countMsg(msg.getReceiver_id()));
+		}
 		return result;
 	}
 	@GetMapping("/findFrd")
@@ -219,18 +228,18 @@ public class MemberController {
 
 	@RequestMapping(value="/updatePwd", method=RequestMethod.GET)
 	public void updatePwd(Model model) {
-		model.addAttribute("pwd", memberVO.getUser_pwd());
+		model.addAttribute("pwd", memberData.getUser_pwd());
 	}
 	@RequestMapping(value="/updatePwd" , method = RequestMethod.POST)
 	public String updatePwd(MemberVO vo, HttpServletRequest request) {
-		vo.setUser_id(memberVO.getUser_id());
+		vo.setUser_id(memberData.getUser_id());
 		vo.setUser_pwd(request.getParameter("password"));
 		service.updatePwd(vo);
 		return "/board/list";
 	}
 	@GetMapping("/checkPwd")
 	public void checkPwd(Model model) {
-		model.addAttribute("pwd", memberVO.getUser_pwd());
+		model.addAttribute("pwd", memberData.getUser_pwd());
 		log.info("비밀번호 확인");
 	}
 	@RequestMapping(value="/modify", method=RequestMethod.GET)
@@ -239,7 +248,7 @@ public class MemberController {
 	}
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
 	public String modify(MemberVO vo) {
-		vo.setUser_num(memberVO.getUser_num());
+		vo.setUser_num(memberData.getUser_num());
 		service.modify(vo);
 		return "/board/list";
 	}

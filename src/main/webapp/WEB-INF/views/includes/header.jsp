@@ -14,8 +14,8 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" >
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" ></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
-    <script src="/resources/js/ckeditor/ckeditor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="/resources/js/ckeditor/ckeditor.js"></script>
     <script src="/resources/js/header.js"></script>
    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -24,7 +24,7 @@
 	<div style="float:none; margin:0 auto">
   		<a class="navbar-brand" href="/board/list"><h1>Big Tree Community</h1></a>
   	</div>
-  	<div>
+ <div>
         <ul class="navbar-nav">
           <li class="nav-item dropdown messages-menu">
             <a
@@ -162,10 +162,12 @@
 	                    <p class='text-center'>프로필 사진</p><img src="/resources/images/basicProfileIcon.png" width="100%">
 	                  
 	                  </div>
+	                  <form class="form-horizontal" method="get" action="" name='sendMsgForm'>
 	 					<div class="form-group">
 	                    <label for="">아이디</label>
-	                    <input type="text" class="form-control" name="memberId" id="memberId" readonly />
+	                    <input type="text" class="form-control" name="user_id" id="memberId" readonly />
 	                  </div>
+	                  </form>
                       <div class="form-group">
                         <label for="">이름</label>
                         <input type="text" class="form-control" name="memberName" id="memberName" value=""  readonly />
@@ -177,7 +179,7 @@
                   </div>
                   <!-- modal-body -->
                   <div class="modal-footer">
-                    <button class="btn " id="sendMsgBtn" type="button"><img src="/resources/images/sendMsg.png" width="50px"></button>
+                    <button class="btn " id="sendMsgBtn" type="submit"><img src="/resources/images/sendMsg.png" width="50px"></button>
                     &nbsp;&nbsp;&nbsp;                
                     <button class="btn " id="friendRegistBtn" type="button"><img src="/resources/images/friendRegistbtnIcon.jpg" width="50px"></button>
                     &nbsp;&nbsp;&nbsp;
@@ -286,6 +288,12 @@ const deleteClicked=()=>{//친구요청 취소버튼 클릭시
 	clicked['deleteClicked']=true
 }
 
+const resetClicked=()=>{
+	for(let i in clicked){
+		clicked[i]=false
+	}
+}
+
 $(document).on('click','#resultNameList',function(e){//친구요청 모달에서 버튼클릭시 처리
 	var getUrl="/"
 		for(let key in clicked){
@@ -303,12 +311,18 @@ $(document).on('click','#resultNameList',function(e){//친구요청 모달에서
 			},
 			success:function(data){
 				alert(data)
+				console.log(clicked)
 				$(".requestResultList").modal('hide')
 				$(".requestResultList").modal('show')
 				getUrl=="/deleteClicked" ? 
 						$("#requestSent").trigger('click'):
 						$("#requestReceived").trigger("click")
-				$(".modal-backdrop").remove()		
+				$(".modal-backdrop").remove()
+				if(getUrl=="/acceptClicked"){
+					sock.send("${info.user_id}"+","+receiver_id+","+ "친구 수락")
+				}
+				resetClicked()
+				
 			}
 		})
 })
@@ -316,7 +330,7 @@ $(document).on('click','#resultNameList',function(e){//친구요청 모달에서
 
 
 $(document).ready(function(){
-
+ 	console.log()
 	var userList;
 	var userName= $("#searchUserName").val()
 	$('#goChat').click( function (e) {
@@ -432,6 +446,9 @@ $(document).ready(function(){
 						},
 						success:function(data){
 							alert(data)
+							if(data.includes("성공")){
+								sock.send(send_id+","+receiver_id+","+ "친구 요청")
+							}
 						}
 					})
 				}
@@ -563,7 +580,27 @@ $(document).ready(function(){
 				console.log("에러"+data)
 			}
 		})//end ajax
+	 
+		
+		
+		
+	 
 	  })
+	 $(document).on("click","button.ml-2",function(){//알람 x누르면 해당 알람 삭제 
+		  $(this).parent().parent().remove()
+		  console.log("눌림")
+	  })
+	 $(document).on("click","#msgRequestFriend",function(){//친구요청 바로가기버튼클릭시
+		  $("#friendRequest").trigger('click')
+		  $("#requestReceived").trigger('click')
+		  $(this).parent().parent().remove()
+		  console.log("눌림")
+	 })
+	  $(document).on("click","#msgMyFriend",function(){//친구요청 바로가기버튼클릭시
+		  $("#friendList").trigger('click')
+		  $(this).parent().parent().remove()
+		  console.log("눌림")
+	 }) 
 	 
 
 </script>

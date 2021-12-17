@@ -75,6 +75,7 @@ prefix="c" %>
                   </div>
                   <!-- modal-body -->
                   <div class="modal-footer">
+                  	
                     <button class="btn btn-warning" id="modalModBtn" type="button">수정</button>
                     <button class="btn btn-danger" id="modalRemoveBtn" type="button">삭제</button>
                     <button class="btn btn-primary" id="modalRegisterBtn" type="button">등록</button>
@@ -189,7 +190,10 @@ prefix="c" %>
     //resplyService 기능 end
     
     $(document).ready(function () {
-
+    	$("#boardModifyBtn").hide()
+    	if("${qna.writer}"=="${info.user_name}"||"${info.user_type}"==1){
+    		$("#boardModifyBtn").show()
+    	}
       var qnoValue = '<c:out value="${qna.qno}"/>'
       var replyUL = $('.chat')
       const showList = (page) => {
@@ -207,8 +211,11 @@ prefix="c" %>
 	              return
 	            } //if문 end
 	                  for (var i = 0, len = list.length || 0; i < len; i++) {
+	                	var replyer = list[i].replyer
+	                	if(replyer=="${qna.writer}"){
+	                		  replyer+="(글쓴이)"} 
 	                    str += "<li class='left clearfix' data-rno='" + list[i].rno + "'>"
-	                    str += " <div><div class='header'><strong class='primary-font'>" + list[i].replyer + '</strong>'
+	                    str += " <div><div class='header'><strong class='primary-font'>" + replyer + '</strong>'
 	                    str += "   <small class='pull-right text-muted'>" + replyService.displayTime(list[i].replyDate) + '</small></div>'
 	                    str += ' <p>' + list[i].reply + '</p></div></li>'
 	                  } //for문 end
@@ -274,10 +281,9 @@ prefix="c" %>
           modalInputReply.val(reply.reply)
           modalInputReplyer.val(reply.replyer)
           modalInputReplyDate.val(replyService.displayTime(reply.replyDate)).attr('readonly', 'readonly')
-          modal.data('rno', reply.rno)
-			
+          modal.data('rno', reply.rno)		
           modal.find("button[id!='modalCloseBtn']").hide()
-          if("${info.user_name}"==replyer){
+          if("${info.user_name}"==replyer.split('(')[0]||"${info.user_type}" == 1){
         	  console.log("${info.user_name}")
          	 console.log($(this).find('strong').text())
         	modalModBtn.show()

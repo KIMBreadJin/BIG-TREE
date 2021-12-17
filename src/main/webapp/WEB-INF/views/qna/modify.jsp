@@ -35,7 +35,7 @@
       <form action="/board/modify" method="get" id="operForm">
         <div class="form-group">
           <label for="title">번호</label>
-          <input type="text" class="form-control" name="bno" value="${qna.qno}" readonly="readonly" />
+          <input type="text" class="form-control" name="qno" value="${qna.qno}" readonly="readonly" />
         </div>
         <div class="form-group">
           <label for="writer">작성자</label>
@@ -50,6 +50,16 @@
           <label for="content">내용</label>
           <textarea name="content" id="content" rows="3" class="form-control" >${qna.content}</textarea>
         </div>
+       <p>비밀글 공개여부</p>
+
+		<div>
+			<input type="radio" id="SecretRadio" name="secret" value="Y"   checked>
+			<label >공개</label>
+		</div>
+		<div>
+			<input type="radio" id="nonsecretRadio" name="secret" value="N">
+			<label>비공개</label>
+		</div>
     	<br/>
         <button data-oper="modify" class="btn btn-default" type="button">수정하기</button>
         <button data-oper="details" class="btn btn-info" type="submit">돌아가기</button>
@@ -73,6 +83,14 @@
 </body>
 <script>
 $(document).ready(function(e){
+	   //비밀글 start
+	   $('[name=secret]').click(function(e){
+		   var secretValue = $("input[type=radio]:checked").val();
+		   console.log(secretValue)
+		  ${qna.secret}=secretValue
+		  
+	   })//비밀글 end
+	   
 	  var operForm = $('#operForm')
 	    $("button[data-oper='modify']").click(function (e) {
         e.preventDefault();

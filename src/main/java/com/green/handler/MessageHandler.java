@@ -16,13 +16,14 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.green.mapper.MessageMapper;
+import com.green.vo.GetSessionUser;
 import com.green.vo.MemberVO;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class MessageHandler extends TextWebSocketHandler{
-	// 로그인중인 개별유저
+		// 로그인중인 개별유저
 		Map<String, WebSocketSession> users = new ConcurrentHashMap<String, WebSocketSession>();
 		
 		
@@ -31,7 +32,9 @@ public class MessageHandler extends TextWebSocketHandler{
 		public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 			
 			Map<String, Object> sessionVal =  session.getAttributes();
-			MemberVO vo = (MemberVO)sessionVal.get("info");
+			MemberVO vo = (MemberVO)sessionVal.get("info") !=null ? 
+								(MemberVO)sessionVal.get("info"): GetSessionUser.getUser();
+			
 			String senderId = vo.getUser_id(); // 접속한 유저의 http세션을 조회하여 id를 얻는 함수
 			System.out.println("senderId: " + senderId);
 			
@@ -54,12 +57,25 @@ public class MessageHandler extends TextWebSocketHandler{
 					String send_name = strs[0]; 					
 					String receiver_id = strs[1];
 					String ms_content = strs[2];
+					switch (strs[2]) {
+					case "친구 요청":
+					    ms_content="님으로부터 "+strs[2]+"이 들어왔습니다 "
+					    	+"<button class='btn btn-outline-secondary float-right' id='msgRequestFriend'>바로가기</button>";
+						break;
+					case "친구 수락":
+						ms_content="님께서 "+strs[2]+"하셨습니다 "
+						    +"<button class='btn btn-outline-secondary float-right' id='msgMyFriend'>친구목록</button>";
+						break;
+					default :
+						break;
+					}
+					
 					WebSocketSession targetSession = users.get(receiver_id);  // 메시지를 받을 세션 조회
 					System.out.println("targetSession : " + targetSession);
 					// 실시간 접속시
 					if(targetSession!=null) {
 						// ex: [&분의일] 신청이 들어왔습니다.
-						TextMessage tmpMsg = new TextMessage("["+send_name+"]"+ " : "+ ms_content );
+						TextMessage tmpMsg = new TextMessage("["+send_name+"]"+ " : "+ ms_content );	
 						System.out.println("tmpMsg" + tmpMsg);
 						targetSession.sendMessage(tmpMsg);
 					}

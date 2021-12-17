@@ -34,8 +34,8 @@ prefix="c" %>
         </div>
         <div>
           <input type="hidden" id="user_id" name="user_id" value="${info.user_id}" />
-          <input type="hidden" id="receiver_id" name="receiver_id" value="${find.user_id}${ans.receiver_id}" />
-          <input type="hidden" id="receiver_name" name="receiver_name" value="${find.user_name}${ans.receiver_name}" />
+          <input type="hidden" id="receiver_id" name="receiver_id" value="${search.user_id}${ans.receiver_id}" />
+          <input type="hidden" id="receiver_name" name="receiver_name" value="${search.user_name}${ans.receiver_name}" />
           <input type="hidden" id="send_name" name="send_name" value="${info.user_name}" />
         </div>
         <br style="clear: both" />
@@ -50,9 +50,9 @@ prefix="c" %>
 	  socket = null
       $(document).ready(function () {
         // 웹소켓 연결
-	    sock = new SockJS("http://localhost:8080/message");
+	    sock = SockJS("http://localhost:8080/message");
    		socket = sock;
-
+   		  		
         // 데이터를 전달 받았을때
         $('#characterLeft').text('140 characters left')
         $('#ms_content').keydown(function () {
@@ -93,6 +93,7 @@ prefix="c" %>
               } else {
                 socket.send(seName + ',' + reId + ',' + content)
                 alert('쪽지를 보냈습니다')
+                opener.location.reload();
                 self.opener = self
                 window.close()
               }

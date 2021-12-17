@@ -76,10 +76,11 @@ div.s_right{
 <!-- /.row body내용-->
 <div class="row">
   <div class="col-lg-12">
-    </div>
+    
   	<!-- /.col-lg-12 -->
   	  <div class="panel-heading">
         <h1>문의게시판</h1>
+       
         <button id="regBtn" type="button" class="btn btn-outline-success">새로운 게시글 등록</button>      	
       </div>      
 		<br>
@@ -98,22 +99,20 @@ div.s_right{
             <tr >
               <td>${qna.qno}</td> <!-- 글번호 -->
               <td>
-              <a class='move' href='${qna.qno}'>       	
+                     	
           	<c:if test="${qna.secret eq 'Y' }">
-         	${qna.title}
-         	</c:if>
+         	<a class='move' href='${qna.qno}'>${qna.title}</a>
+         	</c:if>      		
          	<c:if test="${qna.secret eq 'N' }">
-			<c:choose>
-                <c:when test= "${info.user_type eq 1}">
-                    <c:out value="${qna.title}"/>
-                </c:when>
-               <c:otherwise>비밀글은 작성자와 관리자만 볼 수 있습니다.</c:otherwise>
+			<c:choose>			
+                <c:when test= "${info.user_type eq 1||info.user_name eq qna.writer}">
+                    <a class='move' href='${qna.qno}'><c:out value="${qna.title}"/></a>
+                </c:when>              
+               <c:otherwise><a class='move2' href=''>비밀글은 작성자와 관리자만 볼 수 있습니다.</a></c:otherwise>              
             </c:choose>
-         	</c:if> 
-         	
-         	
-               </a>
-               </td> <!-- 제목 -->
+         	</c:if>          	         	
+               
+            </td> <!-- 제목 -->
               <td>${qna.writer}</td> <!-- 작성자  -->
               <td><fmt:formatDate value="${qna.regDate}" pattern="yyyy-MM-dd" /></td>           
             </tr>
@@ -190,7 +189,6 @@ div.s_right{
     </div>
     <!-- /.panel -->
   </div>
-</div>
 <!-- /.row -->
 <script>
   $(document).ready(function () {
@@ -224,7 +222,12 @@ div.s_right{
    })
    $(".move").click(function(e){
 	   e.preventDefault();
+	   
      var qno=$("input[name=qno]").val()
+/*       if(${info.user_type != 1 || info.user_name != qna.writer}){
+    	 alert("비밀글은 작성자와 관리자만 볼 수 있습니다.")
+  	   
+     }  */
      if(qno){
     	 qno=$(this).attr('href')
     	 actionForm.append("<input type='hidden' name='qno' value='" +qno+"'>");
@@ -237,6 +240,10 @@ div.s_right{
 	  actionForm.submit();
    })
    
+   $(".move2").click(function(e){
+	   e.preventDefault();
+   		alert('비밀글은 작성자와 관리자만 볼 수 있습니다.')
+   })
 
    var searchForm = $("#searchForm");
    $("#searchForm button").click(function(e){
