@@ -40,6 +40,17 @@ public class MessageController {
 	@Setter(onMethod_=@Autowired)
 	MemberService Mservice;
 	
+	@RequestMapping (value = "/msgHeader")
+	public String msgData(MemberVO vo, MessageVO msg, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		vo = (MemberVO)session.getAttribute("info");
+		msg.setReceiver_id(vo.getUser_id());
+		List<MessageVO> list = service.msgList(msg);
+		
+		session.setAttribute("mlist", list);
+		String referer = request.getHeader("Referer");
+		return "redirect:" + referer;
+	}
 	@GetMapping("/sendMsg")
 	public void getMsg(Model model,MemberVO vo, HttpServletRequest request) {
 		HttpSession session = request.getSession();
@@ -87,17 +98,15 @@ public class MessageController {
 	}
 	
 	@PostMapping("/deleteMsg")
-	public String postDelMesg(@RequestParam("mid") long mid ,MemberVO vo, MessageVO msg,RedirectAttributes redirectAttributes, HttpServletRequest request){
+	public String postDelMesg(@RequestParam("mid") long mid ,MemberVO vo, MessageVO msg, HttpServletRequest request){
 		service.deleteMsg(mid);
 		
 		HttpSession session = request.getSession();
 		vo = (MemberVO)session.getAttribute("info");
 		msg.setReceiver_id(vo.getUser_id());
 		List<MessageVO> list = service.msgList(msg);
-		session.removeAttribute("mlist");
-		session.removeAttribute("cntMsg");
+		
 		session.setAttribute("mlist", list);
-		session.setAttribute("cntMsg", service.countMsg(msg.getReceiver_id()));
 		String referer = request.getHeader("Referer");
 		return "redirect:" + referer;
 	}

@@ -35,22 +35,22 @@
 		select*from big_tree_qna where qno=#{qno}
 	</select>
 	<insert id="registQna">
-		insert into big_tree_qna(qno,title,content,writer ) values 
-			(qna_seq.nextval,#{title},#{content},#{writer})
+		insert into big_tree_qna(qno,title,content,writer,secret,id ) values 
+			(qna_seq.nextval,#{title},#{content},#{writer},#{secret},#{id})
 	</insert>
 	<delete id="deleteQna">
 		delete big_tree_qna where qno=#{qno}
 	</delete>
 	<update id="updateQna">
 		update big_tree_qna 
-			set title =#{title}, content=#{content}, updateDate=sysdate
-				where qno = #{qno}
+			set title =#{title}, content=#{content}, updateDate=sysdate ,secret =#{secret},id=#{id}
+				where qno = #{qno}	
 	</update>
 	
 	<select id="getQnaListWithPage" resultType="com.green.vo.QnaVO">
 		<![CDATA[
-			select qno,title,content,writer,regDate,updateDate
-				from( select rownum rn,qno,title,content,writer,regDate,updateDate
+			select qno,title,content,writer,regDate,updateDate,secret
+				from( select rownum rn,qno,title,content,writer,regDate,updateDate,secret
 					from (select*from big_tree_qna order by qno desc)
 						where 
 				]]>	

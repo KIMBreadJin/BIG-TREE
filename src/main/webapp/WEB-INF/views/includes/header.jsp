@@ -25,22 +25,25 @@
   		<a class="navbar-brand" href="/board/list"><h1>Big Tree Community</h1></a>
   	</div>
  <div>
-        <ul class="navbar-nav">
+        <ul class="navbar-nav"  onClick="/message/msgHeader">
           <li class="nav-item dropdown messages-menu">
-            <a
-              class="nav-link dropdown-toggle"
-              href="http://example.com"
-              id="navbarDropdownMenuLink"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >            
-              <i class="fa fa-envelope" aria-hidden="true"></i>
-              <span class="label label-success">${cntMsg}</span>
-            </a>
+	            <a
+	              class="nav-link dropdown-toggle"
+	              href=""
+	              id="navbarDropdownMenuLink"
+	              data-toggle="dropdown"
+	              aria-haspopup="true"
+	              aria-expanded="false"             
+	            >          
+	              <i class="fa fa-envelope" aria-hidden="true"></i>
+	              <span id="recMs" name="recMs" class="label label-success"></span>
+	            </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <ul class="dropdown-menu-over list-unstyled">
-                <li class="header-ul text-center">You have ${cntMsg} messages</li>
+              <form action="/message/msgHeader" name="msgReForm" id="msgReForm">
+                <li id = "cntMsgli" class="header-ul text-center"></li>                
+             	<input type="submit" id="reMsg" value="&#xf021"/>
+	          </form>
                 <li>
                   <!-- inner menu: contains the actual data -->
                   <ul class="menu list-unstyled"> 
@@ -260,7 +263,9 @@ var clicked={
 		"rejectClicked":false,
 		"acceptClicked":false,
 		"blockClicked":false,
-		"deleteClicked":false
+		"deleteClicked":false,
+		"friendListClicked":false,
+		"blockListClicked":false,
 		}
 
 const rejectClicked=()=>{//친구거절 버튼클릭시 
@@ -288,6 +293,20 @@ const deleteClicked=()=>{//친구요청 취소버튼 클릭시
 	clicked['deleteClicked']=true
 }
 
+const blockListClicked=()=>{
+	for(let i in clicked){
+		clicked[i]=false
+	}
+	clicked['blockListClicked']=true
+}
+const friendListClicked=()=>{
+	for(let i in clicked){
+		clicked[i]=false
+	}
+	clicked['friendListClicked']=true
+}
+
+
 const resetClicked=()=>{
 	for(let i in clicked){
 		clicked[i]=false
@@ -301,7 +320,7 @@ $(document).on('click','#resultNameList',function(e){//친구요청 모달에서
 				getUrl += key
 			}	
 		}
-		if(getUrl=="/") return false
+		if(getUrl=="/" || getUrl=="/blockListClicked" || getUrl=="/friendListClicked") return false
 		$.ajax({
 			type:'get',
 			url:getUrl,
@@ -311,7 +330,6 @@ $(document).on('click','#resultNameList',function(e){//친구요청 모달에서
 			},
 			success:function(data){
 				alert(data)
-				console.log(clicked)
 				$(".requestResultList").modal('hide')
 				$(".requestResultList").modal('show')
 				getUrl=="/deleteClicked" ? 
@@ -330,7 +348,6 @@ $(document).on('click','#resultNameList',function(e){//친구요청 모달에서
 
 
 $(document).ready(function(){
- 	console.log()
 	var userList;
 	var userName= $("#searchUserName").val()
 	$('#goChat').click( function (e) {
@@ -382,7 +399,7 @@ $(document).ready(function(){
 		                    str += '</div></li>'
 		                  }
 					 if (list == null || list.length == 0) {			              
-			              return
+						 str="<div>조회 결과 없음!</div>"
 					 }
 					$(".userList").html(str)
 					$("#memberList").modal('show')
@@ -404,8 +421,17 @@ $(document).ready(function(){
 			var receiver_id=$(this).find('p').text()
 			$("#memberName").val($(this).data('name'))
 			$("#memberId").val($(this).find('p').text())
-			$("#memberInfo").modal('show')
-			
+			 if(clicked['friendListClicked']==true){
+				    $("#memberList").modal('hide')
+		 		 }
+	 		 else if(clicked['blockListClicked']==true){
+	 			$("#memberList").modal('hide')
+	 		 }
+			 else{
+				 $("#memberInfo").modal('show')
+			 }
+			 
+			 resetClicked()
 		 })
 		 	 
 		 
@@ -485,7 +511,7 @@ $(document).ready(function(){
 		                    str += '</div></div></li>'
 		                  }
 						 if (data == null ||  data['requestList'].length == 0) {       
-				              return
+							 str="<div>조회 결과 없음!</div>"
 						 }
 						$(".requestResultList").append(str)
 					}
@@ -515,7 +541,7 @@ $(document).ready(function(){
 		                    str += '</div></li>'
 		                  }
 						 if (data == null ||  data['requestList'].length == 0) {
-				              return
+							 str="<div>조회 결과 없음!</div>"
 						 }
 						$(".requestResultList").html(str)
 					}
@@ -537,12 +563,13 @@ $(document).ready(function(){
 				 for (var i = 0, len = list.length || 0; i < len; i++) { 	
 	                    str += "<li class='left clearfix' data-name='" + list[i].user_name + "' id='resultNameList' style='margin:4px' >"
 	                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
-	                    str += "<strong class='primary-font' >" + list[i].user_name + '</strong><p>'+list[i].user_id + '</p>'
+	                    str += "<strong class='primary-font' >" + list[i].user_name + '<button class="btn btn-danger float-right" id="getDelete" onclick="friendListClicked()">친구삭제</button>'
+	                    str +='</strong><p>'+list[i].user_id + '</p>'
 	                    str += " </div>"
 	                    str += '</div></li>'
 	                  }
 				 if (list == null || list.length == 0) {			              
-		              return
+					 str="<div>조회 결과 없음!</div>"
 				 }
 				$(".userList").html(str)
 				$("#memberList").modal('show')
@@ -554,6 +581,7 @@ $(document).ready(function(){
 	  })
 	  
 	  $("#blockList").click(function(e){
+		  console.log("blockList불러오기")
 		$(".userList").html('')
 		var str=""
 		$.ajax({
@@ -566,19 +594,19 @@ $(document).ready(function(){
 				 for (var i = 0, len = list.length || 0; i < len; i++) { 	
 	                    str += "<li class='left clearfix' data-name='" + list[i].user_name + "' id='resultNameList' style='margin:4px' >"
 	                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
-	                    str += "<strong class='primary-font' >" + list[i].user_name + '</strong><p>'+list[i].user_id + '</p>'
+	                    str += "<strong class='primary-font' >" + list[i].user_name + '<button class="btn btn-secondary float-right" id="getDelete" onclick="blockListClicked()">차단풀기</button></strong><p>'+list[i].user_id + '</p>'
 	                    str += " </div>"
 	                    str += '</div></li>'
 	                  }
 				 if (list == null || list.length == 0) {			              
-		              return
+					 str="<div>조회 결과 없음!</div>"
 				 }
 				$(".userList").html(str)
 				$("#memberList").modal('show')
 			},
 			error:function(data){
 				console.log("에러"+data)
-			}
+				}
 		})//end ajax
 	 
 		
@@ -601,6 +629,24 @@ $(document).ready(function(){
 		  $(this).parent().parent().remove()
 		  console.log("눌림")
 	 }) 
+	 $(document).on("click","#getDelete",function(){
+		 var send_id=$(this).parent().parent().find('p').text();
+		 var receiver_id="${info.user_id}"
+		 
+		 $.ajax({
+			 type:'get',
+		 	 url:'/getDelete',
+		 	 data:{
+		 		 "send_id":send_id,
+		 		 "receiver_id":receiver_id
+		 	 },
+		 	 success:function(data){
+		 		 alert(data)
+		 		
+		 	 }
+		 })
+	 })
+	
 	 
 
 </script>

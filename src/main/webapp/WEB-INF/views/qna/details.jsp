@@ -15,6 +15,10 @@ prefix="c" %>
               <input type="text" class="form-control" name="qno" value="${qna.qno}" readonly="readonly" />
             </div>
             <div class="form-group">
+
+              <input type="hidden" class="form-control" name="id" value="${info.user_id}" readonly />
+            </div>
+            <div class="form-group">
               <label for="title">제목</label>
               <input type="text" class="form-control" name="title" value="${qna.title}" readonly="readonly" />
             </div>
@@ -113,7 +117,12 @@ prefix="c" %>
           data: JSON.stringify(reply),
           contentType: 'application/json; charset=utf-8',
           success: function (result, status, xhr) {
-            if (callback) callback(result)
+              if (callback){
+              	callback(result)
+              	if(${qna.id!=info.user_id}){//댓글작성자와 게시글작성자가 다를때만 알림을보냄
+              		sock.send("${qna.title}"+','+ "${qna.id}"+ ','+'댓글 등록'+','+"${qna.qno}"+','+"dd")
+              	}
+              }
           },
           error: function (xhr, status, er) {
             if (error) error(err)
@@ -375,6 +384,10 @@ prefix="c" %>
 
       
       })
+       var ckediters = CKEDITOR.replace('content', {
+    		toolbarCanCollapse:true
+    		
+        })
       
       
 

@@ -38,7 +38,7 @@ public class MessageServiceImpl implements MessageService{
 	}
 
 	@Override
-	public int countMsg(String receiver_id) {
+	public String countMsg(String receiver_id) {
 		return mapper.countMsg(receiver_id);
 	}
 

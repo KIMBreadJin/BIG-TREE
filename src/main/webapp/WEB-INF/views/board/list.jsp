@@ -53,34 +53,31 @@ a.move:hover:after{
   width: 100%;
   opacity: 1;
 }
-div.s_right{
+aside.s_right{
 	width:400px;
-	height:250vh; /* vh= body,html을 안건들이고 화면 꽉차게 하는방법 넓이는 vw를 쓰면됨! */
+	height:row; /* vh= body,html을 안건들이고 화면 꽉차게 하는방법 넓이는 vw를 쓰면됨! */
 	background-color: #B8F3B8;
 	float:right;
 
 }
 
 @media screen and (max-width: 1000px) {
-  div.s_right{display: none;}
+  aside.s_right{display: none;}
 }
 	
 
 
 </style>
 <!--/.s_right 오른쪽 사이드바 -->
-<div class=s_right>오른쪽사이드바만들기
+<aside class=s_right>오른쪽사이드바만들기
 <div>대충 광고</div>
 <div><a href=/qna/list>qna게시판이동</a></div>
-
-
-</div>
+</aside>
 <!-- /.row body내용-->
 <div class="row">
   <div class="col-lg-12">
       <!-- 오늘의 인기글 start -->
-	 <small class="text-muted">오늘의 인기글</small>
-	 <br>
+	 <h3>오늘의 인기글</h3>
 		<table class="test" id="dataTables-example2">
 		    <tr class="table-secondary">
 		        <th class=th1>순위</th>
@@ -103,9 +100,8 @@ div.s_right{
   	  <div class="panel-heading text-center">
         <h1>자유게시판</h1>
         <button id="regBtn" type="button" class="btn btn-outline-success float-right">새로운 게시글 등록</button>     	
+     
       </div>  
-        
-	<br>
       <!-- /.panel-heading -->
       <div class="panel-body">
         <table  class="table table-hover" id="dataTables-example">
@@ -132,7 +128,7 @@ div.s_right{
         </table>
         
             <form class="form-inline my-2 my-lg-0" action="/board/list" id="searchForm" method="get">
-              <select name="type">
+              <select name="type" class="form-control">
                 <option value="TWC" 
                 	<c:out value="${pageMaker.cri.type eq 'TWC'?'selected':''}"/>>전체</option>
                 <option value="T" 
@@ -147,14 +143,13 @@ div.s_right{
                 	<c:out value="${pageMaker.cri.type eq 'TW'?'selected':''}"/>>제목 또는 작성자</option>
                 
               </select>
-              <input type="text" name="keyword"/>
-              <input type="hidden" name="pageNum" value='${pageMaker.cri.pageNum}'>
-              <input type="hidden" name="amount" value='${pageMaker.cri.amount}'>
+              <input type="text" name="keyword" class="form-control"/>
+              <input type="hidden" name="pageNum" value='${pageMaker.cri.pageNum}' class="form-control">
+              <input type="hidden" name="amount" value='${pageMaker.cri.amount}' class="form-control">
               
               <button class="btn btn-outline-success">검색</button>
             </form>
-          
-         
+          <br>         
           <ul class="pagination" >
             <c:if test="${pageMaker.prev}">
               <li class="page-item active">

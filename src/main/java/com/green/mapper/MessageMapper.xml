@@ -13,7 +13,7 @@
     <select id="readMsg" resultType="com.green.vo.MessageVO">
         select * from big_tree_message where mid = #{mid} order by mid desc
     </select>
-	<select id="countMsg" resultType="int">
+	<select id="countMsg" resultType="String">
         select count(*) from big_tree_message where receiver_id= #{receiver_id}
     </select>
 	

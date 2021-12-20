@@ -25,9 +25,8 @@ public class BoardVO {
 	private int replyCnt;
 	private int views;
 	private int report;
+	private String id;
 	
-	
-	private int rn;// 오라클 rownum읽어오기위해
 	
 	private ReplyVO reply;
 	private List<ImageVO> imageList;

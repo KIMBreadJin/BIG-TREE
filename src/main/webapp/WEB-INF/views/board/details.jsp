@@ -36,6 +36,9 @@ prefix="c" %>
               <input type="text" class="form-control" name="bno" value="${board.bno}" readonly="readonly" />
             </div>
             <div class="form-group">
+              <input type="hidden" class="form-control" name="id" value="${board.id}" readonly="readonly" />
+            </div>
+            <div class="form-group">
               <label for="title">제목</label>
               <input type="text" class="form-control" name="title" value="${board.title}" readonly="readonly" />
             </div>
@@ -188,18 +191,24 @@ prefix="c" %>
     // replyService 기능 start
     var replyService = (function () {
       function add(reply, callback, error) {
+    	  console.log("${board.writer}")
         $.ajax({
           type: 'post',
           url: '/replies/new',
           data: JSON.stringify(reply),
           contentType: 'application/json; charset=utf-8',
           success: function (result, status, xhr) {
-            if (callback) callback(result)
+            if (callback){
+            	callback(result)
+            	if(${board.id!=info.user_id}){//댓글작성자와 게시글작성자가 다를때만 알림을보냄
+            		sock.send("${board.title}"+','+ "${board.id}"+ ','+'댓글 등록'+','+"${board.bno}")
+            	}
+            }
           },
           error: function (xhr, status, er) {
             if (error) error(err)
           },
-        })
+        }) 
       }
       const getList = (param, callback, error) => {
         var bno = param.bno
@@ -456,6 +465,7 @@ prefix="c" %>
       var totalHate=${totalHate}
 	
       $(document).ready(function (e) {
+   
     	  $("#reason").val("${board.reportList}")
     	 reportButtonChange()
     	 changeColor()//좋아요,싫어요 버튼 테두리씌우는함수 호출
@@ -634,6 +644,8 @@ prefix="c" %>
     		 alert("${info.user_name} 님의 신고접수가 취소되었습니다")
     	 })
       })//document end
+      
+     
 
       const changeColor=()=>{
         if(likeClicked==true && hateClicked==false){

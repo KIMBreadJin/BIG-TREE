@@ -60,8 +60,6 @@ public class MemberController {
 			List<MessageVO> list = msgService.msgList(msg);
 			log.info("What...." + list);
 			session.setAttribute("mlist", list);
-			
-			session.setAttribute("cntMsg", msgService.countMsg(msg.getReceiver_id()));
 		}
 		return result;
 	}
@@ -204,8 +202,6 @@ public class MemberController {
 			List<MessageVO> list = msgService.msgList(msg);
 			log.info("What...." + list);
 			session.setAttribute("mlist", list);
-			
-			session.setAttribute("cntMsg", msgService.countMsg(msg.getReceiver_id()));
 		}
 		return result;
 	}

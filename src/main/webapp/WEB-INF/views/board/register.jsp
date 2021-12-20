@@ -31,6 +31,10 @@
           <!-- /.panel-heading -->
           <div class="panel-body">
             <form action="/board/register" method="post" id="operForm">
+            <div class="form-group">
+
+              <input type="hidden" class="form-control" name="id" value="${info.user_id}" readonly />
+            </div>
               <div class="form-group">
                 <label for="writer">작성자</label>
                 <input type="text" class="form-control" name="writer" value="${info.user_name}" readonly />

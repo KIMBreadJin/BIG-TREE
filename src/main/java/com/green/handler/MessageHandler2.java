@@ -16,19 +16,13 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.green.mapper.MessageMapper;
-import com.green.service.MessageService;
-import com.green.service.MessageServiceImpl;
 import com.green.vo.GetSessionUser;
 import com.green.vo.MemberVO;
 
 import lombok.extern.slf4j.Slf4j;
-import oracle.jdbc.driver.Message;
 
 @Slf4j
-public class MessageHandler extends TextWebSocketHandler{
-	  @Autowired
-	    MessageService messageService;
-	
+public class MessageHandler2 extends TextWebSocketHandler{
 		// 로그인중인 개별유저
 		Map<String, WebSocketSession> users = new ConcurrentHashMap<String, WebSocketSession>();
 		
@@ -43,8 +37,7 @@ public class MessageHandler extends TextWebSocketHandler{
 			
 			String senderId = vo.getUser_id(); // 접속한 유저의 http세션을 조회하여 id를 얻는 함수
 			System.out.println("senderId: " + senderId);
-			//몇개의 매시지 왔는지						
-			session.sendMessage(new TextMessage("recMs :"+messageService.countMsg(senderId)));
+			
 			if(senderId!=null) {	// 로그인 값이 있는 경우만
 				log.info(senderId + " 연결 됨");
 				users.put(senderId, session);   // 로그인중 개별유저 저장
@@ -55,8 +48,7 @@ public class MessageHandler extends TextWebSocketHandler{
 		@Override
 		protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 			System.out.println("handleTextmessage: " + session + " : " + message);
-			
-			// 특정 유저에게 보내기			
+			// 특정 유저에게 보내기
 			String msg = message.getPayload();
 			if(msg != null) {
 				String[] strs = msg.split(",");
@@ -65,7 +57,6 @@ public class MessageHandler extends TextWebSocketHandler{
 					String send_name = strs[0]; 					
 					String receiver_id = strs[1];
 					String ms_content = strs[2];
-		
 					switch (strs[2]) {
 					case "친구 요청":
 					    ms_content="님으로부터 "+strs[2]+"이 들어왔습니다 "
@@ -79,42 +70,6 @@ public class MessageHandler extends TextWebSocketHandler{
 						break;
 					}
 					
-					WebSocketSession targetSession = users.get(receiver_id);  // 메시지를 받을 세션 조회
-					System.out.println("targetSession : " + targetSession);
-					// 실시간 접속시
-					if(targetSession!=null) {
-						targetSession.sendMessage(new TextMessage("recMs :"+messageService.countMsg(receiver_id)));
-						// ex: [&분의일] 신청이 들어왔습니다.
-						TextMessage tmpMsg = new TextMessage("["+send_name+"]"+ " "+ ms_content );	
-						System.out.println("tmpMsg" + tmpMsg);
-						targetSession.sendMessage(tmpMsg);						
-					}
-				}else if (strs!=null && strs.length ==4 ) {
-					String send_name = strs[0]; 					
-					String receiver_id = strs[1];
-					String ms_content = strs[2];	
-					int bno_short =  Integer.parseInt(strs[3]);
-					
-					ms_content="게시물에 댓글이 등록되었습니다 " 
-							+" <a id='bno_short' href='/board/details?bno="+bno_short+"'>바로가기</a>";
-					WebSocketSession targetSession = users.get(receiver_id);  // 메시지를 받을 세션 조회
-					System.out.println("targetSession : " + targetSession);
-					// 실시간 접속시
-					if(targetSession!=null) {
-						// ex: [&분의일] 신청이 들어왔습니다.
-						TextMessage tmpMsg = new TextMessage("["+send_name+"]"+ " : "+ ms_content );	
-						System.out.println("tmpMsg" + tmpMsg);
-						targetSession.sendMessage(tmpMsg);
-					}
-			} //else if(게시판)문 end
-				else if (strs!=null && strs.length ==5 ) {
-					String send_name = strs[0]; 					
-					String receiver_id = strs[1];
-					String ms_content = strs[2];	
-					int qno_short =  Integer.parseInt(strs[3]);
-					
-					ms_content="게시물에 댓글이 등록되었습니다 " 
-							+" <a id='qno_short' href='/qna/details?qno="+qno_short+"'>바로가기</a>";
 					WebSocketSession targetSession = users.get(receiver_id);  // 메시지를 받을 세션 조회
 					System.out.println("targetSession : " + targetSession);
 					// 실시간 접속시

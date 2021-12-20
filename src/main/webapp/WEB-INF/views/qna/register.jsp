@@ -35,6 +35,9 @@
                 <label for="writer">작성자</label>
                 <input type="text" class="form-control" name="writer" value="${info.user_name}" readonly />
               </div>
+            <div class="form-group">
+              <input type="hidden" class="form-control" name="id" value="${info.user_id}"  />
+            </div>
               <div class="form-group">
                 <label for="title">제목</label>
                 <input type="text" class="form-control" name="title" />
