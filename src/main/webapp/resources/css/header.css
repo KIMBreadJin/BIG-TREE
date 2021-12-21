@@ -80,6 +80,8 @@ input[type="submit"] {font-family:FontAwesome;}
     margin: 0 0 0 45px;
     color: #333;
     font-size: 15px;
+    font-weight: bold;
+    
     position: relative;
 }
 .navbar-nav>.messages-menu>.dropdown-menu li .menu>li>a>p {

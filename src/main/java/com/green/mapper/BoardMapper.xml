@@ -43,7 +43,7 @@
 	</delete>
 	<update id="updateBoard">
 		update big_tree_board 
-			set title =#{title}, content=#{content}, updateDate=sysdate,id={id}
+			set title =#{title}, content=#{content}, updateDate=sysdate,id=#{id}
 				where bno = #{bno}
 	</update>
 	

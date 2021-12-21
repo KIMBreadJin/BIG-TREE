@@ -95,6 +95,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public void deleteBoard(int bno) {
+		replyMapper.deletewithBoard(bno);
 		imageUploadMapper.deleteAll(bno);
 		boardMapper.deleteBoard(bno);	
 	}

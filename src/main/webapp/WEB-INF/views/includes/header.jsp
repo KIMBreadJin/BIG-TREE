@@ -116,8 +116,10 @@
           	나의 정보 조회/수정
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">정보 조회</a>
-          <a class="dropdown-item" href="#">정보 수정</a>
+          <a class="dropdown-item" href="/member/updatePwd">비밀번호 변경</a>
+          <a class="dropdown-item" href="/member/checkProfile">정보 조회</a>
+          <a class="dropdown-item" href="/member/checkPwd">정보 수정</a>
+        </div>
       </li> 
 		<form class="navbar-form" role="search" action="#" id="searchUser">
 		    <div class="form-group">

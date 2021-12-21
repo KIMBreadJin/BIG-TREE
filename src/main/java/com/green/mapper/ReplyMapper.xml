@@ -17,6 +17,9 @@
 	<delete id="delete">
 		delete from big_tree_reply where rno = #{rno}
 	</delete>
+	<delete id="deletewithBoard">
+		delete from big_tree_reply where bno = #{bno}
+	</delete>
 	
 	<select id="getListWithPaging" resultType="com.green.vo.ReplyVO">
 	<!-- select rno,bno,reply,replyer,replyDate,updateDate

@@ -231,7 +231,7 @@ public class MemberController {
 		vo.setUser_id(memberData.getUser_id());
 		vo.setUser_pwd(request.getParameter("password"));
 		service.updatePwd(vo);
-		return "/board/list";
+		return "redirect:/board/list";
 	}
 	@GetMapping("/checkPwd")
 	public void checkPwd(Model model) {
@@ -246,6 +246,16 @@ public class MemberController {
 	public String modify(MemberVO vo) {
 		vo.setUser_num(memberData.getUser_num());
 		service.modify(vo);
-		return "/board/list";
+		return "redirect:/board/list";
+	}
+	@GetMapping("/checkProfile")
+	public void checkProfile(Model model) {
+		model.addAttribute("pwd", memberData.getUser_pwd());
+		log.info("프로필 조회 비밀번호 확인");
+	}
+	@RequestMapping(value="/profile", method=RequestMethod.GET)
+	public void profile(Model model) {
+		log.info("회원정보 조회");
+		model.addAttribute("profile", memberData);
 	}
 }

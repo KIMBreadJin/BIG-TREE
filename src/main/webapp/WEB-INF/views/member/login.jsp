@@ -54,7 +54,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
       <div class="row main">
         <div class="panel-heading">
           <div class="panel-title text-center">
-            <h1 class="title">BIG TREE</h1>
+            <a href ="/member/login"><h1 class="title">BIG TREE</h1></a>
             <hr />
           </div>
         </div>

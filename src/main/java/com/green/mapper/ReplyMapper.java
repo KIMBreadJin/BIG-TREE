@@ -22,7 +22,7 @@ public interface ReplyMapper {
 		);
 	public int getCountByBno(int bno);
 	//댓글의숫자파악을위하여
-	
+	public void deletewithBoard(int bno);
 			
 	
 }

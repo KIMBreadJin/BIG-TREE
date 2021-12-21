@@ -17,6 +17,10 @@
 	<delete id="delete">
 		delete from big_tree_qna_reply where rno = #{rno}
 	</delete>
+	<delete id="deleteWithQna">
+		delete from big_tree_qna_reply where qno = #{qno}
+	
+	</delete>
 	
 	<select id="getListWithPaging" resultType="com.green.vo.QnaReplyVO">
 	<!-- select rno,bno,reply,replyer,replyDate,updateDate

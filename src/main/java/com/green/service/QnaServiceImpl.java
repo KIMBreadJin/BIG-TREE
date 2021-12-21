@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.green.mapper.ImageUploadMapper;
 import com.green.mapper.QnaMapper;
+import com.green.mapper.QnaReplyMapper;
+import com.green.mapper.ReplyMapper;
 import com.green.vo.Criteria;
 import com.green.vo.ImageVO;
 import com.green.vo.QnaVO;
@@ -24,6 +26,9 @@ public class QnaServiceImpl implements QnaService{
 	
 	@Setter(onMethod_=@Autowired)
 	ImageUploadMapper imageUploadMapper;
+	
+	@Setter(onMethod_=@Autowired)
+	QnaReplyMapper replyMapper;
 	
 	@Override
 	public List<QnaVO> getQnaList() {
@@ -66,6 +71,7 @@ public class QnaServiceImpl implements QnaService{
 
 	@Override
 	public void deleteQna(int qno) {
+		replyMapper.deleteWithQna(qno);
 		imageUploadMapper.deleteAll(qno);
 		qnaMapper.deleteQna(qno);
 	}

@@ -22,9 +22,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	  var birthYear ="1950"
 	  var birthMonth ="1"
 	  var birthDay="1"
-	  $("#birthMonth").change(function(){
-		  console.log($(this).val())
-	  })
+	 
       function modifyProfile() {
         birthYear = document.getElementById('birthYear').value
         birthMonth = document.getElementById('birthMonth').value
@@ -97,11 +95,38 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     	  }
       }
       $(document).ready(function(e){
+    	  
+    	  
     	  $("#birthMonth").change(function(){
     		  birthMonth=$("#birthMonth").val()
-    		  console.log("값 : "+birthMonth)
+    		  showDays()
     	  })
       })
+   
+      const showDays=()=>{
+    	  $("#birthDay").empty()
+    	  let str="<option value=''>일</option>"
+			  str+="<c:forEach var='day' begin='1' end='31'>"
+			  str+="<option>${day}</option>"
+			  str+="</c:forEach>  "
+		  $("#birthDay").append(str)	  
+    	  switch(birthMonth){
+    	  	case "2":
+    	  		for(let i=0; i<3; i++){
+    	  			$("#birthDay")[0][29].remove()
+    	  		}
+    	  		break;
+    	  	case "4":
+    	  	case "6":	
+    		case "9":
+    	  	case "11":	
+    	  		$("#birthDay")[0][31].remove()
+    	  	default:
+    	  		$("#birthDay")
+    	  		break;
+    	  }
+    	  
+      }
     </script>
   </head>
   <body>
@@ -176,28 +201,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	            </c:forEach>
 	          </select>
 	          <select id="birthDay" class="form-control">
-	         	<option value="">일</option>
-	         	<c:choose>
-	         		<c:when test="${birthMonth eq '2'}">
-	         			<c:forEach var="day" begin="1" end="28">
-	              		<option>${day}</option>
-	            		</c:forEach>
-	         		</c:when>
-	         		<c:otherwise>
-	         			<c:choose>
-	         			<c:when test="${birthMonth eq 4 or birthMonth eq 6 or birthMonth eq 9 or birthMonth eq 11}">
-	         				<c:forEach var="day" begin="1" end="30">
-	         				<option>${day}</option>
-	         				</c:forEach>
-	         			</c:when>
-	         			<c:otherwise>
-	         				<c:forEach var="day" begin="1" end="31">
-	         				<option>${day}</option>
-	         				</c:forEach>
-	         			</c:otherwise>
-	         			</c:choose>
-	         		</c:otherwise>
-	         	</c:choose>
+	         			<option value="">일</option>	     	
 	          </select>
 	           </div>
 	          <input type="hidden" id="user_birth" name="user_birth" />

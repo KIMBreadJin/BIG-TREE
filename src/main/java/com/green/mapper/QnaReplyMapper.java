@@ -22,6 +22,8 @@ public interface QnaReplyMapper {
 			@Param("qno") int qno
 		);
 	public int getCountByBno(int qno);
+	
+	public void deleteWithQna(int qno);
 	//댓글의숫자파악을위하여
 	
 			

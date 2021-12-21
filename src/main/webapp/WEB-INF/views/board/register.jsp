@@ -71,26 +71,10 @@
 		var objArr;
 		var images=[]
 		var myObjArr=[]
+		var operForm = $('#operForm')
 	   $(document).ready(function (e) {
-		   $(document).on('click',function(e){// document클릭시 이벤트발생
-			   $('div.cke_dialog_body').unbind('click').bind("click" ,function() {//언바인드후 바인드를 통해 마지막이벤트만 호출
-				    objArr= $("iframe").contents().find('pre').text()//textarea의 이미지
-				    console.log($('div.cke_dialog_body'))	
-				    var myobj = JSON.parse(objArr);
-			   		myObjArr.push(myobj)
-				    var fileCallPath = encodeURIComponent(myobj[0].uploadPath + '/s_' + myobj[0].uuid + '_' + myobj[0].fileName)        
-			        str = "<img id='img"+(cnt)+"' src='/display?fileName=" + fileCallPath + "'>"//이미지 태그 생성 
-	                str2="<div id='"+(cnt)+"'>"//form 태그의 input타입 생성하기위한 문자열 선언
-	                str2 += "<input type='hidden' name='imageList[" + (cnt)+ "].fileName' value='" + myobj[0].fileName + "'>"
-	                str2 += "<input type='hidden' name='imageList[" + (cnt) + "].uuid' value='" + myobj[0].uuid + "'>"
-	                str2 += "<input type='hidden' name='imageList[" + (cnt++) + "].uploadPath' value='" + myobj[0].uploadPath + "'>"
-			        str2 +="</div>"
-	                ckediters.setData(ckediters.getData()+str);//기존의 data에 이미지 추가
-			        operForm.append(str2)//폼태그에 input(name=imageList) 보내기
-			   })  
-		   }) 		   
-		 		 //==============버튼 유형에 따른 처리========================
-      var operForm = $('#operForm')
+	//==============버튼 유형에 따른 처리========================
+      
       $("#list").click(function (e) {
         operForm.attr('action', '/board/list').attr('method', 'get').submit()
       })
@@ -163,5 +147,25 @@
           infoTab.remove( 'ratioLock');
           infoTab.remove( 'cmbAlign');    
       });
+	
+		   $(document).on('click','div.cke_dialog_body',function(e){// document클릭시 이벤트발생
+			    objArr= $("iframe").contents().find('pre').text()//textarea의 이미지
+			    $('a.cke_dialog_ui_button.cke_dialog_ui_button_ok').remove()
+			    $('a.cke_dialog_ui_button.cke_dialog_ui_button_cancel').text('확인').css('width','60px')
+			    var myobj = JSON.parse(objArr);
+		   		myObjArr.push(myobj)
+			    var fileCallPath = encodeURIComponent(myobj[0].uploadPath + '/s_' + myobj[0].uuid + '_' + myobj[0].fileName)        
+		        str = "<img id='img"+(cnt)+"' src='/display?fileName=" + fileCallPath + "'>"//이미지 태그 생성 
+               str2="<div id='"+(cnt)+"'>"//form 태그의 input타입 생성하기위한 문자열 선언
+               str2 += "<input type='hidden' name='imageList[" + (cnt)+ "].fileName' value='" + myobj[0].fileName + "'>"
+               str2 += "<input type='hidden' name='imageList[" + (cnt) + "].uuid' value='" + myobj[0].uuid + "'>"
+               str2 += "<input type='hidden' name='imageList[" + (cnt++) + "].uploadPath' value='" + myobj[0].uploadPath + "'>"
+		        str2 +="</div>"
+               ckediters.setData(ckediters.getData()+str);//기존의 data에 이미지 추가
+		        operForm.append(str2)//폼태그에 input(name=imageList) 보내기
+		    
+	   }) 		   
+	
+	
   </script>
 </html>

@@ -4,7 +4,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>BigTree 회원정보 수정</title>
+    <title>BigTree 회원정보 조회</title>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -19,8 +19,8 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     			return false
     		}
     		else{
-    			alert("회원정보 변경 페이지로 이동합니다.")
-    			location.href = '/member/modify'
+    			alert("회원정보 조회 페이지로 이동합니다.")
+    			location.href = '/member/profile'
     		}
     	}
     </script>
@@ -30,12 +30,12 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	<div class="row">
         <div class="panel-heading">
           <div class="panel-title text-center">
-            <h1 class="title">BIG TREE modify profile</h1>
+            <h1 class="title">BIG TREE read profile</h1>
             <hr />
           </div>
 		</div>
 		<div class="main-login main-center">
-			<form class="form-horizontal" method="post" id="updatePwd" name="updatePwd">
+			<form class="form-horizontal" method="get">
 				<div class="form-group">
 					<label class="control-label col-sm-3">비밀번호</label>
 					<div class="col-md-5 col-sm-8">
