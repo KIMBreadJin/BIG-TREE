@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.green.service.BoardService;
 import com.green.service.FriendService;
 import com.green.service.MemberService;
 import com.green.vo.Criteria;
@@ -38,6 +39,9 @@ public class AjaxController {
 	
 	@Setter(onMethod_=@Autowired)
 	MemberService memberService;
+	
+	@Setter(onMethod_=@Autowired)
+	BoardService boardService;
 	
 	@ResponseBody
 	@RequestMapping(value = "/searchUser")
@@ -191,6 +195,21 @@ public class AjaxController {
 	    }
 		friendService.delete(vo2);
 		return "처리 완료";
+	}
+	
+	@ResponseBody
+	@RequestMapping (value = "/getUser" )
+	public MemberVO getUser(@RequestParam("user_name")String user_id) {	
+		MemberVO vo= new MemberVO();
+		vo.setUser_id(user_id);
+		vo=memberService.findFrd(vo);
+		Criteria criteria = new Criteria();
+		criteria.setKeyword(vo.getUser_id());
+		criteria.setType("D");
+		int boardCnt = boardService.getBoardListWithPage(criteria)==null?
+					0:boardService.getBoardListWithPage(criteria).size();		
+		vo.setBoardCnt(boardCnt);
+		return vo;
 	}
 	
 

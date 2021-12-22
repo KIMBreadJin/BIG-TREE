@@ -138,6 +138,18 @@ prefix="c" %>
         </div>
         <!-- /.panel -->
       </div>
+ 
+        <!--  end pagination -->
+        <form class="d-flex" action="/board/list" id='actionForm' method="get">
+        	<input class="form-control me-sm-2" type='hidden' name="pageNum" value="${pageMaker.cri.pageNum}">
+        	<input class="form-control me-sm-2" type='hidden' name="amount" value="${pageMaker.cri.amount}">
+        	<input class="form-control me-sm-2" type="hidden" name="type" value='${pageMaker.cri.type}'>
+            <input class="form-control me-sm-2" type="hidden" name="keyword" value='${pageMaker.cri.keyword}'>
+            
+        </form>
+      
+      
+
 		<!-- 신고하기 모달창  -->
 		<div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -281,7 +293,7 @@ prefix="c" %>
     
     $(document).ready(function () {
     	$("#boardModifyBtn").hide()
-    	if("${board.writer}"=="${info.user_name}"||"${info.user_type}"==1){
+    	if("${board.id}"=="${info.user_id}"||"${info.user_type}"==1){
     		$("#boardModifyBtn").show()
     	}
       var bnoValue = '<c:out value="${board.bno}"/>'

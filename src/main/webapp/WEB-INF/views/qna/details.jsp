@@ -200,7 +200,7 @@ prefix="c" %>
     
     $(document).ready(function () {
     	$("#boardModifyBtn").hide()
-    	if("${qna.writer}"=="${info.user_name}"||"${info.user_type}"==1){
+    	if("${qna.id}"=="${info.user_id}"||"${info.user_type}"==1){
     		$("#boardModifyBtn").show()
     	}
       var qnoValue = '<c:out value="${qna.qno}"/>'

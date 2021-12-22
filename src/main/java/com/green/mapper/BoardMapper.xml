@@ -17,10 +17,9 @@
 			    				<when test="type== 'W'.toString()">
 			    					writer like '%'||#{keyword}||'%'
 			    				</when>
-<!-- 			    				<when test="type== 'P'.toString()">
-			    					views>10
-			    				
-			    				</when> -->
+								<when test="type== 'D'.toString()">
+			    					id =#{keyword}
+			    				</when>
 			    			</choose>
 			    		</trim>
 			    	</foreach>
@@ -43,7 +42,7 @@
 	</delete>
 	<update id="updateBoard">
 		update big_tree_board 
-			set title =#{title}, content=#{content}, updateDate=sysdate,id=#{id}
+			set title =#{title}, content=#{content}, updateDate=sysdate
 				where bno = #{bno}
 	</update>
 	
@@ -64,10 +63,19 @@
 	</select>
 	
 	<select id="getTotalCount" resultType="int">
-		select count(*) from big_tree_board 
-		<if test="keyword !=null">
-		where bno>0 <include refid="criteria"></include>
-		</if>
+				<![CDATA[
+			select count(*)
+				from( select rownum rn,bno,title,content,writer,regDate,updateDate,replyCnt,views,report
+					from (select*from big_tree_board order by bno desc)
+						where 
+				]]>	
+				<if test="keyword !=null">	
+				<include refid="criteria"></include>
+				</if>
+				<![CDATA[	
+						rownum > 0  )
+					where rn > 0
+				]]>
 	</select>
 
 	<update id="updateViews">
@@ -81,6 +89,6 @@
 	 select * from(select bno,title,views from big_tree_board  where views>10 order by views desc) where ROWNUM<=5
 	 ]]>
 	</select>
-
+	
 	
 </mapper>

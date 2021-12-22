@@ -15,11 +15,12 @@
 		gsWin.focus();
 		frm.submit();
 	}
+	
 	$('#sendMsgBtn').click(function(){
 		console.log("눌리나")
 		goSubmit();
 	})
-	});	
+	});
     function onMessage(e){
 	    var data = e.data;
 		var splitdata =data.split(":");

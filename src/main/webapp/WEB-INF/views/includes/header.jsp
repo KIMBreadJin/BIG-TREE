@@ -51,8 +51,9 @@
                     <c:forEach items="${mlist}" var="mlist">                
                       <li>               
                         <a id="readM" href="/message/readMsg?mid=${mlist.mid}" onclick="window.open(this.href, '_blank', 'width=700, height=510'); return false;">
-                          <div class="pull-left">
-                              <img src="http://via.placeholder.com/160x160" class="rounded-circle " alt="User Image">
+                          <div class="pull-left rounded-circle" id="user_profile">
+                              <!-- <img src="http://via.placeholder.com/160x160" class="rounded-circle " alt="User Image"> -->
+                              ${find.user_profileImage}
                           </div>
                           <h4>
                             ${mlist.send_name}
@@ -69,7 +70,7 @@
                     <!-- end message -->
                   </ul>
                 </li>
-                <li class="footer-ul text-center"><a href="/message/msgList">See All Messages</a></li>
+                <li class="footer-ul text-center"><a href="/message/msgList">쪽지함으로 이동</a></li>
               </ul>
             </div>
           </li>
@@ -95,7 +96,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto  float-right">
       <li class="nav-item active">
-        <a class="nav-link" href="#">나의 게시글<span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="#" id="myPost">나의 게시글<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#" id="goChat">실시간 채팅</a>
@@ -119,7 +120,6 @@
           <a class="dropdown-item" href="/member/updatePwd">비밀번호 변경</a>
           <a class="dropdown-item" href="/member/checkProfile">정보 조회</a>
           <a class="dropdown-item" href="/member/checkPwd">정보 수정</a>
-        </div>
       </li> 
 		<form class="navbar-form" role="search" action="#" id="searchUser">
 		    <div class="form-group">
@@ -162,9 +162,9 @@
                     <h4 class="modal-title" id="myModalLabel">회원정보</h4>
                   </div>
                   <!-- modal-header -->
-                  <div class="modal-body" width="300px">
-                  	   <div class="form-group">
-	                    <p class='text-center'>프로필 사진</p><img src="/resources/images/basicProfileIcon.png" width="100%">
+                  <div class="modal-body">
+                  	   <div class="form-group" id="profileImage" style="text-align:center;">
+	                    <p class='text-center'>프로필 사진</p><img src="/resources/images/basicProfileIcon.png" width="80%">
 	                  
 	                  </div>
 	                  <form class="form-horizontal" method="get" action="" name='sendMsgForm'>
@@ -178,7 +178,7 @@
                         <input type="text" class="form-control" name="memberName" id="memberName" value=""  readonly />
                       </div>
                        <div class="form-group">
-                        <label for="">작성한 게시글수 </label>
+                        <label for="">작성한 게시글수 </label><div class='btn btn-outline-primary float-right' id="showUserPost">보러가기</div>
                         <input type="text" class="form-control" name="postCnt"  id="postCnt" value=""  readonly />
                       </div>
                   </div>
@@ -254,6 +254,19 @@
 		margin:0;
 		padding:0;
 	}
+	.userList img{
+		width:45px;
+		height:45px;
+	}
+	.requestResultList img{
+		width:45px;
+		height:45px;
+	}
+	#profileImage img{
+		width:373px;
+		height:373px;
+	}
+	
   </style>
   
 <script type="text/javascript">
@@ -383,19 +396,22 @@ $(document).ready(function(){
 		 })//end ajax
 	 }) 
 		 $("#searchResult").click(function(e){//결과보기 눌렀을때 호출함수
-			 var userName= $("#searchUserName").val()
+			 var userName= $("#searchUserName").val()//이재욱
 			 var str=""
 			$.ajax({
 				type:'get',
 				url:'/getUserList',
 				data:{
-					user_name:userName
+					user_name:userName//이재욱
 				},
 				success:function(list){
 					 $(".userList").html('')
 					 for (var i = 0, len = list.length || 0; i < len; i++) { 	
 		                    str += "<li class='left clearfix' data-name='" + list[i].user_name + "' id='resultNameList' style='margin:4px' >"
-		                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
+		                    str += " <div><div class='header'>"
+		                    str += list[i].user_profileImage!=null ? 
+		                    		list[i].user_profileImage
+		                    		: "<img src='/resources/images/basicProfileIcon.png' />" 
 		                    str += "<strong class='primary-font' >" + list[i].user_name + '</strong><p>'+list[i].user_id + '</p>'
 		                    str += " </div>"
 		                    str += '</div></li>'
@@ -415,14 +431,12 @@ $(document).ready(function(){
 		 $(".requestResultList").on("click","li",function(){
 			 receiver_id=$(this).find('p').text()
 			$("#memberName").val($(this).data('name'))
-			$("#memberId").val($(this).find('p').text())		
+			$("#memberId").val(receiver_id)
 		 })
 		 
 		 $(".userList").on("click","li",function(e){
 			 var send_id="${info.user_id}"
 			var receiver_id=$(this).find('p').text()
-			$("#memberName").val($(this).data('name'))
-			$("#memberId").val($(this).find('p').text())
 			 if(clicked['friendListClicked']==true){
 				    $("#memberList").modal('hide')
 		 		 }
@@ -430,7 +444,27 @@ $(document).ready(function(){
 	 			$("#memberList").modal('hide')
 	 		 }
 			 else{
-				 $("#memberInfo").modal('show')
+				 $.ajax({
+					 type:'get',
+					 url:'/getUser',
+					 data:{
+						"user_name":receiver_id
+						},
+					success:function(data){
+						$("#memberName").val(data.user_name)
+						$("#memberId").val(data.user_id)
+						$("#postCnt").val(data.boardCnt)
+						if(data.user_profileImage!=null){
+							$("#profileImage").find('img').hide()
+							$("#profileImage").append(data.user_profileImage)
+						}
+						else{
+							$("#profileImage").find('img').show()
+						}
+					}
+				 }) 
+				 
+				 $("#memberInfo").modal('show') 
 			 }
 			 
 			 resetClicked()
@@ -441,6 +475,9 @@ $(document).ready(function(){
 			$("#memberList").modal('hide')
 		 })
 		 $("#memberInfoCloseBtn").click(function(e){
+			 if($("#memberInfo").find('img').length==4){
+				 $("#memberInfo").find('img')[1].remove()
+			 }
 			$("#memberInfo").modal('hide')
 		 })
 		 $("#requestListCloseBtn").click(function(e){
@@ -504,7 +541,10 @@ $(document).ready(function(){
 						var str=""
 						for (var i = 0, len = data['memberList'].length || 0; i < len; i++) {	
 		                    str += "<li class='left clearfix' data-name='" + data['memberList'][i].user_name + "' id='resultNameList' style='margin:4px' >"
-		                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
+		                    str += " <div><div class='header'>"
+	                    	str += data['memberList'][i].user_profileImage != null ? 
+	                    			data['memberList'][i].user_profileImage :
+	 	                    		"<img src='/resources/images/basicProfileIcon.png'/>"
 		                    str += "<strong class='primary-font' >" + data['memberList'][i].user_name +'<div class="float-right" id="btns">'
 		                    str += '<button class="btn btn-primary" id="accept" onclick="acceptClicked()">수락</button>'
 				            str += '<button class="btn btn-danger" id="reject"  onclick="rejectClicked()">거절</button>'
@@ -535,7 +575,10 @@ $(document).ready(function(){
 						for (var i = 0, len = data['memberList'].length || 0; i < len; i++) {
 						 	
 		                    str += "<li class='left clearfix' data-name='" + data['memberList'][i].user_name + "' id='resultNameList' style='margin:4px' >"
-		                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
+		                    str += " <div><div class='header'>"
+	                    	str += data['memberList'][i].user_profileImage != null ? 
+	                    			data['memberList'][i].user_profileImage :
+	 	                    		"<img src='/resources/images/basicProfileIcon.png'/>"
 		                    str += "<strong class='primary-font' >" + data['memberList'][i].user_name 
 		                    str +='<div id="btns"><button class="btn btn-danger float-right" id="delete" onclick="deleteClicked()">취소</button></div>'
 		                    str += '</strong><p>'+data['memberList'][i].user_id + '</p>'
@@ -548,6 +591,28 @@ $(document).ready(function(){
 						$(".requestResultList").html(str)
 					}
 				})	
+		})
+		
+		$("#showUserPost").click(function(e){
+			$("#actionForm").find('input[name="pageNum"]').val(1)
+			$("#actionForm").find('input[name="amount"]').val(20)
+			$("#actionForm").find('input[name="type"]').val('D')
+			$("#actionForm").find('input[name="keyword"]').val($("#memberId").val())
+			if($("#postCnt").val()!=0){
+				$("#actionForm").submit()	
+			}
+			else{
+				alert("작성한 게시글이 존재하지 않습니다.")
+			}
+		})
+		$("#myPost").click(function(e){
+			$("#actionForm").find('input[name="pageNum"]').val(1)
+			$("#actionForm").find('input[name="amount"]').val(20)
+			$("#actionForm").find('input[name="type"]').val('D')
+			$("#actionForm").find('input[name="keyword"]').val("${info.user_id}")
+
+			$("#actionForm").submit()	
+			
 		})
 			
 	 })//end document
@@ -564,7 +629,10 @@ $(document).ready(function(){
 			success:function(list){
 				 for (var i = 0, len = list.length || 0; i < len; i++) { 	
 	                    str += "<li class='left clearfix' data-name='" + list[i].user_name + "' id='resultNameList' style='margin:4px' >"
-	                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
+	                    str += " <div><div class='header'>" 
+	                    str += list[i].user_profileImage != null ? 
+	                    		list[i].user_profileImage :
+	                    		"<img src='/resources/images/basicProfileIcon.png'/>"
 	                    str += "<strong class='primary-font' >" + list[i].user_name + '<button class="btn btn-danger float-right" id="getDelete" onclick="friendListClicked()">친구삭제</button>'
 	                    str +='</strong><p>'+list[i].user_id + '</p>'
 	                    str += " </div>"
@@ -583,7 +651,6 @@ $(document).ready(function(){
 	  })
 	  
 	  $("#blockList").click(function(e){
-		  console.log("blockList불러오기")
 		$(".userList").html('')
 		var str=""
 		$.ajax({
@@ -595,7 +662,10 @@ $(document).ready(function(){
 			success:function(list){
 				 for (var i = 0, len = list.length || 0; i < len; i++) { 	
 	                    str += "<li class='left clearfix' data-name='" + list[i].user_name + "' id='resultNameList' style='margin:4px' >"
-	                    str += " <div><div class='header'><img src='/resources/images/basicProfileIcon.png' width='45px' /> "
+	                    str += " <div><div class='header'>"
+                   	    str += list[i].user_profileImage != null ? 
+	                    			list[i].user_profileImage :
+	                    			"<img src='/resources/images/basicProfileIcon.png'/>"
 	                    str += "<strong class='primary-font' >" + list[i].user_name + '<button class="btn btn-secondary float-right" id="getDelete" onclick="blockListClicked()">차단풀기</button></strong><p>'+list[i].user_id + '</p>'
 	                    str += " </div>"
 	                    str += '</div></li>'
@@ -618,18 +688,15 @@ $(document).ready(function(){
 	  })
 	 $(document).on("click","button.ml-2",function(){//알람 x누르면 해당 알람 삭제 
 		  $(this).parent().parent().remove()
-		  console.log("눌림")
 	  })
 	 $(document).on("click","#msgRequestFriend",function(){//친구요청 바로가기버튼클릭시
 		  $("#friendRequest").trigger('click')
 		  $("#requestReceived").trigger('click')
 		  $(this).parent().parent().remove()
-		  console.log("눌림")
 	 })
 	  $(document).on("click","#msgMyFriend",function(){//친구요청 바로가기버튼클릭시
 		  $("#friendList").trigger('click')
 		  $(this).parent().parent().remove()
-		  console.log("눌림")
 	 }) 
 	 $(document).on("click","#getDelete",function(){
 		 var send_id=$(this).parent().parent().find('p').text();
@@ -648,6 +715,7 @@ $(document).ready(function(){
 		 	 }
 		 })
 	 })
+    	  
 	
 	 
 

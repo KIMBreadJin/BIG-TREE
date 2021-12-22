@@ -23,4 +23,9 @@ public class MemberVO {
 	private String user_kakao;
 	private String user_nickName;
 	private int user_type;
+	private String user_profileImage;
+	
+	
+	
+	private int boardCnt;//오라클 연동x 게시글수 저장용
 }

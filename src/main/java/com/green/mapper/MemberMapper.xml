@@ -43,8 +43,10 @@
 	<select id="findFrd" resultType="com.green.vo.MemberVO">
 		select * from big_tree_member where user_id = #{user_id}
 	</select>
+	
 	<update id="modify">
-		update big_tree_member set user_address=#{user_address}, user_phone=#{user_phone},user_email=#{user_email},user_birth=#{user_birth} 
-		where user_num=#{user_num}
+		update big_tree_member set user_address=#{user_address}, user_phone=#{user_phone}
+			,user_email=#{user_email},user_birth=#{user_birth},user_profileImage=#{user_profileImage} 
+				where user_num=#{user_num}
 	</update>
 </mapper>

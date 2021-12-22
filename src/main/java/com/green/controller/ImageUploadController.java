@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.green.vo.ImageVO;
 
 import lombok.Setter;
@@ -104,32 +103,38 @@ public class ImageUploadController {
 
 		return new ResponseEntity<String>("deleted", HttpStatus.OK);
 	}
+
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@PostMapping(value = "/uploadAjaxAction",produces = MediaType.APPLICATION_JSON_UTF8_VALUE) //497page
+	@ResponseBody
+	public ResponseEntity<ImageVO> uploadProfileAjaxPost(MultipartFile uploadFile) {
+		String uploadFolder = "c:\\upload";
+		//폴더 생성
+		String uploadFolderPath = getFolder(); //변경 
+		File uploadPath = new File(uploadFolder,uploadFolderPath); //변경
+		log.info("파일 업로드된 경로 :" +  uploadPath);
+		if(!uploadPath.exists()) uploadPath.mkdirs();//파일의 경로가 존재하지 않으면 폴더 새로 생성 
+			ImageVO attachDTO = new ImageVO();
+			String uploadFileName = uploadFile.getOriginalFilename();
+			attachDTO.setFileName(uploadFileName); //추가 
+			UUID uuid = UUID.randomUUID();//고유한 키를 생성해주는 자바 util 
+			uploadFileName= uuid.toString()+"_" + uploadFileName;//고유키 + "_" + 원래 파일명 
+			try {
+				File saveFile = new File(uploadPath,uploadFileName);
+				uploadFile.transferTo(saveFile); 
+				attachDTO.setUuid(uuid.toString()); //추가
+				attachDTO.setUploadPath(uploadFolderPath); //추가 
+				FileOutputStream thumbnail = new FileOutputStream(
+				new File(uploadPath,"s_" + uploadFileName));
+				Thumbnailator.createThumbnail(uploadFile.getInputStream(), thumbnail,200,200);//섬네일 이미지 생성 
+				thumbnail.close();
+				
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
+		
+		return new ResponseEntity<>(attachDTO, HttpStatus.OK);
+	}
 	
 	private String getFolder() { //오늘날짜를 이용하여 폴더 구조의 문자열을 반환하는 함수 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

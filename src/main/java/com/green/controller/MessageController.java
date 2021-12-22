@@ -77,8 +77,13 @@ public class MessageController {
 		
 	}
 	@GetMapping("/msgList")
-	public void getMList(Model model, MessageVO vo, HttpServletRequest request) {
-
+	public void getMList(MemberVO vo, MessageVO msg, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		vo = (MemberVO)session.getAttribute("info");
+		msg.setReceiver_id(vo.getUser_id());
+		List<MessageVO> list = service.msgList(msg);
+		
+		session.setAttribute("mlist", list);
 	}
 	@GetMapping("/readMsg")
 	public void readMsg(@RequestParam("mid")long mid, Model model) {

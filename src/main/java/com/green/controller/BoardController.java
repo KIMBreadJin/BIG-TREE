@@ -46,14 +46,13 @@ public class BoardController {
 	ReportService reportService;
 	
 	@GetMapping("/list")
-	public void getList(Model model,Criteria cri,HttpServletRequest request) {
+	public void getList(Criteria cri,Model model,HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
 		MemberVO vo = (MemberVO)session.getAttribute("info");
 		
-		int count= boardService.getTotalCount();
+		int count= boardService.getTotalCount(cri);
 		model.addAttribute("member",vo);
-		log.info("갑자기 왜이러나"+boardService.getBoardListWithPage(cri));
 		model.addAttribute("list",boardService.getBoardListWithPage(cri));
 		model.addAttribute("pageMaker",new PageDTO(cri, count));
 		model.addAttribute("popular", boardService.popularViews());
@@ -107,6 +106,7 @@ public class BoardController {
 	}
 	@PostMapping("/delete")
 	public String postDelete(BoardVO vo,RedirectAttributes rttr,@ModelAttribute("cri") Criteria cri) {
+		
 		boardService.deleteBoard(vo.getBno());
 		return "redirect:/board/list"+cri.getListLink();
 	}

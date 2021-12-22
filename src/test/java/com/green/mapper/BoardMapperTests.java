@@ -65,11 +65,7 @@ public class BoardMapperTests {
 		cri.setKeyword("수정");
 		boardMapper.getBoardListWithPage(cri);
 	}
-	//@Test
-	public void getCount() {
-		int cnt= boardMapper.getTotalCount();
-		log.info("게시글의 총 갯수"+cnt);
-	}
+
 	//@Test
 	public void infoTest() {
 		MemberVO a = new MemberVO();

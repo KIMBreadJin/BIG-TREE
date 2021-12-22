@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>
@@ -23,7 +23,12 @@
 			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
-		<async-supported>true</async-supported>
+			<multipart-config>
+				<location>c:\\upload</location>
+				<max-file-size>20971520</max-file-size> <!--  1MB * 20 파일 업로드 제한 용량 -->
+				<max-request-size>41943040</max-request-size>   <!--  40MB  파일 request(한번에 올릴수 있는)  제한 용량 -->
+				<file-size-threshold>20971520</file-size-threshold> <!--  1MB * 20     특정 크기의 메모리 사용 -->
+		</multipart-config>
 	</servlet>
 		
 	<servlet-mapping>
@@ -42,4 +47,5 @@
 		<filter-name>encoding</filter-name>
 		<servlet-name>appServlet</servlet-name>
 	</filter-mapping>
+
 </web-app>

@@ -53,29 +53,31 @@ a.move:hover:after{
   width: 100%;
   opacity: 1;
 }
-aside.s_right{
+#s_right{
 	width:400px;
-	height:row; /* vh= body,html을 안건들이고 화면 꽉차게 하는방법 넓이는 vw를 쓰면됨! */
+	height:100%;
 	background-color: #B8F3B8;
 	float:right;
+	
 
 }
 
 @media screen and (max-width: 1000px) {
-  aside.s_right{display: none;}
+  #s_right{display: none;}
 }
-	
 
 
 </style>
-<!--/.s_right 오른쪽 사이드바 -->
-<aside class=s_right>오른쪽사이드바만들기
+  <!--/.s_right 오른쪽 사이드바 -->
+<div id=s_right>오른쪽사이드바만들기
 <div>대충 광고</div>
 <div><a href=/qna/list>qna게시판이동</a></div>
-</aside>
+</div>
 <!-- /.row body내용-->
 <div class="row">
+
   <div class="col-lg-12">
+
       <!-- 오늘의 인기글 start -->
 	 <h3>오늘의 인기글</h3>
 		<table class="test" id="dataTables-example2">
@@ -198,6 +200,7 @@ aside.s_right{
 
 <script>
   $(document).ready(function () {
+	  console.log("${pageMaker}")
     var result = '<c:out value="${result}"/>'
     checkModal(result)
     console.log($("#pageNumber"))

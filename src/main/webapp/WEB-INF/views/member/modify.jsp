@@ -12,6 +12,14 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	<link rel="stylesheet" type="text/css" href="/resources/css/register.css" />
 	<link href="https://fonts.googleapis.com/css?family=Passion+One" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet" type="text/css" />
+    
+    <style>
+     img{
+      width:200px;
+      height:200px;
+     }
+    </style>
+    
     <script type="text/javascript">
 	  function rand() {
 		    var code = Math.floor(Math.random()*(10000-1000)+1000)
@@ -94,13 +102,78 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     		  $email_site.val($email.val());
     	  }
       }
+      
+      $(document).on('click','img',function(){
+   		  if(confirm("프로필사진을 변경하시겠습니까?")){
+   			  $("#user_profileImage").click()  
+   		  }	  
+      })
+      
       $(document).ready(function(e){
+    	  var basicImage="<div><img src='/resources/images/basicProfileIcon.png'></div>"
+    	  if(${info.user_profileImage==null}){
+    		  $(".uploadResult").html(basicImage)
+    	  }
+    	  else{
+    		  $(".uploadResult").html("${info.user_profileImage}")
+    	  }
+    	  
+    	 
     	  
     	  
     	  $("#birthMonth").change(function(){
     		  birthMonth=$("#birthMonth").val()
     		  showDays()
     	  })
+    	  
+    	    var regex = new RegExp("(.*?)\.(png|jpeg|jpg|bmp|gif)$");
+            var maxSize = 5242880; //5MB
+            function checkExtension(fileName, fileSize) {
+              if (fileSize >= maxSize) {
+                alert("파일 사이즈 초과");
+                return false;
+              }
+              if (!regex.test(fileName)) {
+                alert("이미지파일만 올려주세요.");
+                return false;
+              }
+              return true;
+            }
+    	  
+    	    $("input[type='file']").change(function (e) {//파일 인풋 변경시 호출함수
+                var formData = new FormData();
+                var inputFile = $("#user_profileImage");
+                var files = inputFile[0].files; 
+                if (!checkExtension(files[0].name, files[0].size)) {
+                    return false;
+                  }
+                formData.append("uploadFile", files[0]);               
+                $.ajax({
+                  url: '/uploadAjaxAction',
+                  processData: false,
+                  contentType: false,
+                  data: formData,
+                  type: 'POST',
+                  dataType: 'json',
+                  success: function (result) {
+                    showUploadedFile(result);
+                    
+                  }
+                }); //ajax 
+              });
+    	  
+    	  function showUploadedFile(uploadResultArr) {
+              if (!uploadResultArr || uploadResultArr.length == 0) { return; }
+              var upload = $(".uploadResult");
+              upload.html('')
+              var str = "";
+              OriginPath = uploadResultArr
+       	      var fileCallPath = encodeURIComponent(OriginPath.uploadPath + "/s_" + OriginPath.uuid + "_" + OriginPath.fileName);
+              str += "<img src='/display?fileName=" + fileCallPath + "'>";
+              $("input[name='user_profileImage']").val(null)
+              $("input[name='user_profileImage']").val(str)
+              upload.append(str);
+            }
       })
    
       const showDays=()=>{
@@ -140,6 +213,16 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         </div>
      <div class="main-login main-center">
       <form class="form-horizontal" method="post" name="modify" id="modify" >
+         <div class="form-group">
+            <label class="control-label col-sm-3">프로필사진 </label>
+            <input type="file" id="user_profileImage" style="display:none">
+            <input type="hidden" name="user_profileImage" >
+         <div class="col-md-5 col-sm-8">
+	          <div class="uploadResult">
+	               
+	          </div>
+          </div>
+         </div>
         <div class="form-group">
           <label class="control-label col-sm-3">E-MAIL </label>
           <div class="col-md-5 col-sm-8">

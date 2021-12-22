@@ -15,7 +15,7 @@ public interface BoardService {
 	public void deleteBoard(int bno);//게시글 삭제
 	public void updateViews(int bno);
 	public List<BoardVO> getBoardListWithPage(Criteria cri);
-	public int getTotalCount();//게시글 수 조회
+	public int getTotalCount(Criteria cri);//게시글 수 조회
 	public List<ImageVO>getImageList(int bno);
 	public List<BoardVO> popularViews(); //인기 게시글 조회
 
