@@ -37,6 +37,7 @@ prefix="c" %>
           <input type="hidden" id="receiver_id" name="receiver_id" value="${search.user_id}${ans.receiver_id}" />
           <input type="hidden" id="receiver_name" name="receiver_name" value="${search.user_name}${ans.receiver_name}" />
           <input type="hidden" id="send_name" name="send_name" value="${info.user_name}" />
+          <input type="hidden" id="sender_Image" name="sender_Image" value="${info.user_profileImage}" />
         </div>
         <br style="clear: both" />
         <div class="form-group col-md-2">
@@ -75,6 +76,7 @@ prefix="c" %>
           var reName = $('#receiver_name').val()
           var reId = $('#receiver_id').val()
           var seName = $('#send_name').val()
+          var seImage = $('#sender_Image').val()
           $.ajax({
             type: 'post',
             url: '/message/sendMsg',
@@ -85,6 +87,7 @@ prefix="c" %>
               receiver_id: reId,
               receiver_name: reName,
               send_name: seName,
+              sender_Image : seImage,
             }),
             contentType: 'application/json; charset=utf-8',
             success: function (data) {

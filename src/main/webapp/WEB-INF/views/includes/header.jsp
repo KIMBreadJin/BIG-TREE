@@ -53,7 +53,7 @@
                         <a id="readM" href="/message/readMsg?mid=${mlist.mid}" onclick="window.open(this.href, '_blank', 'width=700, height=510'); return false;">
                           <div class="pull-left rounded-circle" id="user_profile">
                               <!-- <img src="http://via.placeholder.com/160x160" class="rounded-circle " alt="User Image"> -->
-                              ${find.user_profileImage}
+                              ${mlist.sender_Image}
                           </div>
                           <h4>
                             ${mlist.send_name}
