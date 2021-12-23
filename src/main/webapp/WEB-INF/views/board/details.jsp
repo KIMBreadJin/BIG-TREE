@@ -21,6 +21,10 @@ prefix="c" %>
 		top:40px;
 		right:115px;
 	}
+	div img{
+		width:45px;
+		height:45px;
+	}
   </style>
   <body>
     <!-- -------------------게시글 조회--------------------------- -->
@@ -28,7 +32,7 @@ prefix="c" %>
     
       <div class="col-lg-12">
         <div class="panel panel-default">
-          <div class="panel-heading">게시글 조회 페이지</div>                  
+        &nbsp;                 
           <!-- /.panel-heading -->
           <div class="panel-body">
             <div class="form-group">
@@ -54,8 +58,8 @@ prefix="c" %>
               <label for="views">조회수</label>
               <input type="text" class="form-control" name="views" value="${board.views}" readonly="readonly" />
             </div>
-            <div>
-                <button data-oper="modify" id="boardModifyBtn" class="btn btn-warning" type="submit">수정</button>
+            <div class="modify-btn">
+                <button data-oper="modify" id="boardModifyBtn" class="btn btn-success" type="submit"><i class="material-icons">edit</i>  수정</button>
               <button data-oper="list" class="btn btn-info" type="submit">목록</button>
            		<div class="image" align="right">
               	<img src="/resources/images/report_icon.jpg" class="img-report" id="report" width="30px" hspace=5 />
@@ -77,12 +81,12 @@ prefix="c" %>
           <!-- panel -->
           <div class="panel panel-default">
             <div class="panel-heading">
-            	<button id="addReplyBtn" class="btn btn-primary btn-xs">댓글등록</button>
+            	<button id="addReplyBtn" class="btn btn-default btn-round"><i class="material-icons">comment</i> 댓글등록</button>
             	
             </div>    
           </div> 
           <!-- panel-body -->
-         <div class="panel-body">
+         <div class="panel-body reply-UI">
  			<!-- 댓글 구현창 -->
  			<br>
             <ul class="chat">
@@ -105,6 +109,9 @@ prefix="c" %>
 
                       <div class="form-group">
                         <input type="hidden" class="form-control" name="replyer"  id="replyer" readonly />
+                      </div>
+                      <div class="form-group">
+                        <input type="hidden" class="form-control" name="replyerId"  id="replyerId"   readonly />
                       </div>
                       <div class="form-group">
 	                    <label for="">댓글</label>
@@ -185,7 +192,7 @@ prefix="c" %>
                   </div>
                   <!-- modal-body -->
                   <div class="modal-footer">
-                   <button class="btn btn-warning" id="reportModifyBtn" type="button">수정</button>
+                   <button class="btn btn-success" id="reportModifyBtn" type="button">수정</button>
                     <button class="btn btn-danger" id="reportDeleteBtn" type="button">삭제</button>
                     <button class="btn btn-primary" id="reportRegistBtn" type="button">등록</button>
                     <button class="btn btn-default" id="reportCloseBtn" type="button">닫기</button>
@@ -315,12 +322,15 @@ prefix="c" %>
 	            
 	                  for (var i = 0, len = list.length || 0; i < len; i++) {
 	                	  var replyer = list[i].replyer
+	                	  var replyerId=list[i].replyerId
 	                	  if(replyer=="${board.writer}"){
 	                		  replyer+="(글쓴이)"} 
-	                    str += "<li class='left clearfix' data-rno='" + list[i].rno + "'>"
-	                    str += "<div><div class='header'><strong class='primary-font'>" + replyer + "</strong>"                   
-	                    str += "<small class='pull-right text-muted'>" + replyService.displayTime(list[i].replyDate) + '</small></div>'
-	                    str += ' <p>' + list[i].reply + '</p></div></li>'
+	                	  	str += "<div class='left clearfix' data-rno='" + list[i].rno + "' id='getReply' >"
+		                    str += "<div><div class='header'><div class='pull-left'>"
+		                    str += list[i].replyerProfile + "</div>" + ' <p style="font-weight:bolder">' + replyer +'</p>'
+		                    str += "<strong class='primary-font' > &nbsp&nbsp " + list[i].reply + "</strong>"                   
+		                    str += "<small class='pull-right text-muted'>" + replyService.displayTime(list[i].replyDate) + '</small></div>'
+		                    str += '<h5 style="display:none;">'+ list[i].replyerId+'</h5></div></div>'
 	                  } //for문 end
 	              
 	            replyUL.html(str)
@@ -336,13 +346,14 @@ prefix="c" %>
       var modalInputReply = modal.find("input[name='reply']")
       var modalInputReplyer = modal.find("input[name='replyer']") //!! 회원로그인했을경우 회원의아이디로 되게 만들것!
       var modalInputReplyDate = modal.find("input[name='replyDate']")
+      var modalInputReplyerId = modal.find("input[name='replyerId']")
       var modalModBtn = $('#modalModBtn')
       var modalRemoveBtn = $('#modalRemoveBtn')
       var modalRegisterBtn = $('#modalRegisterBtn')
 
       $('#addReplyBtn').click(function (e) {
     	  if(${info.user_name!=null}){
-    		  console.log("${info.user_name}")
+    		modalInputReplyerId.val("${info.user_id}").attr('readonly','readonly')
 	    	modalInputReplyer.val("${info.user_name}").attr('readonly','readonly')
 	        modalInputReplyDate.closest('div').hide()
 	        modal.find("button[id != 'modalCloseBtn' ]").hide()
@@ -364,6 +375,7 @@ prefix="c" %>
         var reply = {
           replyer: modalInputReplyer.val(),
           reply: modalInputReply.val(),
+          replyerId:modalInputReplyerId.val(),
           bno: bnoValue,
         }
         replyService.add(reply, (result) => {
@@ -378,6 +390,7 @@ prefix="c" %>
       
      $('.chat').on('click', 'li', function (e) {
     	  var replyer=$(this).find('strong').text()
+    	  var replyerId=$("#replyerId").val($(this).find('h5').text())
           var rno = $(this).data('rno')
           replyService.get(rno, function (reply) {
           modalInputReply.val(reply.reply)
@@ -387,8 +400,6 @@ prefix="c" %>
 			
           modal.find("button[id!='modalCloseBtn']").hide()
           if("${info.user_name}"== replyer.split('(')[0]||"${info.user_type}" == 1){
-        	 console.log("${info.user_name}")
-         	 console.log($(this).find('strong').text())
         	modalModBtn.show()
           	modalRemoveBtn.show()
           }
@@ -398,7 +409,7 @@ prefix="c" %>
         	  modalModBtn.hide()
           	  modalRemoveBtn.hide()
           }
-          $('#myModal').modal('show')
+          
           
         }) 
 

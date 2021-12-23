@@ -54,7 +54,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
       <div class="row main">
         <div class="panel-heading">
           <div class="panel-title text-center">
-            <a href ="/member/login"><h1 class="title">BIG TREE</h1></a>
+            <h1 class="title"><a href="/member/login">BIG TREE</a></h1>
             <hr />
           </div>
         </div>
@@ -98,9 +98,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                 <input type="checkbox" class="custom-control-input" id="remember_id" name="remember_userID" ${checked} />
                 <label class="custom-control-label" for="remember_id">Remember me</label>
               </div>
-              <button id="loginBtn" type="button" class="btn btn-primary btn-lg btn-block login-button" style="width: 280px">
-                Sign in
-              </button>
+              <button id="loginBtn" type="button" class="btn btn-lg btn-block login-button" style="width: 280px">Sign in</button>
             </div>
             <div class="form-group" id="kakaologin">
               <input type="hidden" name="kakaoemail" id="kakaoemail" />

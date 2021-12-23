@@ -4,8 +4,8 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.mapper.ReplyMapper">
 	<insert id="insert">
-		insert into big_tree_reply(rno ,bno, reply, replyer)
-			values (reply_seq.nextval, #{bno},#{reply},#{replyer})
+		insert into big_tree_reply(rno ,bno, reply, replyer,replyerId)
+			values (reply_seq.nextval, #{bno},#{reply},#{replyer},#{replyerId})
 	</insert>
 	<select id="read" resultType="com.green.vo.ReplyVO"> 
 		select * from big_tree_reply where rno = #{rno}
@@ -28,10 +28,10 @@
 	order by rno asc -->
 
 		<![CDATA[
-			select rno ,bno ,rno ,reply,replyer, replyDate,updateDate
+			select rno ,bno ,rno ,reply,replyer,replyerId,replyDate,updateDate
 				from 
 				(    select /*+ index(big_tree_reply idx_reply) */
-				    rownum rn ,bno ,rno ,reply,replyer, replyDate,updateDate
+				    rownum rn ,bno ,rno ,reply,replyer, replyerId,replyDate,updateDate
 				        from big_tree_reply
 				    where bno = #{bno} and rno>0
 				        and rownum <=#{cri.pageNum} * #{cri.amount}

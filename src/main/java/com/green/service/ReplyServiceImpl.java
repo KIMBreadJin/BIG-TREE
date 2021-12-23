@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.green.mapper.MemberMapper;
 import com.green.mapper.ReplyMapper;
 import com.green.vo.Criteria;
 import com.green.vo.ReplyPageDTO;
@@ -16,6 +17,9 @@ public class ReplyServiceImpl implements ReplyService{
 
 	@Setter(onMethod_=@Autowired )
 	ReplyMapper mapper;
+	
+	@Setter(onMethod_=@Autowired)
+	MemberMapper memberMapper;
 	
 	@Override
 	public int register(ReplyVO vo) {
@@ -43,8 +47,18 @@ public class ReplyServiceImpl implements ReplyService{
 
 	@Override
 	public List<ReplyVO> getList(Criteria cri, int bno) {
-		// TODO Auto-generated method stub
-		return mapper.getListWithPaging(cri, bno);
+		List<ReplyVO> replyList=mapper.getListWithPaging(cri, bno);
+		
+		for(ReplyVO reply : replyList) {
+			String replyerId=reply.getReplyerId()!=null? reply.getReplyerId(): "";
+			String image=memberMapper.getImage(replyerId) != null? 
+						memberMapper.getImage(replyerId) :
+						"<img src='/resources/images/basicProfileIcon.png'>";
+			
+			reply.setReplyerProfile(image);//replyer의 프로필이미지
+		}
+			
+		return replyList;
 	}
 
 	@Override

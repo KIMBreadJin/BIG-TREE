@@ -2,12 +2,20 @@
 prefix="c" %>
 <%@ include file="../includes/header.jsp" %>
   <script src="/resources/js/ckeditor/ckeditor.js"></script>
+  <style>
+  div img{
+		width:45px;
+		height:45px;
+	}
+  </style>
+  
   <body>
     <!-- -------------------게시글 조회--------------------------- -->
     <!-- /.row -->    
       <div class="col-lg-12">
         <div class="panel panel-default">
-          <div class="panel-heading">문의게시판 페이지</div>
+        &nbsp;
+          <div class="panel-heading head-title">QnA 게시판</div>
           <!-- /.panel-heading -->
           <div class="panel-body">
             <div class="form-group">
@@ -31,7 +39,7 @@ prefix="c" %>
               <textarea name="content" id="content" rows="3" class="form-control" readonly="readonly">${qna.content}</textarea>
             </div>
             <div>
-                <button data-oper="modify" id="boardModifyBtn" class="btn btn-warning" type="submit">수정</button>
+                 <button data-oper="modify" id="boardModifyBtn" class="btn btn-success" type="submit"><i class="material-icons">edit</i>  수정</button>
               <button data-oper="list" class="btn btn-info" type="submit">목록</button>           		                
             </div>
            </div>
@@ -43,16 +51,16 @@ prefix="c" %>
           <!-- panel -->
           <div class="panel panel-default">
             <div class="panel-heading">
-            	<button id="addReplyBtn" class="btn btn-primary btn-xs">댓글등록</button>
+            	<button id="addReplyBtn" class="btn btn-default btn-round"><i class="material-icons">comment</i> 댓글등록</button>
             	
             </div>    
           </div> 
           <!-- panel-body -->
-         <div class="panel-body">
+         <div class="panel-body reply-UI">
  			<!-- 댓글 구현창 -->
  			<br>
-            <ul class="chat">             
-            </ul>         
+            <div class="chat">             
+            </div>         
           <div class="panel-footer">            
            </div>
             <!-- 모달창 -->
@@ -67,6 +75,9 @@ prefix="c" %>
                   <div class="modal-body">
                       <div class="form-group">
                         <input type="hidden" class="form-control" name="replyer"  id="replyer" readonly />
+                      </div>
+                       <div class="form-group">
+                        <input type="hidden" class="form-control" name="replyerId"  id="replyerId"  readonly />
                       </div>
                       <div class="form-group">
 	                    <label for="">댓글</label>
@@ -221,12 +232,15 @@ prefix="c" %>
 	            } //if문 end
 	                  for (var i = 0, len = list.length || 0; i < len; i++) {
 	                	var replyer = list[i].replyer
-	                	if(replyer=="${qna.writer}"){
+	                	var replyerId=list[i].replyerId
+	                	if(replyerId=="${qna.id}"){
 	                		  replyer+="(글쓴이)"} 
-	                    str += "<li class='left clearfix' data-rno='" + list[i].rno + "'>"
-	                    str += " <div><div class='header'><strong class='primary-font'>" + replyer + '</strong>'
-	                    str += "   <small class='pull-right text-muted'>" + replyService.displayTime(list[i].replyDate) + '</small></div>'
-	                    str += ' <p>' + list[i].reply + '</p></div></li>'
+		                	str += "<div class='left clearfix' data-rno='" + list[i].rno + "' id='getReply' >"
+		                    str += "<div><div class='header'><div class='pull-left'>"
+		                    str += list[i].replyerProfile + "</div>" + ' <p style="font-weight:bolder">' + replyer +'</p>'
+		                    str += "<strong class='primary-font' > &nbsp&nbsp " + list[i].reply + "</strong>"                   
+		                    str += "<small class='pull-right text-muted'>" + replyService.displayTime(list[i].replyDate) + '</small></div>'
+		                    str += '<h5 style="display:none;">'+ list[i].replyerId+'</h5></div></div>'
 	                  } //for문 end
 	              
 	            replyUL.html(str)
@@ -243,6 +257,7 @@ prefix="c" %>
       var modalInputReply = modal.find("input[name='reply']")
       var modalInputReplyer = modal.find("input[name='replyer']") //!! 회원로그인했을경우 회원의아이디로 되게 만들것!
       var modalInputReplyDate = modal.find("input[name='replyDate']")
+      var modalInputReplyerId = modal.find("input[name='replyerId']")
       var modalModBtn = $('#modalModBtn')
       var modalRemoveBtn = $('#modalRemoveBtn')
       var modalRegisterBtn = $('#modalRegisterBtn')
@@ -250,6 +265,7 @@ prefix="c" %>
       $('#addReplyBtn').click(function (e) {
     	  if(${info.user_name!=null}){
     		  console.log("${info.user_name}")
+    		modalInputReplyerId.val("${info.user_id}")
 	    	modalInputReplyer.val("${info.user_name}").attr('readonly','readonly')
 	        modalInputReplyDate.closest('div').hide()
 	        modal.find("button[id != 'modalCloseBtn' ]").hide()
@@ -271,6 +287,7 @@ prefix="c" %>
         var reply = {
           replyer: modalInputReplyer.val(),
           reply: modalInputReply.val(),
+          replyerId:modalInputReplyerId.val(),
           qno: qnoValue,
         }
         replyService.add(reply, (result) => {
@@ -283,18 +300,20 @@ prefix="c" %>
       }) 
       )// modalRegisterBtn end
       
-     $('.chat').on('click', 'li', function (e) {
-    	  var replyer=$(this).find('strong').text()
+      $('.chat').on('click', '#getReply', function (e) {
+  		  $('#myModal').modal('show')
+    	  var replyer=$("#replyer").val()
+    	  var replyerId=$("#replyerId").val($(this).find('h5').text())
           var rno = $(this).data('rno')
+          console.log(replyerId)
           replyService.get(rno, function (reply) {
           modalInputReply.val(reply.reply)
           modalInputReplyer.val(reply.replyer)
           modalInputReplyDate.val(replyService.displayTime(reply.replyDate)).attr('readonly', 'readonly')
-          modal.data('rno', reply.rno)		
+          modal.data('rno', reply.rno)
+			
           modal.find("button[id!='modalCloseBtn']").hide()
-          if("${info.user_name}"==replyer.split('(')[0]||"${info.user_type}" == 1){
-        	  console.log("${info.user_name}")
-         	 console.log($(this).find('strong').text())
+          if("${info.user_id}"== $("#replyerId").val()||"${info.user_type}" == 1){
         	modalModBtn.show()
           	modalRemoveBtn.show()
           }
@@ -304,12 +323,11 @@ prefix="c" %>
         	  modalModBtn.hide()
           	  modalRemoveBtn.hide()
           }
-          $('#myModal').modal('show')
+          
           
         }) 
 
-      }) //특정댓글의 이벤트 클릭이벤츠처리 424p참조할것 
-
+      })
       modalModBtn.click(function (e) {
           var reply = { rno: modal.data('rno'), reply: modalInputReply.val() }
           replyService.update(reply, (result) => {

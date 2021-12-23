@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.green.mapper.MemberMapper;
 import com.green.mapper.QnaReplyMapper;
 import com.green.mapper.ReplyMapper;
 import com.green.vo.Criteria;
@@ -19,6 +20,9 @@ public class QnaReplyServiceImpl implements QnaReplyService{
 
 	@Setter(onMethod_=@Autowired )
 	QnaReplyMapper mapper;
+	
+	@Setter(onMethod_=@Autowired)
+	MemberMapper memberMapper;
 	
 	@Override
 	public int register(QnaReplyVO vo) {
@@ -46,8 +50,16 @@ public class QnaReplyServiceImpl implements QnaReplyService{
 
 	@Override
 	public List<QnaReplyVO> getList(Criteria cri, int qno) {
-		// TODO Auto-generated method stub
-		return mapper.getListWithPaging(cri, qno);
+		List<QnaReplyVO> replyList=mapper.getListWithPaging(cri, qno);
+		for(QnaReplyVO reply : replyList) {
+			String replyerId=reply.getReplyerId()!=null? reply.getReplyerId(): "";
+			String image=memberMapper.getImage(replyerId) != null? 
+						memberMapper.getImage(replyerId) :
+						"<img src='/resources/images/basicProfileIcon.png'>";
+			reply.setReplyerProfile(image);//replyer의 프로필이미지
+		}
+			
+		return replyList;
 	}
 
 	@Override

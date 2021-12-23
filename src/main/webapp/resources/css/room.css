@@ -12,15 +12,15 @@
   position: relative;
 }
 
-	
 .chat {
-  overflow:auto;
+  overflow: auto;
   position: relative;
   background-color: #a1c0d6;
-  height: 85vh;
+  height: 88vh;
   padding-top: 15px;
   padding-left: 10px;
   padding-right: 10px;
+  max-width: initial;
 }
 
 .chat .date-divider {
@@ -56,6 +56,8 @@
   margin-right: 10px;
   margin-left: 10px;
   font-size: 15px;
+  word-break: break-word;
+  max-width: 60%;
 }
 
 .chat__message-to-me img {
@@ -75,11 +77,13 @@
   padding: 10px 5px;
   border-radius: 2px;
   font-size: 15px;
+  word-break: break-word;
 }
 
 .chat__message-center {
   display: flex;
   flex-direction: column;
+  max-width: 60%;
 }
 
 .chat__message-time {
@@ -89,7 +93,7 @@
 
 .type-message {
   width: 100%;
-  bottom: 0;
+  bottom: 2px;
   position: fixed;
   height: 45px;
   background-color: #eeeeee;
@@ -124,6 +128,7 @@
   padding: 10px;
   margin-right: 5px;
   width: 13%;
+  text-align: center;
 }
 
 .type-message__input .record-message i {

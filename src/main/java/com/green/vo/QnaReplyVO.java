@@ -21,4 +21,8 @@ public class QnaReplyVO {
 	private String replyer;
 	private Date ReplyDate;
 	private Date updateDate;
+	private String replyerId;//
+
+
+	private String replyerProfile;//오라클 연동x
 }

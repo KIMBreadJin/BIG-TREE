@@ -4,8 +4,8 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.mapper.QnaReplyMapper">
 	<insert id="insert">
-		insert into big_tree_qna_reply(rno ,qno, reply, replyer)
-			values (qna_reply_seq.nextval, #{qno},#{reply},#{replyer})
+		insert into big_tree_qna_reply(rno ,qno, reply, replyer,replyerId)
+			values (qna_reply_seq.nextval, #{qno},#{reply},#{replyer},#{replyerId})
 	</insert>
 	<select id="read" resultType="com.green.vo.QnaReplyVO"> 
 		select * from big_tree_qna_reply where rno = #{rno}
@@ -29,10 +29,10 @@
 	order by rno asc -->
 
 		<![CDATA[
-			select rno ,qno ,rno ,reply,replyer, replyDate,updateDate
+			select rno ,qno ,rno ,reply,replyer, replyDate, replyerId ,updateDate
 				from 
 				(    select /*+ index(big_tree_qna_reply idx_reply) */
-				    rownum rn ,qno ,rno ,reply,replyer, replyDate,updateDate
+				    rownum rn ,qno ,rno ,reply,replyer, replyDate,replyerId, updateDate
 				        from big_tree_qna_reply
 				    where qno = #{qno} and rno>0
 				        and rownum <=#{cri.pageNum} * #{cri.amount}

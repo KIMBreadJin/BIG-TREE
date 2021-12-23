@@ -119,7 +119,7 @@ aside.s_right{
         <div class="row">
           <div class="col-lg-12">
             <form class="form-inline my-2 my-lg-0" action="/qna/list" id="searchForm" method="get">
-              <select name="type" class="form-control">
+              <select name="type" class="form-control" style="border:2px solid rgba(0,0,0,.26);">
                 <option value="TWC" 
                 	<c:out value="${pageMaker.cri.type eq 'TWC'?'selected':''}"/>>전체</option>
                 <option value="T" 

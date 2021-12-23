@@ -130,7 +130,7 @@ a.move:hover:after{
         </table>
         
             <form class="form-inline my-2 my-lg-0" action="/board/list" id="searchForm" method="get">
-              <select name="type" class="form-control">
+              <select name="type" class="form-control" style="border:2px solid rgba(0,0,0,.26);">
                 <option value="TWC" 
                 	<c:out value="${pageMaker.cri.type eq 'TWC'?'selected':''}"/>>전체</option>
                 <option value="T" 

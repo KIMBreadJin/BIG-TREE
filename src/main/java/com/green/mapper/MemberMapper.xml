@@ -49,4 +49,8 @@
 			,user_email=#{user_email},user_birth=#{user_birth},user_profileImage=#{user_profileImage} 
 				where user_num=#{user_num}
 	</update>
+	
+	<select id="getImage" resultType="string">
+		select user_profileImage from big_tree_member where user_id=#{user_id}
+	</select>
 </mapper>

@@ -15,14 +15,21 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" ></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
     <script src="/resources/js/ckeditor/ckeditor.js"></script>
     <script src="/resources/js/header.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
+      integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX"
+      crossorigin="anonymous"
+    />
    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <header>
 <nav class="navbar navbar-light bg-light ">
-	<div style="float:none; margin:0 auto">
-  		<a class="navbar-brand" href="/board/list"><h1>Big Tree Community</h1></a>
+	<div class="text-title" style="float:none; margin:0 auto">
+  		<a class="navbar-brand" href="/board/list"><h1 class="title1">Big Tree</h1><h1 class=title2> Community</h1></a>
   	</div>
  <div>
         <ul class="navbar-nav">
@@ -51,9 +58,11 @@
                     <c:forEach items="${mlist}" var="mlist">                
                       <li>               
                         <a id="readM" href="/message/readMsg?mid=${mlist.mid}" onclick="window.open(this.href, '_blank', 'width=600, height=480'); return false;">
-                          <div class="pull-left" id="user_profile">
-                              <!-- <img src="http://via.placeholder.com/160x160" class="rounded-circle " alt="User Image"> -->
+                          <div class="pull-left" id="user_profile">                           
                               ${mlist.sender_Image}
+                              <c:if test="${mlist.sender_Image==null}">
+                              <img src="/resources/images/basicProfileIcon.png">
+                              </c:if>
                           </div>
                           <h4>
                             ${mlist.send_name}
@@ -363,6 +372,13 @@ $(document).on('click','#resultNameList',function(e){//친구요청 모달에서
 
 
 $(document).ready(function(){
+	$("#memberInfo").on('hidden.bs.modal',function(e){
+		
+    	if($("#memberInfo").find('img').length==4){
+			 $("#memberInfo").find('img')[1].remove()
+		 }
+	   
+	})
 	var userList;
 	var userName= $("#searchUserName").val()
 	$('#goChat').click( function (e) {
@@ -475,9 +491,7 @@ $(document).ready(function(){
 			$("#memberList").modal('hide')
 		 })
 		 $("#memberInfoCloseBtn").click(function(e){
-			 if($("#memberInfo").find('img').length==4){
-				 $("#memberInfo").find('img')[1].remove()
-			 }
+			 
 			$("#memberInfo").modal('hide')
 		 })
 		 $("#requestListCloseBtn").click(function(e){
@@ -715,6 +729,14 @@ $(document).ready(function(){
 		 	 }
 		 })
 	 })
+	 
+ 	 $(document).keydown(function(event) {
+	    if ( event.keyCode == 27 || event.which == 27 ) {
+	    	if($("#memberInfo").find('img').length==4){
+				 $("#memberInfo").find('img')[1].remove()
+			 }
+	    }
+	 });
 </script>
 <body>
 <div id="msgStack"></div>

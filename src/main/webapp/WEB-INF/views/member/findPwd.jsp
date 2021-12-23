@@ -28,7 +28,7 @@
 			<div class="row main">
 				<div class="panel-heading">
 	               <div class="panel-title text-center">
-	               		<h1 class="title">BIG TREE</h1>
+	               		<h1 class="title"><a href ="/member/login">BIG TREE</a></h1>
 	               		<hr />
 	               	</div>
 	            </div> 

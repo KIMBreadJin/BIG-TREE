@@ -19,4 +19,5 @@ public interface MemberMapper {
 	public void updatePwd(MemberVO vo); // 비밀번호 변경
 	
 	public MemberVO findFrd(MemberVO vo); //친구 찾기
+	public String getImage(String user_id);//유저 프로필이미지만 가져오기
 }
