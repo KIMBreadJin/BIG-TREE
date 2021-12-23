@@ -83,7 +83,7 @@ SimpleDateFormat sf = new SimpleDateFormat("E요일, yyyy년 MM월 dd일"); %>
       }
       $(document).ready(function () {
         $('#backChats').on('click', function (e) {
-/*           sock.onclose()
+          /*           sock.onclose()
           sock.send('1,' + '${userid}' + ',' + 'OUT') */
           window.resizeTo(720, 498)
           location.replace('chatList')

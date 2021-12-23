@@ -1,28 +1,20 @@
 package com.green.handler;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.green.mapper.MessageMapper;
 import com.green.service.MessageService;
-import com.green.service.MessageServiceImpl;
 import com.green.vo.GetSessionUser;
 import com.green.vo.MemberVO;
 
 import lombok.extern.slf4j.Slf4j;
-import oracle.jdbc.driver.Message;
 
 @Slf4j
 public class MessageHandler extends TextWebSocketHandler{
@@ -84,12 +76,12 @@ public class MessageHandler extends TextWebSocketHandler{
 					// 실시간 접속시
 					if(targetSession!=null) {
 						targetSession.sendMessage(new TextMessage("recMs :"+messageService.countMsg(receiver_id)));
-						// ex: [&분의일] 신청이 들어왔습니다.
+						// ex: [send_name] 신청이 들어왔습니다.
 						TextMessage tmpMsg = new TextMessage("["+send_name+"]"+ " "+ ms_content );	
 						System.out.println("tmpMsg" + tmpMsg);
 						targetSession.sendMessage(tmpMsg);						
 					}
-				}else if (strs!=null && strs.length ==4 ) {
+				}else if (strs!=null && strs.length == 4) {
 					String send_name = strs[0]; 					
 					String receiver_id = strs[1];
 					String ms_content = strs[2];	
@@ -101,13 +93,13 @@ public class MessageHandler extends TextWebSocketHandler{
 					System.out.println("targetSession : " + targetSession);
 					// 실시간 접속시
 					if(targetSession!=null) {
-						// ex: [&분의일] 신청이 들어왔습니다.
+						// ex: [send_name] 게시물에 댓글이 등록되었습니다.
 						TextMessage tmpMsg = new TextMessage("["+send_name+"]"+ " : "+ ms_content );	
 						System.out.println("tmpMsg" + tmpMsg);
 						targetSession.sendMessage(tmpMsg);
 					}
 			} //else if(게시판)문 end
-				else if (strs!=null && strs.length ==5 ) {
+				else if (strs!=null && strs.length == 5) {
 					String send_name = strs[0]; 					
 					String receiver_id = strs[1];
 					String ms_content = strs[2];	
@@ -119,7 +111,7 @@ public class MessageHandler extends TextWebSocketHandler{
 					System.out.println("targetSession : " + targetSession);
 					// 실시간 접속시
 					if(targetSession!=null) {
-						// ex: [&분의일] 신청이 들어왔습니다.
+						// ex: [name]게시물에 댓글이 등록되었습니다.
 						TextMessage tmpMsg = new TextMessage("["+send_name+"]"+ " : "+ ms_content );	
 						System.out.println("tmpMsg" + tmpMsg);
 						targetSession.sendMessage(tmpMsg);

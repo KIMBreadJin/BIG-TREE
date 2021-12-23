@@ -25,7 +25,7 @@
   		<a class="navbar-brand" href="/board/list"><h1>Big Tree Community</h1></a>
   	</div>
  <div>
-        <ul class="navbar-nav"  onClick="/message/msgHeader">
+        <ul class="navbar-nav">
           <li class="nav-item dropdown messages-menu">
 	            <a
 	              class="nav-link dropdown-toggle"
@@ -50,8 +50,8 @@
                   <!-- start message -->
                     <c:forEach items="${mlist}" var="mlist">                
                       <li>               
-                        <a id="readM" href="/message/readMsg?mid=${mlist.mid}" onclick="window.open(this.href, '_blank', 'width=700, height=510'); return false;">
-                          <div class="pull-left rounded-circle" id="user_profile">
+                        <a id="readM" href="/message/readMsg?mid=${mlist.mid}" onclick="window.open(this.href, '_blank', 'width=600, height=480'); return false;">
+                          <div class="pull-left" id="user_profile">
                               <!-- <img src="http://via.placeholder.com/160x160" class="rounded-circle " alt="User Image"> -->
                               ${mlist.sender_Image}
                           </div>
@@ -367,8 +367,8 @@ $(document).ready(function(){
 	var userName= $("#searchUserName").val()
 	$('#goChat').click( function (e) {
 		e.preventDefault()
-	    window.open('/chat/chatList',"채팅목록,","width=700,height=430")
-	    window.resizeTo(700,430); 
+	    window.open('/chat/chatList',"채팅목록,","width=550,height=345")
+	    window.resizeTo(550,345); 
 	    return false;
 	 })		 
 	 $("#searchUser").submit(function(e){
@@ -715,10 +715,6 @@ $(document).ready(function(){
 		 	 }
 		 })
 	 })
-    	  
-	
-	 
-
 </script>
 <body>
 <div id="msgStack"></div>

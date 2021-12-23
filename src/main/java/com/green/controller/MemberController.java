@@ -205,22 +205,6 @@ public class MemberController {
 		}
 		return result;
 	}
-	@GetMapping("/findFrd")
-	public void findFriend(Model model, MemberVO vo) {
-	}
-	@PostMapping("/findFrd")
-	public String findFrdAction(MemberVO vo, Model model,HttpServletRequest request) {
-		MemberVO friend = service.findFrd(vo);
-		HttpSession session = request.getSession();
-		
-		if(friend == null) { 
-			model.addAttribute("checkid", 1);
-		} else { 
-			model.addAttribute("checkid", 0);
-			session.setAttribute("find", friend);
-		}
-		return "/member/findFrd";
-	}
 
 	@RequestMapping(value="/updatePwd", method=RequestMethod.GET)
 	public void updatePwd(Model model) {

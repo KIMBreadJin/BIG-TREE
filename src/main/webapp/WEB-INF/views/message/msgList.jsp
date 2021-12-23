@@ -5,7 +5,6 @@ uri="http://java.sun.com/jsp/jstl/core" %><%@ include file="../includes/header.j
 <html lang="ko">
   <meta charset="UTF-8" />
   <head>
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
     <link
       rel="stylesheet"
@@ -47,13 +46,15 @@ uri="http://java.sun.com/jsp/jstl/core" %><%@ include file="../includes/header.j
                 <c:forEach items="${mlist}" var="mlist" varStatus="status">
                   <tr>
                     <td class="text-center">${status.count}</td>
-                    <td>${mlist.send_name}</td>
+                    <td>
+                      <a id="senderInfo${status.count}" href="#" data-toggle="modal" data-test="${mlist.user_id}">${mlist.send_name}</a>
+                    </td>
                     <td>
                       <div>
                         <a
                           id="readM"
                           href="/message/readMsg?mid=${mlist.mid}"
-                          onclick="window.open(this.href, '_blank', 'width=700, height=510'); return false;"
+                          onclick="window.open(this.href, '_blank', 'width=600, height=480'); return false;"
                           >${mlist.ms_content}</a
                         >
                       </div>
@@ -63,7 +64,7 @@ uri="http://java.sun.com/jsp/jstl/core" %><%@ include file="../includes/header.j
                       <a
                         id="writeB"
                         href="/message/sendMsg?user_id=${mlist.user_id}"
-                        onclick="window.open(this.href, '_blank', 'width=600, height=410'); return false;"
+                        onclick="window.open(this.href, '_blank', 'width=600, height=480'); return false;"
                       >
                         <button type="button" class="btn btn-success btn-just-icon btn-sm" id="backMsg${mlist.mid}">
                           <i class="material-icons">send</i>
@@ -100,5 +101,35 @@ uri="http://java.sun.com/jsp/jstl/core" %><%@ include file="../includes/header.j
       console.log('remove click')
       actForm.attr('action', url).attr('method', 'post').submit()
     }
+    $(document).ready(function () {
+      for (var i = 0; i <= $('.table >tbody tr').length; i++) {
+        $('#senderInfo' + i).on('click', function (e) {
+          var data = $(this).data('test')
+          console.log(data)
+          $.ajax({
+            type: 'get',
+            url: '/getUser',
+            data: {
+              user_name: data,
+            },
+            success: function (data) {
+              $('#memberName').val(data.user_name)
+              $('#memberId').val(data.user_id)
+              $('#postCnt').val(data.boardCnt)
+              if (data.user_profileImage != null) {
+                $('#profileImage').find('img').hide()
+                $('#profileImage').append(data.user_profileImage)
+              } else {
+                $('#profileImage').find('img').show()
+              }
+            },
+          })
+
+          $('#memberInfo').modal('show')
+
+          resetClicked()
+        })
+      }
+    })
   </script>
 </html>

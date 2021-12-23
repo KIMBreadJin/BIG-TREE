@@ -28,7 +28,7 @@ prefix="c" %>
       })
       $('#room').on('click', function () {
         window.resizeTo(600, 800)
-        var rand = Math.floor(Math.random()*2)+1
+        var rand = Math.floor(Math.random() * 2) + 1
         if (rand == 2) {
           location.replace('room2')
         } else {

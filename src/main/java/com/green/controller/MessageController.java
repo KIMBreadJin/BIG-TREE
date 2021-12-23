@@ -95,8 +95,6 @@ public class MessageController {
 		HttpSession session = request.getSession();
 		vo.setReceiver_id(request.getParameter("receiver_id"));
 		vo.setReceiver_name(request.getParameter("receiver_name"));
-		log.info("받아오나" + request.getParameter("receiver_id") , vo.getReceiver_id());
-		log.info("받아오나2" + request.getParameter("receiver_name") , vo.getReceiver_id());
 		session.setAttribute("ans", vo);
 		
 		return "/message/sendMsg";
