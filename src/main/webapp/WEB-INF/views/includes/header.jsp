@@ -110,6 +110,9 @@
       <li class="nav-item">
         <a class="nav-link" href="#" id="goChat">실시간 채팅</a>
       </li>
+      <li class="nav-item active">
+      <a class="nav-link" href=/qna/list id="qna">문의하기</a>
+      </li>
      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle ${info!=null ? "": "disabled"}"" href="#" id="friend" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           	친구
@@ -129,7 +132,9 @@
           <a class="dropdown-item" href="/member/updatePwd">비밀번호 변경</a>
           <a class="dropdown-item" href="/member/checkProfile">정보 조회</a>
           <a class="dropdown-item" href="/member/checkPwd">정보 수정</a>
+      
       </li> 
+      
 		<form class="navbar-form" role="search" action="#" id="searchUser">
 		    <div class="form-group">
 		      <input type="text" class="form-control" placeholder="유저찾기" id="searchUserName">

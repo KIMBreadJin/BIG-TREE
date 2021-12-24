@@ -119,7 +119,7 @@ prefix="c" %>
 	                  </div>
                       <div class="form-group">
                         <label for="">댓글작성일</label>
-                        <input type="text" class="form-control" name="replyDate" value="" />
+                        <input type="hide" class="form-control" name="replyDate" value="" />
                       </div>
                   </div>
                   <!-- modal-body -->
@@ -328,7 +328,7 @@ prefix="c" %>
 		                    str += "<div><div class='header'><div class='pull-left'>"
 		                    str += list[i].replyerProfile + "</div>" + ' <p style="font-weight:bolder">' + replyer +'</p>'
 		                    str += "<strong class='primary-font' > &nbsp&nbsp " + list[i].reply + "</strong>"                   
-		                    str += "<small class='pull-right text-muted'>" + replyService.displayTime(list[i].replyDate) + '</small></div>'
+		                    str += "<small class='pull-right text-muted'>" + replyService.displayTime(list[i].updateDate) + '</small></div>'
 		                    str += '<h5 style="display:none;">'+ list[i].replyerId+'</h5></div></div>'
 	                  } //for문 end
 	              
@@ -396,7 +396,7 @@ prefix="c" %>
           replyService.get(rno, function (reply) {
           modalInputReply.val(reply.reply)
           modalInputReplyer.val(reply.replyer)
-          modalInputReplyDate.val(replyService.displayTime(reply.replyDate)).attr('readonly', 'readonly')
+          modalInputReplyDate.val(replyService.displayTime(reply.updateDate)).attr('readonly', 'readonly')
           modal.data('rno', reply.rno)
 			
           modal.find("button[id!='modalCloseBtn']").hide()

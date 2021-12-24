@@ -53,26 +53,11 @@ a.move:hover:after{
   width: 100%;
   opacity: 1;
 }
-#s_right{
-	width:400px;
-	height:100%;
-	background-color: #B8F3B8;
-	float:right;
-	
 
-}
-
-@media screen and (max-width: 1000px) {
-  #s_right{display: none;}
-}
 
 
 </style>
-  <!--/.s_right 오른쪽 사이드바 -->
-<div id=s_right>오른쪽사이드바만들기
-<div>대충 광고</div>
-<div><a href=/qna/list>qna게시판이동</a></div>
-</div>
+
 <!-- /.row body내용-->
 <div class="row">
 

@@ -53,31 +53,17 @@ a.move:hover:after{
   width: 100%;
   opacity: 1;
 }
-aside.s_right{
-	background-color: #B8F3B8;
-	float:right;
 
-}
-
-@media screen and (max-width: 1000px) {
-  aside.s_right{display: none;}
-}
-	
 
 
 </style>
-<!--/.s_right 오른쪽 사이드바 -->
-<aside class=s_right>오른쪽사이드바만들기
-<div>대충 광고</div>
-<div>대충 </div>
-</aside>
 <!-- /.row body내용-->
 <div class="row">
   <div class="col-lg-12">
     
   	<!-- /.col-lg-12 -->
   	  <div class="panel-heading">
-        <h1>문의게시판</h1>
+        <div class="panel-heading head-title">문의 게시판</div>
        
         <button id="regBtn" type="button" class="btn btn-outline-success">새로운 게시글 등록</button>      	
       </div>      

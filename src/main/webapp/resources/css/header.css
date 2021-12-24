@@ -273,8 +273,11 @@ a {
   color: #3e3947 ;
   text-decoration: none;
 }
-.panel-body .pagination .page-item .page-link{
+.panel-body .pagination .page-item.active .page-link{
   color:#fff;
+}
+.panel-body .pagination .page-item .page-link{
+  color:#000000;
 }
 a:hover {
   color: #8a8a8a !important;
