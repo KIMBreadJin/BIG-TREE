@@ -206,11 +206,10 @@ prefix="c" %>
   </body>
 
   <!-- 리플 기능 -->
-  <script>
+ <script>
     // replyService 기능 start
     var replyService = (function () {
       function add(reply, callback, error) {
-    	  console.log("${board.writer}")
         $.ajax({
           type: 'post',
           url: '/replies/new',
@@ -306,7 +305,7 @@ prefix="c" %>
       var bnoValue = '<c:out value="${board.bno}"/>'
       var replyUL = $('.chat')
       const showList = (page) => {
-        	 
+        	  
 	          replyService.getList({ bno: bnoValue, page: page || 1 }, (replyCnt,list) => {
 	        	if(page==-1){
 	        		page = Math.ceil(replyCnt/10.0);
@@ -323,9 +322,9 @@ prefix="c" %>
 	                  for (var i = 0, len = list.length || 0; i < len; i++) {
 	                	  var replyer = list[i].replyer
 	                	  var replyerId=list[i].replyerId
-	                	  if(replyer=="${board.writer}"){
+	                	  if(replyerId=="${board.id}"){
 	                		  replyer+="(글쓴이)"} 
-	                	  	str += "<div class='left clearfix' data-rno='" + list[i].rno + "' id='getReply' >"
+		                	str += "<div class='left clearfix' data-rno='" + list[i].rno + "' id='getReply' >"
 		                    str += "<div><div class='header'><div class='pull-left'>"
 		                    str += list[i].replyerProfile + "</div>" + ' <p style="font-weight:bolder">' + replyer +'</p>'
 		                    str += "<strong class='primary-font' > &nbsp&nbsp " + list[i].reply + "</strong>"                   
@@ -350,7 +349,7 @@ prefix="c" %>
       var modalModBtn = $('#modalModBtn')
       var modalRemoveBtn = $('#modalRemoveBtn')
       var modalRegisterBtn = $('#modalRegisterBtn')
-
+	
       $('#addReplyBtn').click(function (e) {
     	  if(${info.user_name!=null}){
     		modalInputReplyerId.val("${info.user_id}").attr('readonly','readonly')
@@ -378,20 +377,22 @@ prefix="c" %>
           replyerId:modalInputReplyerId.val(),
           bno: bnoValue,
         }
-        replyService.add(reply, (result) => {
+         replyService.add(reply, (result) => {
           alert(result)
           modal.find('input').val('')
           modal.modal('hide')
           //showList(1) // 댓글목록갱신
          showList(-1);
-        })
+        }) 
       }) 
       )// modalRegisterBtn end
       
-     $('.chat').on('click', 'li', function (e) {
-    	  var replyer=$(this).find('strong').text()
+     $('.chat').on('click', '#getReply', function (e) {
+  		  $('#myModal').modal('show')
+    	  var replyer=$("#replyer").val()
     	  var replyerId=$("#replyerId").val($(this).find('h5').text())
           var rno = $(this).data('rno')
+          console.log(replyerId)
           replyService.get(rno, function (reply) {
           modalInputReply.val(reply.reply)
           modalInputReplyer.val(reply.replyer)
@@ -399,7 +400,8 @@ prefix="c" %>
           modal.data('rno', reply.rno)
 			
           modal.find("button[id!='modalCloseBtn']").hide()
-          if("${info.user_name}"== replyer.split('(')[0]||"${info.user_type}" == 1){
+          if("${info.user_id}"== $("#replyerId").val()||"${info.user_type}" == 1){
+        	$("#reply").attr('readonly',false)
         	modalModBtn.show()
           	modalRemoveBtn.show()
           }

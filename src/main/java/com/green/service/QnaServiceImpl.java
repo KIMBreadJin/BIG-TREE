@@ -18,7 +18,6 @@ import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
-@Log4j
 public class QnaServiceImpl implements QnaService{
 
 	@Setter(onMethod_=@Autowired)

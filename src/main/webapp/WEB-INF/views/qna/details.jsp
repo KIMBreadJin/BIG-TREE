@@ -314,6 +314,7 @@ prefix="c" %>
 			
           modal.find("button[id!='modalCloseBtn']").hide()
           if("${info.user_id}"== $("#replyerId").val()||"${info.user_type}" == 1){
+        	$("#reply").attr('readonly',false)
         	modalModBtn.show()
           	modalRemoveBtn.show()
           }

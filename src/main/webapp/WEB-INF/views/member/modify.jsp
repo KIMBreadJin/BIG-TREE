@@ -288,6 +288,8 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	          </select>
 	           </div>
 	          <input type="hidden" id="user_birth" name="user_birth" />
+	          <input type="hidden" id="user_id" name="user_id" value="${info.user_id}" />
+	          <input type="hidden" id="user_pwd" name="user_pwd" value="${info.user_pwd}"/>
 	        </div>
         </div>
 

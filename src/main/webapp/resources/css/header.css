@@ -29,7 +29,7 @@ input[type='submit'] {
   text-align: center;
   color: #7fa900;
   text-shadow: 3px 3px #5c6c5e, 5px 5px #9cad9a;
-  letter-spacing: 0.1em;
+  letter-spacing: 3px;
   margin: 0;
   display: inline;
 }
@@ -39,7 +39,7 @@ input[type='submit'] {
   text-align: center;
   color: #fbffec;
   text-shadow: 3px 3px #5c6c5e, 5px 5px #9cad9a;
-  letter-spacing: 0.1em;
+  letter-spacing: 1px;
   margin: 0;
   display: inline;
 }
@@ -89,6 +89,7 @@ input[type='submit'] {
   border-radius: 5px;
 }
 .navbar-collapse > .navbar-nav > .nav-item > .nav-link {
+  color:black;
   font-size: 15px;
   font-weight: bold;
 }

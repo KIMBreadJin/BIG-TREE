@@ -227,9 +227,18 @@ public class MemberController {
 		log.info("회원정보 변경");
 	}
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
-	public String modify(MemberVO vo) {
+	public String modify(MemberVO vo, MessageVO msg, HttpServletRequest request) {
+		HttpSession session = request.getSession();
 		vo.setUser_num(memberData.getUser_num());
 		service.modify(vo);
+		
+		session.setAttribute("info", service.info(vo));
+		
+		vo = (MemberVO)session.getAttribute("info");
+		msg.setReceiver_id(vo.getUser_id());
+		List<MessageVO> list = msgService.msgList(msg);
+		log.info("modify 1)...." + list);
+		session.setAttribute("mlist", list);
 		return "redirect:/board/list";
 	}
 	@GetMapping("/checkProfile")
