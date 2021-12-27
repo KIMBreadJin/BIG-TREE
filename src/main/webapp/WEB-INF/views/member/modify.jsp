@@ -303,8 +303,8 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	          	 			<option value="010">010</option>
 	          	 		</select>
 	          	 	</div>
-	        	 	 - <input type="text" class="form-control" id="phone2" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" size = 4/> -
-	        	 	   <input type="text" class="form-control" id="phone3" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" size = 4/>       
+	        	 	 - <input type="text" class="form-control" id="phone2" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" size = 4 value="${phone1 }"/> -
+	        	 	   <input type="text" class="form-control" id="phone3" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" size = 4 value="${phone1 }"/>       
 	        	 <button class="btn btn-info btn-sm" type="button" id="phnChk" onclick="fn_phnChk()" value="N"> 인증 </button>   
 	        	 </div>     	   	
         	<input type="hidden" id="user_phone" name="user_phone" />

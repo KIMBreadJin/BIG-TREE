@@ -41,7 +41,7 @@ public class ChattingHandler extends TextWebSocketHandler{
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		
-System.out.println("handleTextmessage: " + session + " : " + message);
+		System.out.println("handleTextmessage: " + session + " : " + message);
 		
 		//protocol: RoomNum, 보내는id, 내용 
 		String msg = message.getPayload();

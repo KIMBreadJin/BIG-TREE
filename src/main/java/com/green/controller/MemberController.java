@@ -50,19 +50,20 @@ public class MemberController {
 		vo.setUser_pwd(request.getParameter("user_pwd"));
 		log.info("아이디" + vo.getUser_id() + "비밀번호" + vo.getUser_pwd());
 		int result = service.login(vo);
-		log.info("아이디 개수"+result);			
+		
 		session.setAttribute("info", service.info(vo));
-		log.info("넘버" + session.getAttribute("info"));
+		log.info("login session" + session.getAttribute("info"));
 		memberData = service.info(vo);
 		if(result == 1) {
 			vo = (MemberVO)session.getAttribute("info");
 			msg.setReceiver_id(vo.getUser_id());
 			List<MessageVO> list = msgService.msgList(msg);
-			log.info("What...." + list);
+			log.info("message...." + list);
 			session.setAttribute("mlist", list);
 		}
 		return result;
 	}
+	
 	@RequestMapping(value ="/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
 		session.invalidate();
@@ -223,8 +224,14 @@ public class MemberController {
 		log.info("비밀번호 확인");
 	}
 	@RequestMapping(value="/modify", method=RequestMethod.GET)
-	public void modify() {
+	public void modify(Model model) {
 		log.info("회원정보 변경");
+		String phone = memberData.getUser_phone();
+		String phone1 = phone.substring(4, 8);
+		String phone2 = phone.substring(9);
+		log.info(phone1+"-"+phone2);
+		model.addAttribute("phone1",phone1);
+		model.addAttribute("phone2",phone2);
 	}
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
 	public String modify(MemberVO vo, MessageVO msg, HttpServletRequest request) {

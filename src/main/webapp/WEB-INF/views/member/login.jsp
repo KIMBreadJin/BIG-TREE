@@ -21,7 +21,6 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <script>
       $(document).ready(function () {
         $('#loginBtn').click(function () {
-          console.log('클릭')
           var id = $('#inputId').val()
           var pw = $('#inputPwd').val()
           var remember_id = $('#remember_id').is(':checked')
