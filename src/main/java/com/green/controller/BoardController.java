@@ -83,9 +83,9 @@ public class BoardController {
 		
 		RecommendedVO rVo= new RecommendedVO();
 		rVo.setBno(bno);
-		rVo.setUserName(mVo!=null? mVo.getUser_name(): "비회원");//현재 접속중인유저의 이름,로그아웃상태는 비회원
-		rVo.setHateCnt(0);
-		rVo.setLikeCnt(0);
+		rVo.setUser_id(mVo!=null? mVo.getUser_name(): "비회원");//현재 접속중인유저의 이름,로그아웃상태는 비회원
+		rVo.setHated(0);
+		rVo.setLiked(0);
 		RecommendedVO rVo2=recommendedService.getRecommended(rVo);
 
 		model.addAttribute("board",vo);
@@ -97,10 +97,10 @@ public class BoardController {
 	
 	@PostMapping("/modify")
 	public String postModify(BoardVO vo,RedirectAttributes rttr,@ModelAttribute("cri") Criteria cri) {
-		rttr.addAttribute("pageNum", cri.getPageNum());//추가
-		rttr.addAttribute("amount",cri.getAmount());//추가 
-		rttr.addAttribute("type",cri.getType());//추가 
-		rttr.addAttribute("keyword",cri.getKeyword());//추가 
+		rttr.addAttribute("pageNum", cri.getPageNum());
+		rttr.addAttribute("amount",cri.getAmount());
+		rttr.addAttribute("type",cri.getType());
+		rttr.addAttribute("keyword",cri.getKeyword());
 		boardService.updateBoard(vo);
 		return "redirect:/board/list";
 	}

@@ -28,6 +28,10 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         var birth = birthYear + ' ' + birthMonth + ' ' + birthDay
         console.log(birth)
         document.getElementById('user_birth').value = birth
+        var email_id = document.getElementById('email_id').value
+        var email_site = document.getElementById('email_site').value
+        var email=email_id+'@'+email_site
+        document.getElementById('user_email').value=email
         var phone = phone1.value + '-' + phone2.value + '-' + phone3.value
         document.getElementById('user_phone').value = phone
         console.log(phone)
@@ -148,37 +152,6 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     		  $email_site.val($email.val());
     	  }
       }
-      $(document).ready(function(e){
-    	  $("#birthMonth").change(function(){
-    		  birthMonth=$("#birthMonth").val()
-    		  showDays()
-    	  })
-      })
-   
-      const showDays=()=>{
-    	  $("#birthDay").empty()
-    	  let str="<option value=''>일</option>"
-			  str+="<c:forEach var='day' begin='1' end='31'>"
-			  str+="<option>${day}</option>"
-			  str+="</c:forEach>  "
-		  $("#birthDay").append(str)	  
-    	  switch(birthMonth){
-    	  	case "2":
-    	  		for(let i=0; i<3; i++){
-    	  			$("#birthDay")[0][29].remove()
-    	  		}
-    	  		break;
-    	  	case "4":
-    	  	case "6":	
-    		case "9":
-    	  	case "11":	
-    	  		$("#birthDay")[0][31].remove()
-    	  	default:
-    	  		$("#birthDay")
-    	  		break;
-    	  }
-    	  
-      }
     </script>
   </head>
   <body>
@@ -279,17 +252,20 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	          <select id="birthYear" class="form-control">
 	          	<option value="">출생년도</option>
 	            <c:forEach var="year" begin="1950" end="2021">	              
-	              <option value="${2021-year+1950}">${2021-year+1950}년</option>
+	              <option value="${2021-year+1950}년">${2021-year+1950}년</option>
 	            </c:forEach>
 	          </select>
-	          <select id="birthMonth" class="form-control" name="birthMonth">
+	          <select id="birthMonth" class="form-control">
 	          	<option value="">월</option>
 	            <c:forEach var="month" begin="1" end="12">
-	              <option>${month}</option>
+	              <option>${month}월</option>
 	            </c:forEach>
 	          </select>
 	          <select id="birthDay" class="form-control">
-	         			<option value="">일</option>	     	
+	         	<option value="">일</option>
+	            <c:forEach var="day" begin="1" end="31">
+	              <option>${day}일</option>
+	            </c:forEach>
 	          </select>
 	           </div>
 	          <input type="hidden" id="user_birth" name="user_birth" />

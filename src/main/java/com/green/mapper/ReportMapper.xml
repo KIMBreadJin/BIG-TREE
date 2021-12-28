@@ -4,23 +4,23 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.mapper.ReportMapper">
 	<insert id="regist">
-		insert into big_tree_report(bno,reason,details,reporter)
-		 values (#{bno},#{reason},#{details},#{reporter})
+		insert into big_tree_report(bno,reason,details,reporter_id)
+		 values (#{bno},#{reason},#{details},#{reporter_id})
 	</insert>
 	<delete id="delete">
-		delete big_tree_report where bno=#{bno} and reporter= #{reporter}
+		delete big_tree_report where bno=#{bno} and reporter_id= #{reporter_id}
 	</delete>
 	<select id="getReportList" resultType="com.green.vo.ReportVO">
 		select*from big_tree_report where bno=#{bno}
 	</select>
 	<select id="getReportCount" resultType="int">
-		select count(reporter) from big_tree_report where bno=#{bno}
+		select count(reporter_id) from big_tree_report where bno=#{bno}
 	</select>
 	<select id="getReport" resultType="com.green.vo.ReportVO">
-		select*from big_tree_report where bno=#{bno} and reporter=#{reporter}
+		select*from big_tree_report where bno=#{bno} and reporter_id=#{reporter_id}
 	</select>
 	<update id="update">
 		update big_tree_report set reason=#{reason}, details=#{details},
-		 	updateDate = sysdate where bno = #{bno} and reporter=#{reporter}
+		 	reportDate = sysdate where bno = #{bno} and reporter_id=#{reporter_id}
 	</update>
 </mapper>

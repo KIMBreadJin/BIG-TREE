@@ -17,7 +17,7 @@ public class ReportVO {
 	private int bno;
 	private String reason;
 	private String details;
-	private String reporter;
+	private String reporter_id;
 	private Date reportDate;
 
 }

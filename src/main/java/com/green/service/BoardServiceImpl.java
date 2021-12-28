@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 
 import com.green.mapper.BoardMapper;
 import com.green.mapper.ImageUploadMapper;
+import com.green.mapper.RecommendedMapper;
 import com.green.mapper.ReplyMapper;
 import com.green.mapper.ReportMapper;
 import com.green.vo.BoardVO;
@@ -36,6 +37,9 @@ public class BoardServiceImpl implements BoardService {
 	ImageUploadMapper imageUploadMapper;
 	
 	@Setter(onMethod_=@Autowired)
+	RecommendedMapper recommendedMapper;
+	
+	@Setter(onMethod_=@Autowired)
 	ReportMapper reportMapper;
 	
 	@Setter(onMethod_=@Autowired)
@@ -60,8 +64,8 @@ public class BoardServiceImpl implements BoardService {
 		log.info("asdasd"+reportVO);
 		BoardVO boardVo =boardMapper.getBoard(bno);
 		if(GetSessionUser.getUser()!=null) {
-			String userName=GetSessionUser.getUser().getUser_name();
-			reportVO.setReporter(userName);
+			String userId=GetSessionUser.getUser().getUser_id();
+			reportVO.setReporter_id(userId);
 			boardVo.setReportWithUser(reportMapper.getReport(reportVO));//게시글을 불러올때 유저가 해당게시글에 신고하였으면 정보를 가져감 
 			boardVo.setReportList(reportMapper.getReportList(bno));
 		}
@@ -95,6 +99,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public void deleteBoard(int bno) {
+		recommendedMapper.deleteAll(bno);
 		replyMapper.deletewithBoard(bno);
 		imageUploadMapper.deleteAll(bno);
 		boardMapper.deleteBoard(bno);	

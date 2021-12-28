@@ -20,7 +20,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
      }
     </style>
     
-    <script type="text/javascript">
+<script type="text/javascript">
 	  function rand() {
 		    var code = Math.floor(Math.random()*(10000-1000)+1000)
 		    $('#captcha').val(code)
@@ -30,7 +30,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	  var birthYear ="1950"
 	  var birthMonth ="1"
 	  var birthDay="1"
-	 
+	  
       function modifyProfile() {
         birthYear = document.getElementById('birthYear').value
         birthMonth = document.getElementById('birthMonth').value
@@ -77,18 +77,15 @@ uri="http://java.sun.com/jsp/jstl/core" %>
           dataType: 'json',
           data: { user_phone: phoneValue },
           success: function (data) {
-            if (data == 1) {
-              alert('중복된 핸드폰 번호입니다')
-            } else if (data == 0) {
               $('#phnChk').attr('value', 'Y')
               $('#phone1').attr('readonly', 'true')
               $('#phone2').attr('readonly', 'true')
               $('#phone3').attr('readonly', 'true')
               alert('인증 되었습니다')
             }
-          },
-        })
-      }
+          
+         })
+        }
       function selectEmail(email){
     	  var $email = $(email);
     	  var $email_site = $('input[name=email_site]')
@@ -102,78 +99,11 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     		  $email_site.val($email.val());
     	  }
       }
-      
-      $(document).on('click','img',function(){
-   		  if(confirm("프로필사진을 변경하시겠습니까?")){
-   			  $("#user_profileImage").click()  
-   		  }	  
-      })
-      
       $(document).ready(function(e){
-    	  var basicImage="<div><img src='/resources/images/basicProfileIcon.png'></div>"
-    	  if(${info.user_profileImage==null}){
-    		  $(".uploadResult").html(basicImage)
-    	  }
-    	  else{
-    		  $(".uploadResult").html("${info.user_profileImage}")
-    	  }
-    	  
-    	 
-    	  
-    	  
     	  $("#birthMonth").change(function(){
     		  birthMonth=$("#birthMonth").val()
     		  showDays()
     	  })
-    	  
-    	    var regex = new RegExp("(.*?)\.(png|jpeg|jpg|bmp|gif)$");
-            var maxSize = 5242880; //5MB
-            function checkExtension(fileName, fileSize) {
-              if (fileSize >= maxSize) {
-                alert("파일 사이즈 초과");
-                return false;
-              }
-              if (!regex.test(fileName)) {
-                alert("이미지파일만 올려주세요.");
-                return false;
-              }
-              return true;
-            }
-    	  
-    	    $("input[type='file']").change(function (e) {//파일 인풋 변경시 호출함수
-                var formData = new FormData();
-                var inputFile = $("#user_profileImage");
-                var files = inputFile[0].files; 
-                if (!checkExtension(files[0].name, files[0].size)) {
-                    return false;
-                  }
-                formData.append("uploadFile", files[0]);               
-                $.ajax({
-                  url: '/uploadAjaxAction',
-                  processData: false,
-                  contentType: false,
-                  data: formData,
-                  type: 'POST',
-                  dataType: 'json',
-                  success: function (result) {
-                    showUploadedFile(result);
-                    
-                  }
-                }); //ajax 
-              });
-    	  
-    	  function showUploadedFile(uploadResultArr) {
-              if (!uploadResultArr || uploadResultArr.length == 0) { return; }
-              var upload = $(".uploadResult");
-              upload.html('')
-              var str = "";
-              OriginPath = uploadResultArr
-       	      var fileCallPath = encodeURIComponent(OriginPath.uploadPath + "/s_" + OriginPath.uuid + "_" + OriginPath.fileName);
-              str += "<img src='/display?fileName=" + fileCallPath + "'>";
-              $("input[name='user_profileImage']").val(null)
-              $("input[name='user_profileImage']").val(str)
-              upload.append(str);
-            }
       })
    
       const showDays=()=>{
@@ -213,16 +143,6 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         </div>
      <div class="main-login main-center">
       <form class="form-horizontal" method="post" name="modify" id="modify" >
-         <div class="form-group">
-            <label class="control-label col-sm-3">프로필사진 </label>
-            <input type="file" id="user_profileImage" style="display:none">
-            <input type="hidden" name="user_profileImage" >
-         <div class="col-md-5 col-sm-8">
-	          <div class="uploadResult">
-	               
-	          </div>
-          </div>
-         </div>
         <div class="form-group">
           <label class="control-label col-sm-3">E-MAIL </label>
           <div class="col-md-5 col-sm-8">
@@ -288,8 +208,6 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	          </select>
 	           </div>
 	          <input type="hidden" id="user_birth" name="user_birth" />
-	          <input type="hidden" id="user_id" name="user_id" value="${info.user_id}" />
-	          <input type="hidden" id="user_pwd" name="user_pwd" value="${info.user_pwd}"/>
 	        </div>
         </div>
 
@@ -303,8 +221,8 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 	          	 			<option value="010">010</option>
 	          	 		</select>
 	          	 	</div>
-	        	 	 - <input type="text" class="form-control" id="phone2" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" size = 4 value="${phone1 }"/> -
-	        	 	   <input type="text" class="form-control" id="phone3" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" size = 4 value="${phone1 }"/>       
+	        	 	 - <input type="text" class="form-control" id="phone2" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" size = 4 value="${phone1}" /> -
+	        	 	   <input type="text" class="form-control" id="phone3" maxlength="4" onKeyup="this.value=this.value.replace(/[^0-9]/g,'')" size = 4 value="${phone2}"/>       
 	        	 <button class="btn btn-info btn-sm" type="button" id="phnChk" onclick="fn_phnChk()" value="N"> 인증 </button>   
 	        	 </div>     	   	
         	<input type="hidden" id="user_phone" name="user_phone" />

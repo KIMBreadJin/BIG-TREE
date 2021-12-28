@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.green.mapper.MemberMapper;
+import com.green.mapper.MessageMapper;
 import com.green.vo.MemberVO;
 
 import lombok.Setter;
@@ -87,6 +88,11 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public void modify(MemberVO vo) {
 		mapper.modify(vo);
+	}
+	@Override
+	public void deleteUser(String user_id) {
+		mapper.deleteUser(user_id);
+		
 	}
 	
 	

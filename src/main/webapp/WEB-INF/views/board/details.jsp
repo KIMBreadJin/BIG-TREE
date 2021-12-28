@@ -117,9 +117,8 @@ prefix="c" %>
 	                    <label for="">댓글</label>
 	                    <input type="text" class="form-control" name="reply" id="reply" />
 	                  </div>
-                      <div class="form-group">
-                        <label for="">댓글작성일</label>
-                        <input type="hide" class="form-control" name="replyDate" value="" />
+                      <div class="form-group">                  
+                        <input type="hidden" class="form-control" name="replyDate" value="" />
                       </div>
                   </div>
                   <!-- modal-body -->
@@ -170,7 +169,7 @@ prefix="c" %>
                         <input type="hidden" class="form-control" name="bno" id="bno" readonly />
                       </div>
                       <div class="form-group">          
-                        <input type="hidden" class="form-control" name="reporter" id="reporter" readonly />
+                        <input type="hidden" class="form-control" name="reporter_id" id="reporter_id" readonly />
                       </div>
                       <div class="form-group">
 					  	<label class="control-label col-sm-3">신고사유 </label>
@@ -180,7 +179,7 @@ prefix="c" %>
 						      <option value="부적절한 컨텐츠">부적절한 컨텐츠</option>
 						      <option value="욕설 ">욕설</option>
 						      <option value="자극적인 내용">자극적인 내용</option>
-						      <option value="정치적 성향이 짙음">정치적 성향이 짙음</option>
+						      <option value="과다한 반복 게시글">과다한 반복 게시글</option>
 					       </select>
 					    </div>
 					 </div>      
@@ -199,6 +198,7 @@ prefix="c" %>
                   </div>
                 </div>
               </div>
+              
             </div>
 
     <!-- ----------------------여기까지 게시글 조회------------------------------   -->
@@ -297,7 +297,8 @@ prefix="c" %>
     })()
     //resplyService 기능 end
     
-    $(document).ready(function () {
+    $(document).ready(function () { 
+    	
     	$("#boardModifyBtn").hide()
     	if("${board.id}"=="${info.user_id}"||"${info.user_type}"==1){
     		$("#boardModifyBtn").show()
@@ -351,6 +352,7 @@ prefix="c" %>
       var modalRegisterBtn = $('#modalRegisterBtn')
 	
       $('#addReplyBtn').click(function (e) {
+    	  $("#reply").val('').attr('readonly',false)
     	  if(${info.user_name!=null}){
     		modalInputReplyerId.val("${info.user_id}").attr('readonly','readonly')
 	    	modalInputReplyer.val("${info.user_name}").attr('readonly','readonly')
@@ -401,7 +403,6 @@ prefix="c" %>
 			
           modal.find("button[id!='modalCloseBtn']").hide()
           if("${info.user_id}"== $("#replyerId").val()||"${info.user_type}" == 1){
-        	$("#reply").attr('readonly',false)
         	modalModBtn.show()
           	modalRemoveBtn.show()
           }
@@ -483,36 +484,34 @@ prefix="c" %>
 
   <!-- 추천,비추천기능 -->
   <script>
-      var reported="${board.reportList}".includes("reporter=${info.user_name}")
-      var likeClicked= ${recommended.likeCnt}!=1 ? false : true
-      var hateClicked= ${recommended.hateCnt}!=1 ? false : true
+      var reported=${board.reportWithUser!=null}
+      var likeClicked= ${recommended.liked}!=1 ? false : true
+      var hateClicked= ${recommended.hated}!=1 ? false : true
       var totalLike=${totalLike}
       var totalHate=${totalHate}
 	
       $(document).ready(function (e) {
-   
-    	  $("#reason").val("${board.reportList}")
+    	  $("#reason").val("${board.reportWithUser.reason}")
     	 reportButtonChange()
     	 changeColor()//좋아요,싫어요 버튼 테두리씌우는함수 호출
         <!-- 수정,목록가기 버튼 클릭시 호출함수 -->
     	 var operForm = $('#operForm')
-        $("button[data-oper='modify']").click(function (e) {
+       
+    	 $("button[data-oper='modify']").click(function (e) {
           operForm.attr('action', '/board/modify').submit()
         })
+       
         $("button[data-oper='list']").click(function (e) {
           operForm.find('#bno').remove() //operForm 에서 id가 bno인 것을 찾아 데이터 삭제
           operForm.attr('action', '/board/list').submit()
         })
   <!-- 추천,비추천 이미지버튼 클릭시 -->
     $(".img-thumbnail").click(function(e){
-  
-    	if("${recommended.userName}"==="비회원"){
-    		alert("비회원이용할수없습니다")
-    		return false;
-
-      }
-    	
-    	 var img=$(".img-thumbnail")
+	      var img=$(".img-thumbnail")
+	      if(${info.user_id==null}){
+	    	alert("비회원은 이용할수 없습니다")
+	    	return false;
+	      }	
          if(img.eq(0)[0]==$(this)[0]){//눌린 버튼이 추천일때
              if(hateClicked==false && likeClicked==false){//아무버튼이 눌려져있지않은경우
              	$(".likeText").text(++totalLike)
@@ -554,15 +553,16 @@ prefix="c" %>
     
     	 <!--report 클릭시 호출하게되는 함수 145번줄  -->
     	 $("#report").click(function(e){ 
-    		 console.log(${info!=null})
     		 if(reported){
     			 if(confirm("이미 신고접수된 게시글입니다 수정하시겠습니까?")){
     				 $("#reportModal").modal('show')
-    				 $("#reason option").each(function(){//신고사유의 옵션들을 하나씩가져와 비교후 reporter와 일치하면 selected로변경 
-    					 if($(this).val()=="${board.reportWithUser.reason}" ){
-					       $(this).attr("selected","selected"); // attr적용안될경우 prop으로 					
-					    }					
-					  });
+    				 if(${board.reportWithUser!=null}){
+	    				 $("#reason option").each(function(){//신고사유의 옵션들을 하나씩가져와 비교후 reporter_id와 일치하면 selected로변경 
+	    					 if($(this).val()=="${board.reportWithUser.reason}" ){
+						       $(this).attr("selected","selected"); // attr적용안될경우 prop으로 					
+						    }					
+						  });
+    				 }
     				 $("#reportModifyBtn").show()
     				 $("#reportDeleteBtn").show()
     				 $("#reportRegistBtn").hide()
@@ -583,9 +583,10 @@ prefix="c" %>
     	 })
     	
     	 $("#reportRegistBtn").click(function(e){
+    		 $("#reply").css('readonly',false)
     		 var reason=$("#reason").val()
     		 var details=$("#details").val()
-    		 var data={"bno":${board.bno},"reporter":"${info.user_name}",
+    		 var data={"bno":${board.bno},"reporter_id":"${info.user_id}",
     					"reason":reason	,"details":details 
     		 }
     		 if(reason.length==0){
@@ -601,24 +602,25 @@ prefix="c" %>
     			 url:'/reportRegist',
     			 dataType:'json',
     			 success: function(data){
-    				alert(data.reporter+"님의 신고접수가 완료되었습니다")
+    				alert(data.reporter_id+"님의 신고접수가 완료되었습니다")
+    				$("#details").val(data.details)
     			 }
     		 })
-   		
+    		 
     		 $("#reportModal").modal('hide')
     		  reported =!reported 
-    		  $("#reason option").each(function(){//신고사유의 옵션들을 하나씩가져와 비교후 reporter와 일치하면 selected로변경 	
+    		  $("#reason option").each(function(){//신고사유의 옵션들을 하나씩가져와 비교후 reporter_id와 일치하면 selected로변경 	
     			  if($(this).val()== reason ){
+    				  
 				       $(this).attr("selected","selected"); // attr적용안될경우 prop으로 					
 				    }					
 				  });
-    		  $("#details").val(details)
     		  reportButtonChange()
     	 })
     	 $("#reportModifyBtn").click(function(e){
     		 var reason=$("#reason").val()
     		 var details=$("#details").val()
-    		 var data={"bno":${board.bno},"reporter":"${info.user_name}",
+    		 var data={"bno":${board.bno},"reporter_id":"${info.user_id}",
     					"reason":reason	,"details":details 
     		 }
     		 if(reason.length==0){
@@ -634,16 +636,16 @@ prefix="c" %>
     			 url:'/reportRegist',
     			 dataType:'json',
     			 success: function(data){
-    				alert(data.reporter+"님의 신고접수가 수정되었습니다")
+    				alert(data.reporter_id+"님의 신고접수가 수정되었습니다")
+    			    $("#details").val(data.details)
     			 }
     		 })
     		 $("#reportModal").modal('hide')
-    		 $("#reason option").each(function(){//신고사유의 옵션들을 하나씩가져와 비교후 reporter와 일치하면 selected로변경 
+    		 $("#reason option").each(function(){//신고사유의 옵션들을 하나씩가져와 비교후 reporter_id와 일치하면 selected로변경 
     					 if($(this).val()== reason ){
 					       $(this).attr("selected","selected"); // attr적용안될경우 prop으로 					
 					    }					
 					  });
-    		  $("#details").val(details)
     		  reportButtonChange()
     	 })
     	 
@@ -653,7 +655,7 @@ prefix="c" %>
     	 $("#reportDeleteBtn").click(function(e){
     		 var reason=$("#reason").val()
     		 var details=$("#details").val()
-    		 var data={"bno":${board.bno},"reporter":"${info.user_name}",
+    		 var data={"bno":${board.bno},"reporter_id":"${info.user_id}",
     					"reason":reason	,"details":details 
     			}
     		 $.ajax({
@@ -687,8 +689,8 @@ prefix="c" %>
         }
       }
       const updateRecommended=()=>{
-        var param={"bno":${board.bno} ,"userName":"${info.user_name}",
-    				"likeCnt":(likeClicked ? 1: 0), "hateCnt":(hateClicked ? 1: 0)
+        var param={"bno":${board.bno} ,"user_id":"${info.user_id}",
+    				"liked":(likeClicked ? 1: 0), "hated":(hateClicked ? 1: 0)
     	  }
         $.ajax({
      	  type:'POST',
@@ -703,7 +705,7 @@ prefix="c" %>
  	 <!--신고여부 확인 후 이미지 테두리씌우는 함수  --> 
  	const reportButtonChange=()=>{
 			 if(reported){
-				 $(".reportText").css('color','red').text('신고완료')
+				 $(".reportText").css('color','red').text('신고완료').css('left','100px')
 			 }
 			 else{
 				 $(".reportText").css('color','black').text('신고')

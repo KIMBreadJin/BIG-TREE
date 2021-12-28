@@ -4,24 +4,29 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.mapper.RecommendedMapper">
 	<insert id= "registRecommended">
-		insert into big_tree_recommended (bno,userName,likeCnt,hateCnt) 
-			values(#{bno},#{userName},#{likeCnt},#{hateCnt})
+		insert into big_tree_recommended (bno,user_id,liked,hated) 
+			values(#{bno},#{user_id},#{liked},#{hated})
 	</insert>
 	<update id= "updateRecommended">
-		update big_tree_recommended set likeCnt=#{likeCnt} , hateCnt=#{hateCnt} where userName=#{userName} and bno=#{bno}
+		update big_tree_recommended set liked=#{liked} , hated=#{hated} where user_id=#{user_id} and bno=#{bno}
 	</update>
 	<select id="getRecommendList" resultType="com.green.vo.RecommendedVO">
 		select*from big_tree_recommended where bno=#{bno}
 	</select>
 	<select id="getRecommended" resultType="com.green.vo.RecommendedVO">
-		select*from big_tree_recommended where bno=#{bno} and userName=#{userName}
+		select*from big_tree_recommended where bno=#{bno} and user_id=#{user_id}
 	</select>
 	
 	<select id="getTotalLike" resultType="int">
-		select sum(likeCnt) from big_tree_recommended where bno=#{bno}
+		select sum(liked) from big_tree_recommended where bno=#{bno}
 	</select>
 	<select id="getTotalHate" resultType="int">
-		select sum(hateCnt) from big_tree_recommended where bno=#{bno} 
+		select sum(hated) from big_tree_recommended where bno=#{bno} 
 	</select>
-	
+	<delete id="deleteRecommended">
+		delete big_tree_recommended where user_id=#{user_id} and bno=#{bno}
+	</delete>
+	<delete id="deleteAll">
+		delete big_tree_recommended where bno=#{bno}
+	</delete>
 </mapper>

@@ -47,4 +47,9 @@ public class RecommendedServiceImpl implements RecommendedService{
 		return mapper.getTotalHate(bno);
 	}
 
+	@Override
+	public void deleteRecommended(RecommendedVO vo) {
+		mapper.deleteRecommended(vo);	
+	}
+
 }

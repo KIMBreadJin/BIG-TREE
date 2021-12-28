@@ -14,9 +14,10 @@ import lombok.NoArgsConstructor;
 
 public class RecommendedVO {
 	public int bno;
-	public String userName;
-	public int likeCnt;
-	public int hateCnt;
+	public String user_id;
+	public int liked;
+	public int hated;
 	
+
 	
 }

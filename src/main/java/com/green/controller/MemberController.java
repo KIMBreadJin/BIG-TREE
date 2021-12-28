@@ -237,10 +237,12 @@ public class MemberController {
 	public String modify(MemberVO vo, MessageVO msg, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		vo.setUser_num(memberData.getUser_num());
+		memberData.setUser_email(vo.getUser_email());
+		memberData.setUser_birth(vo.getUser_birth());
+		memberData.setUser_address(vo.getUser_address());
+		memberData.setUser_phone(vo.getUser_phone());
 		service.modify(vo);
-		
 		session.setAttribute("info", service.info(vo));
-		
 		vo = (MemberVO)session.getAttribute("info");
 		msg.setReceiver_id(vo.getUser_id());
 		List<MessageVO> list = msgService.msgList(msg);
@@ -257,5 +259,11 @@ public class MemberController {
 	public void profile(Model model) {
 		log.info("회원정보 조회");
 		model.addAttribute("profile", memberData);
+	}
+	@PostMapping("/deleteM")
+	public String removeUser(MemberVO vo, HttpSession session) {
+		service.deleteUser(vo.getUser_id());
+		session.invalidate();
+		return "redirect:/member/login";
 	}
 }
