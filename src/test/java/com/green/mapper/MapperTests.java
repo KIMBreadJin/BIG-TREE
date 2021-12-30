@@ -24,9 +24,9 @@ public class MapperTests {
 		for(int i=0; i<50;i++) {
 			RecommendedVO vo = new RecommendedVO();
 			vo.setBno(49);
-			vo.setUserName("이재욱"+i);
-			vo.setLikeCnt(0);
-			vo.setHateCnt(1);
+			vo.setUser_id("이재욱"+i);
+			vo.setLiked(i);
+			vo.setHated(i);
 			mapper.registRecommended(vo);
 		}
 	}
@@ -38,7 +38,7 @@ public class MapperTests {
 	@Test
 	public void getRecommended() {
 		RecommendedVO vo = new RecommendedVO();
-		vo.setUserName("이재욱0");
+		vo.setUser_id("이재욱0");
 		vo.setBno(49);
 		mapper.getRecommended(vo);
 	}

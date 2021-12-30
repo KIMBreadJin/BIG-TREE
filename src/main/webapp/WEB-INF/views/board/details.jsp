@@ -1,212 +1,200 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> <%@ taglib uri="http://java.sun.com/jsp/jstl/core"
-prefix="c" %>
-<%@ include file="../includes/header.jsp" %>
-  <script src="/resources/js/ckeditor/ckeditor.js"></script>
-  <style>
-    .image {
-      position: relative;
-    }
-    .image .likeText {
-      position: absolute;
-      top: 40px;
-      right: 60px;
-    }
-    .image .hateText {
-      position: absolute;
-      top: 40px;
-      right: 5px;
-    }
-	.image .reportText{
-		position:absolute;
-		top:40px;
-		right:115px;
-	}
-	div img{
-		width:45px;
-		height:45px;
-	}
-  </style>
-  <body>
-    <!-- -------------------게시글 조회--------------------------- -->
-    <!-- /.row -->
-    
-      <div class="col-lg-12">
-        <div class="panel panel-default">
-        &nbsp;                 
-          <!-- /.panel-heading -->
-          <div class="panel-body">
-            <div class="form-group">
-              <label for="title">번호</label>
-              <input type="text" class="form-control" name="bno" value="${board.bno}" readonly="readonly" />
-            </div>
-            <div class="form-group">
-              <input type="hidden" class="form-control" name="id" value="${board.id}" readonly="readonly" />
-            </div>
-            <div class="form-group">
-              <label for="title">제목</label>
-              <input type="text" class="form-control" name="title" value="${board.title}" readonly="readonly" />
-            </div>
-            <div class="form-group">
-              <label for="writer">작성자</label>
-              <input type="text" class="form-control" name="writer" value="${board.writer}" readonly="readonly" />
-            </div>
-            <div class="form-group">
-              <label for="content">내용</label>
-              <textarea name="content" id="content" rows="3" class="form-control" readonly="readonly">${board.content}</textarea>
-            </div>
-            <div class="form-group">
-              <label for="views">조회수</label>
-              <input type="text" class="form-control" name="views" value="${board.views}" readonly="readonly" />
-            </div>
-            <div class="modify-btn">
-                <button data-oper="modify" id="boardModifyBtn" class="btn btn-success" type="submit"><i class="material-icons">edit</i>  수정</button>
-              <button data-oper="list" class="btn btn-info" type="submit">목록</button>
-           		<div class="image" align="right">
-              	<img src="/resources/images/report_icon.jpg" class="img-report" id="report" width="30px" hspace=5 />
-                <div class="reportText">신고</div>
-                <img src="/resources/images/recommend.png" class="img-thumbnail" id="like" width="50px" />
-                <div class="likeText">${totalLike}</div>
-                <img src="/resources/images/not_recommend.png" class="img-thumbnail" id="hate" width="50px" />
-                <div class="hateText">${totalHate}</div>     
-              </div>    
-             <!-- 신고,추천,비추천 아이콘 -->            
-                
-            </div>
-           </div>
- 		</div>
-	</div>
-            <!-- 리플기능 추가하기 -->
-           <br>
-      <div class="col-lg-12" >
-          <!-- panel -->
-          <div class="panel panel-default">
-            <div class="panel-heading">
-            	<button id="addReplyBtn" class="btn btn-default btn-round"><i class="material-icons">comment</i> 댓글등록</button>
-            	
-            </div>    
-          </div> 
-          <!-- panel-body -->
-         <div class="panel-body reply-UI">
- 			<!-- 댓글 구현창 -->
- 			<br>
-            <ul class="chat">
-             
-            </ul>
-         
-          <div class="panel-footer">
-            
-           </div>
-            <!-- 모달창 -->
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button class="close">&times</button>
-                    <h4 class="modal-title" id="myModalLabel">댓글</h4>
-                  </div>
-                  <!-- modal-header -->
-                  <div class="modal-body">
+prefix="c" %> <%@ include file="../includes/header.jsp" %>
+<script src="/resources/js/ckeditor/ckeditor.js"></script>
+<style>
+  .image {
+    position: relative;
+  }
+  .image .likeText {
+    position: absolute;
+    top: 40px;
+    right: 60px;
+  }
+  .image .hateText {
+    position: absolute;
+    top: 40px;
+    right: 5px;
+  }
+  .image .reportText {
+    position: absolute;
+    top: 40px;
+    right: 115px;
+  }
+  div img {
+    width: 45px;
+    height: 45px;
+  }
+</style>
+<body>
+  <!-- -------------------게시글 조회--------------------------- -->
+  <!-- /.row -->
 
-                      <div class="form-group">
-                        <input type="hidden" class="form-control" name="replyer"  id="replyer" readonly />
-                      </div>
-                      <div class="form-group">
-                        <input type="hidden" class="form-control" name="replyerId"  id="replyerId"   readonly />
-                      </div>
-                      <div class="form-group">
-	                    <label for="">댓글</label>
-	                    <input type="text" class="form-control" name="reply" id="reply" />
-	                  </div>
-                      <div class="form-group">                  
-                        <input type="hidden" class="form-control" name="replyDate" value="" />
-                      </div>
-                  </div>
-                  <!-- modal-body -->
-                  <div class="modal-footer">
-                    <button class="btn btn-warning" id="modalModBtn" type="button">수정</button>
-                    <button class="btn btn-danger" id="modalRemoveBtn" type="button">삭제</button>
-                    <button class="btn btn-primary" id="modalRegisterBtn" type="button">등록</button>
-                    <button class="btn btn-info" id="modalCloseBtn" type="button">닫기</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- 리플기능 추가하기 끝 -->
-
-            <form action="/board/modify" method="get" id="operForm">
-              <input type="hidden" id="bno" name="bno" value="${board.bno}" />
-              <input type="hidden" name="pageNum" value="${cri.pageNum}" />
-              <input type="hidden" name="amount" value="${cri.amount}" />
-              <input type="hidden" name="keyword" value="${cri.keyword}" />
-              <input type="hidden" name="type" value="${cri.type}" />
-            </form>
-          
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      &nbsp;
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+        <div class="form-group">
+          <label for="title">번호</label>
+          <input type="text" class="form-control" name="bno" value="${board.bno}" readonly="readonly" />
         </div>
-        <!-- /.panel -->
+        <div class="form-group">
+          <input type="hidden" class="form-control" name="id" value="${board.id}" readonly="readonly" />
+        </div>
+        <div class="form-group">
+          <label for="title">제목</label>
+          <input type="text" class="form-control" name="title" value="${board.title}" readonly="readonly" />
+        </div>
+        <div class="form-group">
+          <label for="writer">작성자</label>
+          <input type="text" class="form-control" name="writer" value="${board.writer}" readonly="readonly" />
+        </div>
+        <div class="form-group">
+          <label for="content">내용</label>
+          <textarea name="content" id="content" rows="3" class="form-control" readonly="readonly">${board.content}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="views">조회수</label>
+          <input type="text" class="form-control" name="views" value="${board.views}" readonly="readonly" />
+        </div>
+        <div class="modify-btn">
+          <button data-oper="modify" id="boardModifyBtn" class="btn btn-success" type="submit">
+            <i class="material-icons">edit</i> 수정
+          </button>
+          <button data-oper="list" class="btn btn-info" type="submit">목록</button>
+          <div class="image" align="right">
+            <img src="/resources/images/report_icon.jpg" class="img-report" id="report" width="30px" hspace="5" />
+            <div class="reportText">신고</div>
+            <img src="/resources/images/recommend.png" class="img-thumbnail" id="like" width="50px" />
+            <div class="likeText">${totalLike}</div>
+            <img src="/resources/images/not_recommend.png" class="img-thumbnail" id="hate" width="50px" />
+            <div class="hateText">${totalHate}</div>
+          </div>
+          <!-- 신고,추천,비추천 아이콘 -->
+        </div>
       </div>
- 
-        <!--  end pagination -->
-        <form class="d-flex" action="/board/list" id='actionForm' method="get">
-        	<input class="form-control me-sm-2" type='hidden' name="pageNum" value="${pageMaker.cri.pageNum}">
-        	<input class="form-control me-sm-2" type='hidden' name="amount" value="${pageMaker.cri.amount}">
-        	<input class="form-control me-sm-2" type="hidden" name="type" value='${pageMaker.cri.type}'>
-            <input class="form-control me-sm-2" type="hidden" name="keyword" value='${pageMaker.cri.keyword}'>
-            
-        </form>
-      
-      
+    </div>
+  </div>
+  <!-- 리플기능 추가하기 -->
+  <br />
+  <div class="col-lg-12">
+    <!-- panel -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <button id="addReplyBtn" class="btn btn-default btn-round"><i class="material-icons">comment</i> 댓글등록</button>
+      </div>
+    </div>
+    <!-- panel-body -->
+    <div class="panel-body reply-UI">
+      <!-- 댓글 구현창 -->
+      <br />
+      <ul class="chat"></ul>
 
-		<!-- 신고하기 모달창  -->
-		<div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h4 class="modal-title" >신고하기</h4>
-                  </div>
-                  <!-- modal-header -->
-                  <div class="modal-body">
-					  <div class="form-group">
-                        <input type="hidden" class="form-control" name="bno" id="bno" readonly />
-                      </div>
-                      <div class="form-group">          
-                        <input type="hidden" class="form-control" name="reporter_id" id="reporter_id" readonly />
-                      </div>
-                      <div class="form-group">
-					  	<label class="control-label col-sm-3">신고사유 </label>
-					    <div class="col-md-5 col-sm-8">
-					       <select name="reason" class="form-control" id="reason" >
-						      <option value="">사유를 선택해주세요</option>
-						      <option value="부적절한 컨텐츠">부적절한 컨텐츠</option>
-						      <option value="욕설 ">욕설</option>
-						      <option value="자극적인 내용">자극적인 내용</option>
-						      <option value="과다한 반복 게시글">과다한 반복 게시글</option>
-					       </select>
-					    </div>
-					 </div>      
-					 
-					 <div class="form-group">
-			            <label for="content">세부내용</label>
-			            <textarea name="details" id="details" rows="3" class="form-control">${board.reportWithUser.details}</textarea>
-		              </div>         
-                  </div>
-                  <!-- modal-body -->
-                  <div class="modal-footer">
-                   <button class="btn btn-success" id="reportModifyBtn" type="button">수정</button>
-                    <button class="btn btn-danger" id="reportDeleteBtn" type="button">삭제</button>
-                    <button class="btn btn-primary" id="reportRegistBtn" type="button">등록</button>
-                    <button class="btn btn-default" id="reportCloseBtn" type="button">닫기</button>
-                  </div>
-                </div>
-              </div>
-              
+      <div class="panel-footer"></div>
+      <!-- 모달창 -->
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button class="close">&times</button>
+              <h4 class="modal-title" id="myModalLabel">댓글</h4>
             </div>
+            <!-- modal-header -->
+            <div class="modal-body">
+              <div class="form-group">
+                <input type="hidden" class="form-control" name="replyer" id="replyer" readonly />
+              </div>
+              <div class="form-group">
+                <input type="hidden" class="form-control" name="replyerId" id="replyerId" readonly />
+              </div>
+              <div class="form-group">
+                <label for="">댓글</label>
+                <input type="text" class="form-control" name="reply" id="reply" />
+              </div>
+              <div class="form-group">
+                <input type="hidden" class="form-control" name="replyDate" value="" />
+              </div>
+            </div>
+            <!-- modal-body -->
+            <div class="modal-footer">
+              <button class="btn btn-warning" id="modalModBtn" type="button">수정</button>
+              <button class="btn btn-danger" id="modalRemoveBtn" type="button">삭제</button>
+              <button class="btn btn-primary" id="modalRegisterBtn" type="button">등록</button>
+              <button class="btn btn-info" id="modalCloseBtn" type="button">닫기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 리플기능 추가하기 끝 -->
 
-    <!-- ----------------------여기까지 게시글 조회------------------------------   -->
-  
-  </body>
+      <form action="/board/modify" method="get" id="operForm">
+        <input type="hidden" id="bno" name="bno" value="${board.bno}" />
+        <input type="hidden" name="pageNum" value="${cri.pageNum}" />
+        <input type="hidden" name="amount" value="${cri.amount}" />
+        <input type="hidden" name="keyword" value="${cri.keyword}" />
+        <input type="hidden" name="type" value="${cri.type}" />
+      </form>
+    </div>
+    <!-- /.panel -->
+  </div>
 
-  <!-- 리플 기능 -->
- <script>
+  <!--  end pagination -->
+  <form class="d-flex" action="/board/list" id="actionForm" method="get">
+    <input class="form-control me-sm-2" type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}" />
+    <input class="form-control me-sm-2" type="hidden" name="amount" value="${pageMaker.cri.amount}" />
+    <input class="form-control me-sm-2" type="hidden" name="type" value="${pageMaker.cri.type}" />
+    <input class="form-control me-sm-2" type="hidden" name="keyword" value="${pageMaker.cri.keyword}" />
+  </form>
+
+  <!-- 신고하기 모달창  -->
+  <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">신고하기</h4>
+        </div>
+        <!-- modal-header -->
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="hidden" class="form-control" name="bno" id="bno" readonly />
+          </div>
+          <div class="form-group">
+            <input type="hidden" class="form-control" name="reporter_id" id="reporter_id" readonly />
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-3">신고사유 </label>
+            <div class="col-md-5 col-sm-8">
+              <select name="reason" class="form-control" id="reason">
+                <option value="">사유를 선택해주세요</option>
+                <option value="부적절한 컨텐츠">부적절한 컨텐츠</option>
+                <option value="욕설 ">욕설</option>
+                <option value="자극적인 내용">자극적인 내용</option>
+                <option value="과다한 반복 게시글">과다한 반복 게시글</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="content">세부내용</label>
+            <textarea name="details" id="details" rows="3" class="form-control">${board.reportWithUser.details}</textarea>
+          </div>
+        </div>
+        <!-- modal-body -->
+        <div class="modal-footer">
+          <button class="btn btn-success" id="reportModifyBtn" type="button">수정</button>
+          <button class="btn btn-danger" id="reportDeleteBtn" type="button">삭제</button>
+          <button class="btn btn-primary" id="reportRegistBtn" type="button">등록</button>
+          <button class="btn btn-default" id="reportCloseBtn" type="button">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ----------------------여기까지 게시글 조회------------------------------   -->
+</body>
+
+<!-- 리플 기능 -->
+<script>
     // replyService 기능 start
     var replyService = (function () {
       function add(reply, callback, error) {
@@ -226,7 +214,7 @@ prefix="c" %>
           error: function (xhr, status, er) {
             if (error) error(err)
           },
-        }) 
+        })
       }
       const getList = (param, callback, error) => {
         var bno = param.bno
@@ -238,42 +226,42 @@ prefix="c" %>
           if (error) error()
         })
       }
-		const remove = (rno,callback,error)=>{
-			$.ajax({
-				type:'delete',
-				url:'/replies/' +rno,
-				success:(deleteResult,status,xhr)=>{
-					if(callback) callback(deleteResult)
-				},
-				error:
-					(xhr,status,er)=>{
-						if(error) error(er);
-					}
-			})
-		}
-		const update= (reply,callback,error)=>{
+  const remove = (rno,callback,error)=>{
+  	$.ajax({
+  		type:'delete',
+  		url:'/replies/' +rno,
+  		success:(deleteResult,status,xhr)=>{
+  			if(callback) callback(deleteResult)
+  		},
+  		error:
+  			(xhr,status,er)=>{
+  				if(error) error(er);
+  			}
+  	})
+  }
+  const update= (reply,callback,error)=>{
 
-			$.ajax({
-				type:'put',
-				url:'/replies/' + reply.rno,
-				data:JSON.stringify(reply),
-				contentType:"application/json; charset=utf-8",
-				success:(result, status, xhr)=>{
-					if(callback) callback(result);
-				},
-				error:
-					(xhr,status,er)=>{
-					if(error) error(er);
-				}
-			})
-		}
-		const get = (rno ,callback ,error)=>{
-			$.get("/replies/" +rno +".json" , (result) =>{
-				if(callback) {callback(result)}
-			}).fail((xhr,status,err) =>{
-				if(error) error();
-			})
-		}
+  	$.ajax({
+  		type:'put',
+  		url:'/replies/' + reply.rno,
+  		data:JSON.stringify(reply),
+  		contentType:"application/json; charset=utf-8",
+  		success:(result, status, xhr)=>{
+  			if(callback) callback(result);
+  		},
+  		error:
+  			(xhr,status,er)=>{
+  			if(error) error(er);
+  		}
+  	})
+  }
+  const get = (rno ,callback ,error)=>{
+  	$.get("/replies/" +rno +".json" , (result) =>{
+  		if(callback) {callback(result)}
+  	}).fail((xhr,status,err) =>{
+  		if(error) error();
+  	})
+  }
       const displayTime = (timeValue) => {
         var today = new Date()
         var gap = today.getTime() - timeValue
@@ -296,9 +284,9 @@ prefix="c" %>
       return { add, getList, remove, update, get, displayTime }
     })()
     //resplyService 기능 end
-    
-    $(document).ready(function () { 
-    	
+
+    $(document).ready(function () {
+
     	$("#boardModifyBtn").hide()
     	if("${board.id}"=="${info.user_id}"||"${info.user_type}"==1){
     		$("#boardModifyBtn").show()
@@ -306,40 +294,40 @@ prefix="c" %>
       var bnoValue = '<c:out value="${board.bno}"/>'
       var replyUL = $('.chat')
       const showList = (page) => {
-        	  
-	          replyService.getList({ bno: bnoValue, page: page || 1 }, (replyCnt,list) => {
-	        	if(page==-1){
-	        		page = Math.ceil(replyCnt/10.0);
-	        		showList(pageNum)
-	        		return;
-	        	}
-	            var str = ''
-	            if (list == null || list.length == 0) {
-	              // 데이터가 없으면 종료함
-	              replyUL.html('')
-	              return
-	            } //if문 end
-	            
-	                  for (var i = 0, len = list.length || 0; i < len; i++) {
-	                	  var replyer = list[i].replyer
-	                	  var replyerId=list[i].replyerId
-	                	  if(replyerId=="${board.id}"){
-	                		  replyer+="(글쓴이)"} 
-		                	str += "<div class='left clearfix' data-rno='" + list[i].rno + "' id='getReply' >"
-		                    str += "<div><div class='header'><div class='pull-left'>"
-		                    str += list[i].replyerProfile + "</div>" + ' <p style="font-weight:bolder">' + replyer +'</p>'
-		                    str += "<strong class='primary-font' > &nbsp&nbsp " + list[i].reply + "</strong>"                   
-		                    str += "<small class='pull-right text-muted'>" + replyService.displayTime(list[i].updateDate) + '</small></div>'
-		                    str += '<h5 style="display:none;">'+ list[i].replyerId+'</h5></div></div>'
-	                  } //for문 end
-	              
-	            replyUL.html(str)
-	            showReplyPage(replyCnt)
-	          })//람다함수(replyCnt,list를 파라미터로갖고있는)의 end 
-	         }//showList function end 
-		 showList(1);
 
-	
+           replyService.getList({ bno: bnoValue, page: page || 1 }, (replyCnt,list) => {
+         	if(page==-1){
+         		page = Math.ceil(replyCnt/10.0);
+         		showList(pageNum)
+         		return;
+         	}
+             var str = ''
+             if (list == null || list.length == 0) {
+               // 데이터가 없으면 종료함
+               replyUL.html('')
+               return
+             } //if문 end
+
+                   for (var i = 0, len = list.length || 0; i < len; i++) {
+                 	  var replyer = list[i].replyer
+                 	  var replyerId=list[i].replyerId
+                 	  if(replyerId=="${board.id}"){
+                 		  replyer+="(글쓴이)"}
+                  	str += "<div class='left clearfix' data-rno='" + list[i].rno + "' id='getReply' >"
+                      str += "<div><div class='header'><div class='pull-left'>"
+                      str += list[i].replyerProfile + "</div>" + ' <p style="font-weight:bolder">' + replyer +'</p>'
+                      str += "<strong class='primary-font' > &nbsp&nbsp " + list[i].reply + "</strong>"
+                      str += "<small class='pull-right text-muted'>" + replyService.displayTime(list[i].updateDate) + '</small></div>'
+                      str += '<h5 style="display:none;">'+ list[i].replyerId+'</h5></div></div>'
+                   } //for문 end
+
+             replyUL.html(str)
+             showReplyPage(replyCnt)
+           })//람다함수(replyCnt,list를 파라미터로갖고있는)의 end
+          }//showList function end
+   showList(1);
+
+
 
       // 모달기능 start
       var modal = $('#myModal')
@@ -350,19 +338,19 @@ prefix="c" %>
       var modalModBtn = $('#modalModBtn')
       var modalRemoveBtn = $('#modalRemoveBtn')
       var modalRegisterBtn = $('#modalRegisterBtn')
-	
+
       $('#addReplyBtn').click(function (e) {
     	  $("#reply").val('').attr('readonly',false)
     	  if(${info.user_name!=null}){
     		modalInputReplyerId.val("${info.user_id}").attr('readonly','readonly')
-	    	modalInputReplyer.val("${info.user_name}").attr('readonly','readonly')
-	        modalInputReplyDate.closest('div').hide()
-	        modal.find("button[id != 'modalCloseBtn' ]").hide()
-	        modalRegisterBtn.show()
-	        modal.modal('show')
+     	modalInputReplyer.val("${info.user_name}").attr('readonly','readonly')
+         modalInputReplyDate.closest('div').hide()
+         modal.find("button[id != 'modalCloseBtn' ]").hide()
+         modalRegisterBtn.show()
+         modal.modal('show')
     	  }
     	  else {
-    		 
+
     		  alert("비회원은 이용할수 없습니다")
     	  }
       }) //addReply btn end
@@ -385,10 +373,10 @@ prefix="c" %>
           modal.modal('hide')
           //showList(1) // 댓글목록갱신
          showList(-1);
-        }) 
-      }) 
+        })
+      })
       )// modalRegisterBtn end
-      
+
      $('.chat').on('click', '#getReply', function (e) {
   		  $('#myModal').modal('show')
     	  var replyer=$("#replyer").val()
@@ -400,23 +388,23 @@ prefix="c" %>
           modalInputReplyer.val(reply.replyer)
           modalInputReplyDate.val(replyService.displayTime(reply.updateDate)).attr('readonly', 'readonly')
           modal.data('rno', reply.rno)
-			
+
           modal.find("button[id!='modalCloseBtn']").hide()
           if("${info.user_id}"== $("#replyerId").val()||"${info.user_type}" == 1){
         	modalModBtn.show()
           	modalRemoveBtn.show()
           }
-          
+
           else{
         	  $("#reply").attr('readonly',true)
         	  modalModBtn.hide()
           	  modalRemoveBtn.hide()
           }
-          
-          
-        }) 
 
-      }) //특정댓글의 이벤트 클릭이벤츠처리 424p참조할것 
+
+        })
+
+      }) //특정댓글의 이벤트 클릭이벤츠처리 424p참조할것
 
       modalModBtn.click(function (e) {
           var reply = { rno: modal.data('rno'), reply: modalInputReply.val() }
@@ -426,7 +414,7 @@ prefix="c" %>
             showList(pageNum)
           })
         }) //modalModBtn(수정)기능 end
-       
+
         modalRemoveBtn.click(function (e) {
           var rno = modal.data('rno')
           replyService.remove(rno, (result) => {
@@ -436,7 +424,7 @@ prefix="c" %>
           })
         }) //modalRemoveBtn(삭제)기능 end
         replyPageFooter.on('click', 'li a', function (e) {
-            //li 태그로 만든 페이지 번호를 누르면     
+            //li 태그로 만든 페이지 번호를 누르면
             e.preventDefault()
             var targetPageNum = $(this).attr('href')
             //this는 누른 페이지 li 태그이고 이때의 li태그의 href 속성을 얻음   href = "3(페이지)"
@@ -476,42 +464,38 @@ prefix="c" %>
 
         replyPageFooter.html(str)
       } // showReplyPage Function end
-      
-       
-   
-    
-  </script>
+</script>
 
-  <!-- 추천,비추천기능 -->
-  <script>
+<!-- 추천,비추천기능 -->
+<script>
       var reported=${board.reportWithUser!=null}
       var likeClicked= ${recommended.liked}!=1 ? false : true
       var hateClicked= ${recommended.hated}!=1 ? false : true
       var totalLike=${totalLike}
       var totalHate=${totalHate}
-	
+
       $(document).ready(function (e) {
     	  $("#reason").val("${board.reportWithUser.reason}")
     	 reportButtonChange()
     	 changeColor()//좋아요,싫어요 버튼 테두리씌우는함수 호출
         <!-- 수정,목록가기 버튼 클릭시 호출함수 -->
     	 var operForm = $('#operForm')
-       
+
     	 $("button[data-oper='modify']").click(function (e) {
           operForm.attr('action', '/board/modify').submit()
         })
-       
+
         $("button[data-oper='list']").click(function (e) {
           operForm.find('#bno').remove() //operForm 에서 id가 bno인 것을 찾아 데이터 삭제
           operForm.attr('action', '/board/list').submit()
         })
   <!-- 추천,비추천 이미지버튼 클릭시 -->
     $(".img-thumbnail").click(function(e){
-	      var img=$(".img-thumbnail")
-	      if(${info.user_id==null}){
-	    	alert("비회원은 이용할수 없습니다")
-	    	return false;
-	      }	
+       var img=$(".img-thumbnail")
+       if(${info.user_id==null}){
+     	alert("비회원은 이용할수 없습니다")
+     	return false;
+       }
          if(img.eq(0)[0]==$(this)[0]){//눌린 버튼이 추천일때
              if(hateClicked==false && likeClicked==false){//아무버튼이 눌려져있지않은경우
              	$(".likeText").text(++totalLike)
@@ -544,24 +528,24 @@ prefix="c" %>
               	likeClicked = !likeClicked
               }
            }
-    
+
       	changeColor()//이미지 색상변경 함수호출
      	updateRecommended()//추천수 업데이트함수호출
      	<!-- 추천,비추천 함수 끝-->
     	 })//click end
-    	 
-    
+
+
     	 <!--report 클릭시 호출하게되는 함수 145번줄  -->
-    	 $("#report").click(function(e){ 
+    	 $("#report").click(function(e){
     		 if(reported){
     			 if(confirm("이미 신고접수된 게시글입니다 수정하시겠습니까?")){
     				 $("#reportModal").modal('show')
     				 if(${board.reportWithUser!=null}){
-	    				 $("#reason option").each(function(){//신고사유의 옵션들을 하나씩가져와 비교후 reporter_id와 일치하면 selected로변경 
-	    					 if($(this).val()=="${board.reportWithUser.reason}" ){
-						       $(this).attr("selected","selected"); // attr적용안될경우 prop으로 					
-						    }					
-						  });
+     				 $("#reason option").each(function(){//신고사유의 옵션들을 하나씩가져와 비교후 reporter_id와 일치하면 selected로변경
+     					 if($(this).val()=="${board.reportWithUser.reason}" ){
+  				       $(this).attr("selected","selected"); // attr적용안될경우 prop으로
+  				    }
+  				  });
     				 }
     				 $("#reportModifyBtn").show()
     				 $("#reportDeleteBtn").show()
@@ -576,18 +560,18 @@ prefix="c" %>
     			 $("#reportRegistBtn").show()
     			 $("#reportModifyBtn").hide()
     			 $("#reportDeleteBtn").hide()
-    		 } 
+    		 }
     		 else{
     			 alert("비회원은 이용하실 수 없습니다")
     		 }
     	 })
-    	
+
     	 $("#reportRegistBtn").click(function(e){
     		 $("#reply").css('readonly',false)
     		 var reason=$("#reason").val()
     		 var details=$("#details").val()
     		 var data={"bno":${board.bno},"reporter_id":"${info.user_id}",
-    					"reason":reason	,"details":details 
+    					"reason":reason	,"details":details
     		 }
     		 if(reason.length==0){
     			 alert("신고사유를 선택하세요")
@@ -606,22 +590,22 @@ prefix="c" %>
     				$("#details").val(data.details)
     			 }
     		 })
-    		 
+
     		 $("#reportModal").modal('hide')
-    		  reported =!reported 
-    		  $("#reason option").each(function(){//신고사유의 옵션들을 하나씩가져와 비교후 reporter_id와 일치하면 selected로변경 	
+    		  reported =!reported
+    		  $("#reason option").each(function(){//신고사유의 옵션들을 하나씩가져와 비교후 reporter_id와 일치하면 selected로변경
     			  if($(this).val()== reason ){
-    				  
-				       $(this).attr("selected","selected"); // attr적용안될경우 prop으로 					
-				    }					
-				  });
+
+  		       $(this).attr("selected","selected"); // attr적용안될경우 prop으로
+  		    }
+  		  });
     		  reportButtonChange()
     	 })
     	 $("#reportModifyBtn").click(function(e){
     		 var reason=$("#reason").val()
     		 var details=$("#details").val()
     		 var data={"bno":${board.bno},"reporter_id":"${info.user_id}",
-    					"reason":reason	,"details":details 
+    					"reason":reason	,"details":details
     		 }
     		 if(reason.length==0){
     			 alert("신고사유를 선택하세요")
@@ -641,14 +625,14 @@ prefix="c" %>
     			 }
     		 })
     		 $("#reportModal").modal('hide')
-    		 $("#reason option").each(function(){//신고사유의 옵션들을 하나씩가져와 비교후 reporter_id와 일치하면 selected로변경 
+    		 $("#reason option").each(function(){//신고사유의 옵션들을 하나씩가져와 비교후 reporter_id와 일치하면 selected로변경
     					 if($(this).val()== reason ){
-					       $(this).attr("selected","selected"); // attr적용안될경우 prop으로 					
-					    }					
-					  });
+  			       $(this).attr("selected","selected"); // attr적용안될경우 prop으로
+  			    }
+  			  });
     		  reportButtonChange()
     	 })
-    	 
+
     	 $("#reportCloseBtn").click(function(e){
     		 $("#reportModal").modal('hide')
     	 })
@@ -656,23 +640,23 @@ prefix="c" %>
     		 var reason=$("#reason").val()
     		 var details=$("#details").val()
     		 var data={"bno":${board.bno},"reporter_id":"${info.user_id}",
-    					"reason":reason	,"details":details 
+    					"reason":reason	,"details":details
     			}
     		 $.ajax({
     			 type:'POST',
     			 data:data,
     			 url:'/reportDelete',
     			 dataType:'json',
-    		
+
     		 })
     		  $("#reportModal").modal('hide')
-    		  reported =!reported 
+    		  reported =!reported
     		  reportButtonChange()
     		 alert("${info.user_name} 님의 신고접수가 취소되었습니다")
     	 })
       })//document end
-      
-     
+
+
 
       const changeColor=()=>{
         if(likeClicked==true && hateClicked==false){
@@ -700,20 +684,20 @@ prefix="c" %>
 
        })//ajax end
       }
-      
-      
- 	 <!--신고여부 확인 후 이미지 테두리씌우는 함수  --> 
- 	const reportButtonChange=()=>{
-			 if(reported){
-				 $(".reportText").css('color','red').text('신고완료').css('left','100px')
-			 }
-			 else{
-				 $(".reportText").css('color','black').text('신고')
-			 } 
- 	}
-      
+
+
+   <!--신고여부 확인 후 이미지 테두리씌우는 함수  -->
+  const reportButtonChange=()=>{
+  	 if(reported){
+  		 $(".reportText").css('color','red').text('신고완료').css('left','100px')
+  	 }
+  	 else{
+  		 $(".reportText").css('color','black').text('신고')
+  	 }
+  }
+
       var ckediters = CKEDITOR.replace('content', {
     		toolbarCanCollapse:true
-    		
+
         })
-  </script>
+</script>
