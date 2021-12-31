@@ -22,8 +22,6 @@ public class ChatController {
 		HttpSession session = request.getSession();
 		MemberVO vo = (MemberVO)session.getAttribute("info");
 		
-		
-		log.info("==================================");
 		log.info("@ChatController, GET Chat / Username : " + vo.getUser_name());
 		
 		model.addAttribute("userid", vo.getUser_name());	

@@ -32,10 +32,6 @@ import net.coobird.thumbnailator.Thumbnailator;
 @Controller
 @Slf4j
 public class ImageUploadController {
-
-	
-	
-	
 	@PostMapping(value = "/uploadImage",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<ImageVO>> uploadAjaxPost( MultipartFile[] upload) {

@@ -117,14 +117,7 @@ public class BoardController {
 		vo=boardService.getBoard(bno);
 		model.addAttribute("board",vo);
 	}
-	
-//	//인기글테스트용 		
-//	ModelAndView mav = new ModelAndView();
-//	Map<String,Object> map = new HashMap<>();
-//	map.put("list",list);
-//	mav.addObject("map",map);
-//	mav.setViewName("/list");
-//	return mav;
+
 }
 
 
